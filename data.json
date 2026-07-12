@@ -1,0 +1,760 @@
+{
+  "meta": {
+    "baseline_date": "2026-07-01",
+    "note": "Portfolio holdings reflect cost basis/units as manually entered as of 1 July 2026. current_price and current_value for GOOGLEFINANCE-linked ETF/stock rows (LON:*, NSE:*) will have moved since \u2014 refresh this file from the live Google Sheet periodically to keep prices current.",
+    "target_retirement": "2037-09-01",
+    "currency_primary": "GBP"
+  },
+  "constants": {
+    "target_net_worth_gbp": 1420000,
+    "base_salary_gbp": 108962.7,
+    "salary_growth_pct": 2.0,
+    "equity_growth_pct": 7.0,
+    "inflation_pct": 2.5,
+    "monthly_take_home_gbp": 5468,
+    "monthly_expenses_gbp": 3500,
+    "monthly_surplus_gbp": 1968,
+    "emergency_shield_monthly_gbp": 452,
+    "emergency_shield_target_gbp": 10500,
+    "property_engine_existing_monthly_gbp": 150,
+    "property_engine_new_monthly_gbp": 1516,
+    "property_engine_total_monthly_gbp": 1666,
+    "property_engine_target_2037_gbp": 320000,
+    "pension_total_baseline_jul2026_gbp": 219348.67,
+    "pension_target_2037_gbp": 780000,
+    "aviva_monthly_pct_gross": 15
+  },
+  "debt": {
+    "status": "cleared",
+    "credit_card_cleared_gbp": 1296.95,
+    "personal_loan_cleared_gbp": 3194.3,
+    "clear_date": "2026-09-01"
+  },
+  "total_portfolio_value_gbp": 305562.91,
+  "holdings": [
+    {
+      "owner": "Srini",
+      "symbol": "Cash",
+      "name": "Cash",
+      "account_type": "Cash",
+      "asset_class": "Liquid",
+      "units": 1.0,
+      "avg_cost": 650.0,
+      "cost_basis": 650,
+      "current_price": 673.31,
+      "current_value": 673.31,
+      "gain_loss": 23.31,
+      "return_pct": 0.0359,
+      "weight_raw": 0.0028,
+      "weight_pct": 0.22
+    },
+    {
+      "owner": "Srini",
+      "symbol": "LON:VWRL",
+      "name": "Vanguard FTSE All-World UCITS ETF USD Dis",
+      "account_type": "ISA",
+      "asset_class": "ETF",
+      "units": 14.3572,
+      "avg_cost": 121.38,
+      "cost_basis": 1742.6829,
+      "current_price": 137.16,
+      "current_value": 1969.2403,
+      "gain_loss": 226.5574,
+      "return_pct": 0.13,
+      "weight_raw": 0.0081,
+      "weight_pct": 0.64
+    },
+    {
+      "owner": "Srini",
+      "symbol": "LON:VUAG",
+      "name": "Vanguard S&P 500 UCITS ETF USD Acc",
+      "account_type": "ISA",
+      "asset_class": "ETF",
+      "units": 18.2298,
+      "avg_cost": 95.363,
+      "cost_basis": 1738.4509,
+      "current_price": 108.72,
+      "current_value": 1981.9467,
+      "gain_loss": 243.4958,
+      "return_pct": 0.1401,
+      "weight_raw": 0.0082,
+      "weight_pct": 0.65
+    },
+    {
+      "owner": "Srini",
+      "symbol": null,
+      "name": "Av MyM BlackRock World ex UK Equity Index Tracker",
+      "account_type": "Pension",
+      "asset_class": "Fund",
+      "units": 18160.0878,
+      "avg_cost": 5.8639,
+      "cost_basis": 106488.4,
+      "current_price": 6.4588,
+      "current_value": 117292.3751,
+      "gain_loss": 10803.9751,
+      "return_pct": 0.1015,
+      "weight_raw": 0.4828,
+      "weight_pct": 38.39
+    },
+    {
+      "owner": "Srini",
+      "symbol": null,
+      "name": "Av MyM BlackRock UK Equity Index Tracker",
+      "account_type": "Pension",
+      "asset_class": "Fund",
+      "units": 2951.5842,
+      "avg_cost": 2.9367,
+      "cost_basis": 8668.03,
+      "current_price": 3.0133,
+      "current_value": 8894.0087,
+      "gain_loss": 225.9787,
+      "return_pct": 0.0261,
+      "weight_raw": 0.0366,
+      "weight_pct": 2.91
+    },
+    {
+      "owner": "Srini",
+      "symbol": null,
+      "name": "Av MyM My Future Growth (Pre-2025)",
+      "account_type": "Pension",
+      "asset_class": "Fund",
+      "units": 39.9705,
+      "avg_cost": 2.319,
+      "cost_basis": 92.69,
+      "current_price": 3.4926,
+      "current_value": 139.601,
+      "gain_loss": 46.911,
+      "return_pct": 0.5061,
+      "weight_raw": 0.0006,
+      "weight_pct": 0.05
+    },
+    {
+      "owner": "Srini",
+      "symbol": null,
+      "name": "ARSP - Global Equity Tracker (including UK) Fund",
+      "account_type": "Pension",
+      "asset_class": "Fund",
+      "units": 4121.248,
+      "avg_cost": 1015.2373,
+      "cost_basis": 41840.4469,
+      "current_price": 2060.11,
+      "current_value": 84902.2422,
+      "gain_loss": 43061.7953,
+      "return_pct": 1.0292,
+      "weight_raw": 0.3495,
+      "weight_pct": 27.79
+    },
+    {
+      "owner": "Srini",
+      "symbol": null,
+      "name": "FTSE Global All Cap Index Fund Accumulation",
+      "account_type": "Pension",
+      "asset_class": "Fund",
+      "units": 93.4228,
+      "avg_cost": 272.91,
+      "cost_basis": 25496.02,
+      "current_price": 289.84,
+      "current_value": 27077.6643,
+      "gain_loss": 1581.6444,
+      "return_pct": 0.062,
+      "weight_raw": 0.1115,
+      "weight_pct": 8.86
+    },
+    {
+      "owner": "Deepa",
+      "symbol": "LON:VFEG",
+      "name": "Vanguard FTSE Emerging Mkts UCITS ETF USD Acc",
+      "account_type": "ISA",
+      "asset_class": "ETF",
+      "units": 24.3733,
+      "avg_cost": 64.861,
+      "cost_basis": 1580.8763,
+      "current_price": 65.44,
+      "current_value": 1594.9884,
+      "gain_loss": 14.1121,
+      "return_pct": 0.0089,
+      "weight_raw": 0.0413,
+      "weight_pct": 0.52
+    },
+    {
+      "owner": "Deepa",
+      "symbol": "LON:VUAG",
+      "name": "Vanguard S&P 500 UCITS ETF USD Acc",
+      "account_type": "ISA",
+      "asset_class": "ETF",
+      "units": 19.5849,
+      "avg_cost": 105.478,
+      "cost_basis": 2065.7785,
+      "current_price": 108.72,
+      "current_value": 2129.2729,
+      "gain_loss": 63.4943,
+      "return_pct": 0.0307,
+      "weight_raw": 0.0552,
+      "weight_pct": 0.7
+    },
+    {
+      "owner": "Deepa",
+      "symbol": "LON:VWRP",
+      "name": "Vanguard FTSE All-World UCITS - (USD) Accumulating ETF",
+      "account_type": "ISA",
+      "asset_class": "ETF",
+      "units": 30.069,
+      "avg_cost": 137.557,
+      "cost_basis": 4136.2029,
+      "current_price": 141.56,
+      "current_value": 4256.5691,
+      "gain_loss": 120.3662,
+      "return_pct": 0.0291,
+      "weight_raw": 0.1103,
+      "weight_pct": 1.39
+    },
+    {
+      "owner": "Deepa",
+      "symbol": "LON:VUKG",
+      "name": "Vanguard FTSE 100 UCITS ETF GBP Acc",
+      "account_type": "ISA",
+      "asset_class": "ETF",
+      "units": 48.0764,
+      "avg_cost": 54.796,
+      "cost_basis": 2634.3944,
+      "current_price": 56.09,
+      "current_value": 2696.6052,
+      "gain_loss": 62.2109,
+      "return_pct": 0.0236,
+      "weight_raw": 0.0699,
+      "weight_pct": 0.88
+    },
+    {
+      "owner": "Deepa",
+      "symbol": null,
+      "name": "Av MyM My Future Growth (Pre-2025)",
+      "account_type": "Pension",
+      "asset_class": "Fund",
+      "units": 6959.7899,
+      "avg_cost": 2.3757,
+      "cost_basis": 16534.15,
+      "current_price": 3.4926,
+      "current_value": 24307.7622,
+      "gain_loss": 7773.6122,
+      "return_pct": 0.4702,
+      "weight_raw": 0.63,
+      "weight_pct": 7.96
+    },
+    {
+      "owner": "Srini",
+      "symbol": "NSE:HEALTHIETF",
+      "name": "Icici Prudential Nifty Healthcare Etf",
+      "account_type": "Stocks",
+      "asset_class": "ETF",
+      "units": 85.0,
+      "avg_cost": 152.51,
+      "cost_basis": 12963.35,
+      "current_price": 165.68,
+      "current_value": 14082.8,
+      "gain_loss": 1119.45,
+      "return_pct": 0.0864,
+      "weight_raw": null,
+      "weight_pct": 4.61
+    },
+    {
+      "owner": "Srini",
+      "symbol": "NSE:NEXT50IETF",
+      "name": "ICICI Prudential Nifty Next 50 ETF",
+      "account_type": "Stocks",
+      "asset_class": "ETF",
+      "units": 132.0,
+      "avg_cost": 72.27,
+      "cost_basis": 9539.64,
+      "current_price": 75.51,
+      "current_value": 9967.32,
+      "gain_loss": 427.68,
+      "return_pct": 0.0448,
+      "weight_raw": null,
+      "weight_pct": 3.26
+    },
+    {
+      "owner": "Deepa",
+      "symbol": "Cash",
+      "name": "Cash",
+      "account_type": "Cash",
+      "asset_class": "Liquid",
+      "units": 1.0,
+      "avg_cost": 3500.0,
+      "cost_basis": 3500,
+      "current_price": 3597.2,
+      "current_value": 3597.2,
+      "gain_loss": 97.2,
+      "return_pct": 0.0278,
+      "weight_raw": 0.0932,
+      "weight_pct": 1.18
+    }
+  ],
+  "monthly_snapshot": [
+    {
+      "date": "2026-04-01",
+      "combined_pension": 222874.64,
+      "combined_isa": 12165.29,
+      "combined_cash": 3986.88,
+      "srini_pension": "2026-04-01",
+      "srini_isa": 201875.07,
+      "srini_cash": 3509.58,
+      "deepa_pension": "2026-04-01",
+      "deepa_isa": 20999.57,
+      "deepa_cash": 8783.55
+    },
+    {
+      "date": "2026-05-01",
+      "combined_pension": 242695.33,
+      "combined_isa": 12946.84,
+      "combined_cash": 4146.66,
+      "srini_pension": "2026-05-01",
+      "srini_isa": 220084.87,
+      "srini_cash": 3611.91,
+      "deepa_pension": "2026-05-01",
+      "deepa_isa": 22610.46,
+      "deepa_cash": 9334.93
+    },
+    {
+      "date": "2026-06-01",
+      "combined_pension": 258716.38,
+      "combined_isa": 14087.17,
+      "combined_cash": 4057.88,
+      "srini_pension": "2026-06-01",
+      "srini_isa": 234762.73,
+      "srini_cash": 3954.66,
+      "deepa_pension": "2026-06-01",
+      "deepa_isa": 23953.65,
+      "deepa_cash": 10132.51
+    },
+    {
+      "date": "2026-07-01",
+      "combined_pension": 262613.65,
+      "combined_isa": 14672.78,
+      "combined_cash": 4270.51,
+      "srini_pension": "2026-07-01",
+      "srini_isa": 238305.89,
+      "srini_cash": 3963.5,
+      "deepa_pension": "2026-07-01",
+      "deepa_isa": 24307.76,
+      "deepa_cash": 10709.28
+    }
+  ],
+  "history": [
+    {
+      "date": "2026-01-13",
+      "total_value": 211684.38,
+      "change": null,
+      "net_injections": 1326.79,
+      "mom_growth_pct": null
+    },
+    {
+      "date": "2026-02-01",
+      "total_value": 211604.64,
+      "change": -79.74,
+      "net_injections": 150,
+      "mom_growth_pct": -0.11
+    },
+    {
+      "date": "2026-03-01",
+      "total_value": 219287.54,
+      "change": 7682.9,
+      "net_injections": 2860.49,
+      "mom_growth_pct": 2.25
+    },
+    {
+      "date": "2026-04-01",
+      "total_value": 205985.8,
+      "change": -13301.74,
+      "net_injections": 1474.77,
+      "mom_growth_pct": -6.69
+    },
+    {
+      "date": "2026-05-01",
+      "total_value": 224566.17,
+      "change": 18580.37,
+      "net_injections": 1224.77,
+      "mom_growth_pct": 8.38
+    },
+    {
+      "date": "2026-06-01",
+      "total_value": 239338.76,
+      "change": 14772.59,
+      "net_injections": 1474.77,
+      "mom_growth_pct": 5.88
+    },
+    {
+      "date": "2026-07-01",
+      "total_value": 243242.7,
+      "change": 3903.94,
+      "net_injections": 0,
+      "mom_growth_pct": 1.63
+    }
+  ],
+  "milestones": [
+    {
+      "year": 2026,
+      "age": 49,
+      "milestone": "Zero Consumer Debt. \u00a31,968 surplus deployed.",
+      "isa_est": "~\u00a310,000",
+      "pension_est": "~\u00a3234,000",
+      "mortgage_est": "~\u00a3165,000"
+    },
+    {
+      "year": 2027,
+      "age": 50,
+      "milestone": "Remortgage UK house. Emergency shield hits \u00a310.5k.",
+      "isa_est": "~\u00a332,000",
+      "pension_est": "~\u00a3267,000",
+      "mortgage_est": "~\u00a3159,000"
+    },
+    {
+      "year": 2028,
+      "age": 51,
+      "milestone": "Full accumulation mode. \u00a320k/year into ISA.",
+      "isa_est": "~\u00a356,000",
+      "pension_est": "~\u00a3304,000",
+      "mortgage_est": "~\u00a3153,000"
+    },
+    {
+      "year": 2029,
+      "age": 52,
+      "milestone": "Pension crosses \u00a3340k mark.",
+      "isa_est": "~\u00a382,000",
+      "pension_est": "~\u00a3344,000",
+      "mortgage_est": "~\u00a3146,000"
+    },
+    {
+      "year": 2030,
+      "age": 53,
+      "milestone": "Stay the course. Ignore market volatility.",
+      "isa_est": "~\u00a3110,000",
+      "pension_est": "~\u00a3388,000",
+      "mortgage_est": "~\u00a3140,000"
+    },
+    {
+      "year": 2031,
+      "age": 54,
+      "milestone": "Final year of 100% equity risk profile for ISA.",
+      "isa_est": "~\u00a3140,000",
+      "pension_est": "~\u00a3435,000",
+      "mortgage_est": "~\u00a3134,000"
+    },
+    {
+      "year": 2032,
+      "age": 55,
+      "milestone": "THE DECISION POINT. ISA liquid balance eclipses remaining UK mortgage. You can buy Chennai flat in cash, clear the UK mortgage, or let the ISA compound.",
+      "isa_est": "~\u00a3172,000",
+      "pension_est": "~\u00a3487,000",
+      "mortgage_est": "~\u00a3127,000"
+    },
+    {
+      "year": 2033,
+      "age": 56,
+      "milestone": "De-Risking Protocol Begins. Shift 5% to bonds.",
+      "isa_est": "(Optional)",
+      "pension_est": "~\u00a3542,000",
+      "mortgage_est": "~\u00a3120,000"
+    },
+    {
+      "year": 2034,
+      "age": 57,
+      "milestone": "Shift another 5% of pension to bonds.",
+      "isa_est": "(Optional)",
+      "pension_est": "~\u00a3601,000",
+      "mortgage_est": "~\u00a3113,000"
+    },
+    {
+      "year": 2035,
+      "age": 58,
+      "milestone": "Shift another 5% of pension to bonds.",
+      "isa_est": "(Optional)",
+      "pension_est": "~\u00a3665,000",
+      "mortgage_est": "~\u00a3105,000"
+    },
+    {
+      "year": 2036,
+      "age": 59,
+      "milestone": "Final working year. Shift final 5% to bonds.",
+      "isa_est": "(Optional)",
+      "pension_est": "~\u00a3733,000",
+      "mortgage_est": "~\u00a398,000"
+    },
+    {
+      "year": 2037,
+      "age": 60,
+      "milestone": "SEPTEMBER: RETIREMENT. Execute final property play.",
+      "isa_est": "Target Achieved",
+      "pension_est": "~\u00a3780,000",
+      "mortgage_est": "~\u00a390,000"
+    }
+  ],
+  "plan_v1_reference": [
+    {
+      "year": 2026,
+      "age": 49,
+      "action_focus": "Kill All Debt",
+      "surplus_allocation": "\u00a33,300 to Debt",
+      "liquid_assets": "\u00a32,000 (Emergency)",
+      "pension_locked": 228000.0
+    },
+    {
+      "year": 2027,
+      "age": 50,
+      "action_focus": "Max ISA",
+      "surplus_allocation": "\u00a31,666 to ISA / Rest to Cash",
+      "liquid_assets": 20000.0,
+      "pension_locked": 251000.0
+    },
+    {
+      "year": 2028,
+      "age": 51,
+      "action_focus": "Max ISA",
+      "surplus_allocation": "\u00a31,666 to ISA",
+      "liquid_assets": 42000.0,
+      "pension_locked": 276000.0
+    },
+    {
+      "year": 2029,
+      "age": 52,
+      "action_focus": "Max ISA",
+      "surplus_allocation": "\u00a31,666 to ISA",
+      "liquid_assets": 66000.0,
+      "pension_locked": 303000.0
+    },
+    {
+      "year": 2030,
+      "age": 53,
+      "action_focus": "Max ISA",
+      "surplus_allocation": "\u00a31,666 to ISA",
+      "liquid_assets": 92000.0,
+      "pension_locked": 333000.0
+    },
+    {
+      "year": 2031,
+      "age": 54,
+      "action_focus": "Max ISA",
+      "surplus_allocation": "\u00a31,666 to ISA",
+      "liquid_assets": 120000.0,
+      "pension_locked": 366000.0
+    },
+    {
+      "year": 2032,
+      "age": 55,
+      "action_focus": "Buy House",
+      "surplus_allocation": "Withdraw ISA for Downpayment",
+      "liquid_assets": "\u00a310,000 (Reset)",
+      "pension_locked": 402000.0
+    },
+    {
+      "year": 2033,
+      "age": 56,
+      "action_focus": "Pension Push",
+      "surplus_allocation": "\u00a32,500 to Pension (SIPP)",
+      "liquid_assets": 20000.0,
+      "pension_locked": 450000.0
+    },
+    {
+      "year": 2034,
+      "age": 57,
+      "action_focus": "Pension Push",
+      "surplus_allocation": "\u00a32,500 to Pension (SIPP)",
+      "liquid_assets": 30000.0,
+      "pension_locked": 500000.0
+    },
+    {
+      "year": 2035,
+      "age": 58,
+      "action_focus": "Tax Plan",
+      "surplus_allocation": "Consult on RNOR Status",
+      "liquid_assets": 40000.0,
+      "pension_locked": 550000.0
+    },
+    {
+      "year": 2036,
+      "age": 59,
+      "action_focus": "RETIRE",
+      "surplus_allocation": "Move to Chennai",
+      "liquid_assets": "Flat + \u00a3600k Pension",
+      "pension_locked": null
+    }
+  ],
+  "mortgage_amortization": [
+    {
+      "year_num": 0.0,
+      "date": "2026-04-26",
+      "rate": "-",
+      "annual_interest": "-",
+      "annual_principal": "-",
+      "year_end_balance": 170543.49
+    },
+    {
+      "year_num": 1.0,
+      "date": "2027-04-01",
+      "rate": 0.0343,
+      "annual_interest": 5716.48,
+      "annual_principal": 5916.44,
+      "year_end_balance": 164627.05
+    },
+    {
+      "year_num": 2.0,
+      "date": "2028-04-01",
+      "rate": "3.43%/6.5%*",
+      "annual_interest": 8034.33,
+      "annual_principal": 5166.45,
+      "year_end_balance": 159460.6
+    },
+    {
+      "year_num": 3.0,
+      "date": "2029-04-01",
+      "rate": 0.065,
+      "annual_interest": 10147.24,
+      "annual_principal": 4183.16,
+      "year_end_balance": 155277.44
+    },
+    {
+      "year_num": 4.0,
+      "date": "2030-04-01",
+      "rate": 0.065,
+      "annual_interest": 9865.98,
+      "annual_principal": 4464.42,
+      "year_end_balance": 150813.02
+    },
+    {
+      "year_num": 5.0,
+      "date": "2031-04-01",
+      "rate": 0.065,
+      "annual_interest": 9565.41,
+      "annual_principal": 4764.99,
+      "year_end_balance": 146048.03
+    },
+    {
+      "year_num": 6.0,
+      "date": "2032-04-01",
+      "rate": 0.065,
+      "annual_interest": 9244.75,
+      "annual_principal": 5085.65,
+      "year_end_balance": 140962.38
+    },
+    {
+      "year_num": 7.0,
+      "date": "2033-04-01",
+      "rate": 0.065,
+      "annual_interest": 8902.57,
+      "annual_principal": 5427.83,
+      "year_end_balance": 135534.55
+    },
+    {
+      "year_num": 8.0,
+      "date": "2034-04-01",
+      "rate": 0.065,
+      "annual_interest": 8537.47,
+      "annual_principal": 5792.93,
+      "year_end_balance": 129741.62
+    },
+    {
+      "year_num": 9.0,
+      "date": "2035-04-01",
+      "rate": 0.065,
+      "annual_interest": 8147.88,
+      "annual_principal": 6182.52,
+      "year_end_balance": 123559.1
+    },
+    {
+      "year_num": 10.0,
+      "date": "2036-04-01",
+      "rate": 0.065,
+      "annual_interest": 7732.14,
+      "annual_principal": 6598.26,
+      "year_end_balance": 116960.84
+    },
+    {
+      "year_num": 11.0,
+      "date": "2037-04-01",
+      "rate": 0.065,
+      "annual_interest": 7288.52,
+      "annual_principal": 7041.88,
+      "year_end_balance": 109918.96
+    }
+  ],
+  "derisking_schedule": [
+    {
+      "year": 2032,
+      "equity_pct": 100,
+      "cash_pct": 0,
+      "note": "Final year of 100% equity"
+    },
+    {
+      "year": 2033,
+      "equity_pct": 95,
+      "cash_pct": 5,
+      "note": "De-risking begins"
+    },
+    {
+      "year": 2034,
+      "equity_pct": 90,
+      "cash_pct": 10,
+      "note": "Second 5% shift"
+    },
+    {
+      "year": 2035,
+      "equity_pct": 85,
+      "cash_pct": 15,
+      "note": "Third 5% shift"
+    },
+    {
+      "year": 2036,
+      "equity_pct": 80,
+      "cash_pct": 20,
+      "note": "Final 5% shift \u2014 80/20 locked for retirement"
+    }
+  ],
+  "scenarios": {
+    "chennai": {
+      "label": "Scenario A: Chennai",
+      "action": "Sell UK house (clears \u00a390k mortgage, unlocks \u00a3310k cash). Use \u00a3150k from ISA to buy Chennai flat in cash.",
+      "starting_liquid_corpus_gbp": 1260000,
+      "starting_liquid_corpus_inr_cr": 13.2,
+      "passive_income_annual_gbp": 50400,
+      "withdrawal_rate_pct": 4,
+      "tax_note": "Tax-free under RNOR",
+      "fixed_assets": "Fully paid-off Chennai flat"
+    },
+    "uk": {
+      "label": "Scenario B: Stay in UK",
+      "action": "Use \u00a390k from ISA to instantly clear the UK mortgage.",
+      "starting_liquid_corpus_gbp": 1010000,
+      "passive_income_annual_gbp": 40400,
+      "withdrawal_rate_pct": 4,
+      "fixed_assets": "Fully paid-off \u00a3400k Coventry home"
+    }
+  },
+  "end_state_2037": {
+    "pension_gbp": 780000,
+    "isa_gbp": 320000,
+    "uk_house_value_gbp": 400000,
+    "uk_mortgage_balance_gbp": 90000,
+    "total_net_worth_gbp": 1420000
+  },
+  "action_log": [
+    {
+      "item": "Verify final Direct Debit for Personal Loan completes in Aug/Sept 2026.",
+      "done": false
+    },
+    {
+      "item": "Sept 1 2026: Set up automated \u00a31,516 top-up to Trading 212 ISA.",
+      "done": false
+    },
+    {
+      "item": "Sept 1 2026: Set up automated \u00a3452 standing order to High-Yield Savings Account.",
+      "done": false
+    },
+    {
+      "item": "Log into Vanguard: Switch \u00a325,557 from LifeStrategy 80% to FTSE Global All Cap.",
+      "done": false
+    },
+    {
+      "item": "Log into Aviva: Verify Target Retirement Age is set to 2042+ and 7% fund switch to UK BlackRock tracker is complete.",
+      "done": false
+    }
+  ]
+}

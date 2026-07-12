@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Project 2037 — Retirement Glide Path</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#151b23; --panel2:#1c232d; --border:#2a323d;
+    --text:#e6edf3; --muted:#8b96a5; --accent:#4f8cff;
+    --green:#2ea043; --green-bg:#0f2a17; --amber:#d29922; --amber-bg:#2b230d;
+    --red:#f85149; --red-bg:#2b1214;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:14px; padding-bottom:60px;
+  }
+  header{
+    position:sticky; top:0; z-index:10; background:var(--panel);
+    border-bottom:1px solid var(--border); padding:12px 16px;
+    display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between;
+  }
+  header h1{font-size:16px; margin:0; font-weight:600;}
+  header .sub{color:var(--muted); font-size:12px;}
+  .badge{
+    display:inline-block; padding:3px 9px; border-radius:20px; font-size:11px;
+    font-weight:600; letter-spacing:.3px;
+  }
+  .badge.green{background:var(--green-bg); color:var(--green); border:1px solid var(--green);}
+  .badge.amber{background:var(--amber-bg); color:var(--amber); border:1px solid var(--amber);}
+  .badge.red{background:var(--red-bg); color:var(--red); border:1px solid var(--red);}
+  .badge.neutral{background:#20272f; color:var(--muted); border:1px solid var(--border);}
+
+  .toggle-wrap{display:flex; align-items:center; gap:8px; font-size:12px;}
+  .toggle{
+    position:relative; width:96px; height:28px; background:#20272f;
+    border-radius:20px; cursor:pointer; border:1px solid var(--border);
+  }
+  .toggle .knob{
+    position:absolute; top:2px; left:2px; width:46px; height:22px; border-radius:16px;
+    background:var(--accent); transition:left .2s ease;
+    display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700;
+  }
+  .toggle.uk .knob{left:48px;}
+  .toggle .labels{
+    position:absolute; inset:0; display:flex; font-size:10px; color:var(--muted);
+  }
+  .toggle .labels span{flex:1; display:flex; align-items:center; justify-content:center;}
+
+  main{max-width:1180px; margin:0 auto; padding:16px;}
+  .section-title{
+    font-size:13px; text-transform:uppercase; letter-spacing:.6px; color:var(--muted);
+    margin:28px 0 10px; display:flex; align-items:center; gap:8px;
+  }
+  .section-title::after{content:""; flex:1; height:1px; background:var(--border);}
+
+  .grid{display:grid; gap:12px;}
+  .grid.cards{grid-template-columns:repeat(auto-fit, minmax(190px,1fr));}
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:14px 16px;
+  }
+  .card .label{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.4px;}
+  .card .value{font-size:22px; font-weight:700; margin-top:4px;}
+  .card .caption{font-size:11px; color:var(--muted); margin-top:6px; line-height:1.4;}
+  .progress-track{
+    height:6px; background:#20272f; border-radius:4px; margin-top:8px; overflow:hidden;
+  }
+  .progress-fill{height:100%; border-radius:4px;}
+
+  .flow-row{display:flex; flex-wrap:wrap; gap:10px; align-items:stretch;}
+  .flow-box{
+    background:var(--panel2); border:1px solid var(--border); border-radius:8px;
+    padding:10px 12px; min-width:140px; flex:1;
+  }
+  .flow-box .t{font-size:11px; color:var(--muted);}
+  .flow-box .v{font-size:16px; font-weight:700; margin-top:2px;}
+  .flow-arrow{display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:18px; padding:0 4px;}
+
+  table{width:100%; border-collapse:collapse; font-size:12.5px;}
+  thead th{
+    text-align:left; padding:8px 10px; color:var(--muted); font-weight:600;
+    border-bottom:1px solid var(--border); position:sticky; top:52px; background:var(--panel);
+    white-space:nowrap;
+  }
+  tbody td{padding:7px 10px; border-bottom:1px solid #1a2029; white-space:nowrap;}
+  tbody tr:hover{background:var(--panel2);}
+  .num{text-align:right; font-variant-numeric:tabular-nums;}
+  .pos{color:var(--green);}
+  .neg{color:var(--red);}
+  .table-wrap{overflow-x:auto; background:var(--panel); border:1px solid var(--border); border-radius:10px;}
+  .filter-row{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;}
+  select,input[type=text]{
+    background:var(--panel2); color:var(--text); border:1px solid var(--border);
+    border-radius:6px; padding:6px 8px; font-size:12px;
+  }
+
+  .chart-card{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:14px; height:280px;}
+
+  .timeline{display:flex; flex-direction:column; gap:0; background:var(--panel); border:1px solid var(--border); border-radius:10px; overflow:hidden;}
+  .tl-item{
+    display:flex; gap:12px; padding:12px 14px; border-bottom:1px solid #1a2029; align-items:flex-start;
+  }
+  .tl-item:last-child{border-bottom:none;}
+  .tl-item input[type=checkbox]{margin-top:3px; width:16px; height:16px; accent-color:var(--green);}
+  .tl-year{font-weight:700; min-width:46px;}
+  .tl-body{flex:1;}
+  .tl-milestone{font-size:13px;}
+  .tl-meta{font-size:11px; color:var(--muted); margin-top:3px;}
+  .tl-item.done .tl-milestone{color:var(--muted); text-decoration:line-through;}
+
+  .action-list{display:flex; flex-direction:column; gap:0; background:var(--panel); border:1px solid var(--border); border-radius:10px; overflow:hidden;}
+  .action-item{display:flex; gap:10px; padding:11px 14px; border-bottom:1px solid #1a2029; align-items:flex-start; font-size:13px;}
+  .action-item:last-child{border-bottom:none;}
+  .action-item input{margin-top:3px; width:16px; height:16px; accent-color:var(--green);}
+  .action-item.done span{color:var(--muted); text-decoration:line-through;}
+
+  .scenario-cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px;}
+  .scenario-card{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:16px;}
+  .scenario-card.active{border-color:var(--accent); box-shadow:0 0 0 1px var(--accent) inset;}
+  .scenario-card h3{margin:0 0 8px; font-size:14px;}
+  .scenario-card .big{font-size:24px; font-weight:700; margin:8px 0 4px;}
+  .scenario-card .line{display:flex; justify-content:space-between; font-size:12.5px; padding:4px 0; border-bottom:1px solid #1a2029;}
+  .scenario-card .line:last-child{border-bottom:none;}
+
+  footer{max-width:1180px; margin:20px auto 0; padding:16px; color:var(--muted); font-size:11.5px; border-top:1px solid var(--border);}
+  a{color:var(--accent);}
+  .two-col{display:grid; grid-template-columns:1.3fr 1fr; gap:12px;}
+  @media (max-width:760px){ .two-col{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Project 2037 — Retirement Glide Path</h1>
+    <div class="sub" id="countdown">Loading…</div>
+  </div>
+  <div class="toggle-wrap">
+    <span>Chennai</span>
+    <div class="toggle" id="scenarioToggle"><div class="labels"><span></span><span></span></div><div class="knob" id="toggleKnob">🇮🇳</div></div>
+    <span>UK</span>
+  </div>
+  <div>
+    <span class="badge neutral" id="dataAsOfBadge">Data as of —</span>
+  </div>
+</header>
+
+<main>
+
+  <div class="section-title">Headline</div>
+  <div class="grid cards">
+    <div class="card">
+      <div class="label">Total Portfolio Value (live)</div>
+      <div class="value" id="mTotalPortfolio">—</div>
+      <div class="caption">Sum of holdings tab — Srini + Deepa</div>
+    </div>
+    <div class="card">
+      <div class="label">Pension Corpus</div>
+      <div class="value" id="mPension">—</div>
+      <div class="caption" id="mPensionRag">vs plan —</div>
+    </div>
+    <div class="card">
+      <div class="label">Property Engine ISA (Srini)</div>
+      <div class="value" id="mIsa">—</div>
+      <div class="caption" id="mIsaRag">vs plan —</div>
+    </div>
+    <div class="card">
+      <div class="label">Emergency Shield</div>
+      <div class="value" id="mShield">—</div>
+      <div class="progress-track"><div class="progress-fill" id="mShieldBar"></div></div>
+      <div class="caption" id="mShieldCaption">of £10,500 target</div>
+    </div>
+    <div class="card">
+      <div class="label">Consumer Debt</div>
+      <div class="value" id="mDebt">—</div>
+      <div class="caption" id="mDebtCaption">—</div>
+    </div>
+    <div class="card">
+      <div class="label">2037 Net Worth Target</div>
+      <div class="value">£1.42M</div>
+      <div class="caption">Pension £780k + ISA £320k + House £400k − Mortgage £90k</div>
+    </div>
+  </div>
+
+  <div class="section-title">Monthly Cash Flow Allocation</div>
+  <div class="flow-row">
+    <div class="flow-box"><div class="t">Take-home pay</div><div class="v">£5,468</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box"><div class="t">Baseline expenses</div><div class="v">£3,500</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-box" style="border-color:var(--accent)"><div class="t">Liquid surplus</div><div class="v">£1,968</div></div>
+  </div>
+  <div class="flow-row" style="margin-top:8px;">
+    <div class="flow-arrow" style="flex:0 0 20px;">↳</div>
+    <div class="flow-box"><div class="t">Emergency Shield</div><div class="v">£452/mo</div><div class="caption">→ High-yield savings, until £10,500</div></div>
+    <div class="flow-box"><div class="t">Property Engine ISA</div><div class="v">£1,666/mo</div><div class="caption">£150 existing + £1,516 new → Trading 212 ISA</div></div>
+  </div>
+  <div class="flow-row" style="margin-top:8px;">
+    <div class="flow-box" style="border-style:dashed;"><div class="t">Separately, from gross salary</div><div class="v">15% → Aviva pension (salary sacrifice)</div></div>
+  </div>
+
+  <div class="section-title">Pension Engine</div>
+  <div class="two-col">
+    <div class="chart-card"><canvas id="pensionChart"></canvas></div>
+    <div class="grid" style="grid-template-columns:1fr; gap:10px;">
+      <div class="card"><div class="label">Aviva (Active Workplace)</div><div class="value" id="pAviva">—</div><div class="caption">93% BlackRock World ex-UK / 7% BlackRock UK Equity — 15% of gross salary monthly</div></div>
+      <div class="card"><div class="label">L&amp;G Legacy (ASRP Global Equity Tracker)</div><div class="value" id="pLG">—</div><div class="caption">£0 new input — compounding only</div></div>
+      <div class="card"><div class="label">Vanguard SIPP Legacy (FTSE Global All Cap)</div><div class="value" id="pVanguard">—</div><div class="caption">£0 new input — compounding only</div></div>
+    </div>
+  </div>
+
+  <div class="section-title">De-Risking Glide Path — 2026 to 2037</div>
+  <div class="timeline" id="timeline"></div>
+
+  <div class="section-title">End-State Scenario</div>
+  <div class="scenario-cards">
+    <div class="scenario-card" id="cardChennai">
+      <h3>🇮🇳 Scenario A — Chennai</h3>
+      <div class="big" id="chennaiCorpus">£1.26M</div>
+      <div class="line"><span>Action</span><span style="text-align:right; max-width:60%;">Sell UK house, buy Chennai flat cash</span></div>
+      <div class="line"><span>Passive income (4% SWR)</span><span>£50,400/yr</span></div>
+      <div class="line"><span>Tax treatment</span><span>Tax-free (RNOR)</span></div>
+      <div class="line"><span>Fixed asset</span><span>Chennai flat, paid off</span></div>
+    </div>
+    <div class="scenario-card" id="cardUK">
+      <h3>🇬🇧 Scenario B — Stay in UK</h3>
+      <div class="big" id="ukCorpus">£1.01M</div>
+      <div class="line"><span>Action</span><span style="text-align:right; max-width:60%;">Clear mortgage with £90k ISA</span></div>
+      <div class="line"><span>Passive income (4% SWR)</span><span>£40,400/yr</span></div>
+      <div class="line"><span>Fixed asset</span><span>Coventry home, paid off (£400k)</span></div>
+    </div>
+  </div>
+
+  <div class="section-title">Portfolio Holdings <span style="font-weight:400; text-transform:none;">(as of 1 Jul 2026, live prices for Google Finance-linked rows)</span></div>
+  <div class="filter-row">
+    <select id="fOwner"><option value="">All owners</option></select>
+    <select id="fAccount"><option value="">All account types</option></select>
+    <input type="text" id="fSearch" placeholder="Search name / symbol...">
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Owner</th><th>Symbol</th><th>Name</th><th>Account</th>
+          <th class="num">Value (£)</th><th class="num">Cost Basis (£)</th>
+          <th class="num">Gain/Loss (£)</th><th class="num">Return %</th><th class="num">Weight %</th>
+        </tr>
+      </thead>
+      <tbody id="holdingsBody"></tbody>
+    </table>
+  </div>
+
+  <div class="section-title">Portfolio Value Over Time</div>
+  <div class="chart-card"><canvas id="historyChart"></canvas></div>
+
+  <div class="section-title">Immediate Action Log</div>
+  <div class="action-list" id="actionList"></div>
+
+</main>
+
+<footer>
+  Project 2037 dashboard. Portfolio figures are manual-entry accurate as of <strong>1 July 2026</strong>; rows linked to GOOGLEFINANCE in the source Google Sheet
+  will have moved since — refresh <code>data.json</code> from the live sheet periodically. Checklist state is stored locally in this browser only.
+</footer>
+
+<script>
+const fmtGBP = (n) => n==null ? '—' : '£' + Number(n).toLocaleString('en-GB', {maximumFractionDigits:0});
+const fmtGBP2 = (n) => n==null ? '—' : '£' + Number(n).toLocaleString('en-GB', {minimumFractionDigits:2, maximumFractionDigits:2});
+const fmtPct = (n) => n==null ? '—' : (n>=0?'+':'') + Number(n).toFixed(1) + '%';
+
+let DATA = null;
+let scenario = 'chennai';
+
+fetch('./data.json').then(r=>r.json()).then(d=>{
+  DATA = d;
+  render();
+}).catch(e=>{
+  document.querySelector('main').innerHTML = '<p style="color:var(--red)">Could not load data.json — make sure it is in the same folder as index.html.</p>';
+  console.error(e);
+});
+
+function ragClass(pct){
+  if(pct>=95) return 'green';
+  if(pct>=70) return 'amber';
+  return 'red';
+}
+
+function render(){
+  // header
+  document.getElementById('dataAsOfBadge').textContent = 'Data as of ' + DATA.meta.baseline_date;
+  const target = new Date(DATA.meta.target_retirement + 'T00:00:00');
+  const now = new Date();
+  const days = Math.round((target-now)/86400000);
+  const years = (days/365.25).toFixed(1);
+  document.getElementById('countdown').textContent = `${days.toLocaleString()} days (${years} yrs) to September 2037`;
+
+  // totals
+  document.getElementById('mTotalPortfolio').textContent = fmtGBP(DATA.total_portfolio_value_gbp);
+
+  const pensionRows = DATA.holdings.filter(h=>h.account_type==='Pension');
+  const pensionTotal = pensionRows.reduce((s,h)=>s+h.current_value,0);
+  document.getElementById('mPension').textContent = fmtGBP(pensionTotal);
+
+  const milestone2026 = DATA.milestones.find(m=>m.year===new Date().getFullYear()) || DATA.milestones[0];
+  const pensionPlan = milestone2026 ? parseFloat(String(milestone2026.pension_est).replace(/[^0-9.]/g,'')) : null;
+  if(pensionPlan){
+    const pct = (pensionTotal/pensionPlan*100);
+    const cls = ragClass(pct);
+    document.getElementById('mPensionRag').innerHTML = `<span class="badge ${cls}">${pct.toFixed(0)}% of ${milestone2026.year} plan (${milestone2026.pension_est})</span>`;
+  }
+
+  const srini = DATA.holdings.filter(h=>h.owner==='Srini');
+  const srinIsa = srini.filter(h=>h.account_type==='ISA').reduce((s,h)=>s+h.current_value,0);
+  document.getElementById('mIsa').textContent = fmtGBP(srinIsa);
+  const isaPlan = milestone2026 ? parseFloat(String(milestone2026.isa_est).replace(/[^0-9.]/g,'')) : null;
+  if(isaPlan){
+    const pct = (srinIsa/isaPlan*100);
+    const cls = ragClass(pct);
+    document.getElementById('mIsaRag').innerHTML = `<span class="badge ${cls}">${pct.toFixed(0)}% of ${milestone2026.year} plan (${milestone2026.isa_est})</span>`;
+  }
+
+  const srinCash = srini.filter(h=>h.account_type==='Cash').reduce((s,h)=>s+h.current_value,0);
+  document.getElementById('mShield').textContent = fmtGBP(srinCash);
+  const shieldPct = Math.min(100, srinCash/DATA.constants.emergency_shield_target_gbp*100);
+  const shieldBar = document.getElementById('mShieldBar');
+  shieldBar.style.width = shieldPct+'%';
+  shieldBar.style.background = shieldPct>=100 ? 'var(--green)' : (shieldPct>=50?'var(--amber)':'var(--red)');
+  document.getElementById('mShieldCaption').textContent = `${shieldPct.toFixed(0)}% of £${DATA.constants.emergency_shield_target_gbp.toLocaleString()} target`;
+
+  document.getElementById('mDebt').textContent = DATA.debt.status==='cleared' ? '£0' : '—';
+  document.getElementById('mDebt').style.color = 'var(--green)';
+  document.getElementById('mDebtCaption').textContent = `Cleared ${DATA.debt.clear_date}`;
+
+  // pension account cards
+  const byName = n => pensionRows.find(h=>h.name===n);
+  const aviva = ['Av MyM BlackRock World ex UK Equity Index Tracker','Av MyM BlackRock UK Equity Index Tracker','Av MyM My Future Growth (Pre-2025)']
+    .map(n=>byName(n)).filter(Boolean).reduce((s,h)=>s+h.current_value,0);
+  const lg = byName('ARSP - Global Equity Tracker (including UK) Fund');
+  const vg = byName('FTSE Global All Cap Index Fund Accumulation');
+  document.getElementById('pAviva').textContent = fmtGBP(aviva);
+  document.getElementById('pLG').textContent = fmtGBP(lg ? lg.current_value : null);
+  document.getElementById('pVanguard').textContent = fmtGBP(vg ? vg.current_value : null);
+
+  renderPensionChart(pensionTotal);
+  renderTimeline();
+  renderScenarios();
+  renderHoldingsTable();
+  renderHistoryChart();
+  renderActionLog();
+}
+
+function renderPensionChart(currentValue){
+  const labels = DATA.milestones.map(m=>m.year);
+  const planData = DATA.milestones.map(m=>parseFloat(String(m.pension_est).replace(/[^0-9.]/g,'')) || null);
+  const ctx = document.getElementById('pensionChart');
+  new Chart(ctx, {
+    type:'line',
+    data:{
+      labels,
+      datasets:[
+        {label:'Plan (from model)', data:planData, borderColor:'#4f8cff', backgroundColor:'transparent', tension:.3},
+        {label:'Actual (Jul 2026)', data:labels.map(y=> y===2026 ? currentValue : null), pointRadius:6, pointBackgroundColor:'#2ea043', showLine:false}
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#8b96a5', font:{size:10}}}},
+      scales:{
+        x:{ticks:{color:'#8b96a5'}, grid:{color:'#1a2029'}},
+        y:{ticks:{color:'#8b96a5', callback:v=>'£'+(v/1000)+'k'}, grid:{color:'#1a2029'}}
+      }
+    }
+  });
+}
+
+function renderTimeline(){
+  const saved = JSON.parse(localStorage.getItem('p2037_milestones')||'{}');
+  const wrap = document.getElementById('timeline');
+  wrap.innerHTML = '';
+  DATA.milestones.forEach(m=>{
+    const key = 'y'+m.year;
+    const done = !!saved[key];
+    const div = document.createElement('div');
+    div.className = 'tl-item' + (done?' done':'');
+    div.innerHTML = `
+      <input type="checkbox" ${done?'checked':''} data-key="${key}">
+      <div class="tl-year">${m.year}</div>
+      <div class="tl-body">
+        <div class="tl-milestone">${m.milestone}</div>
+        <div class="tl-meta">Age ${m.age} · ISA ${m.isa_est} · Pension ${m.pension_est} · Mortgage ${m.mortgage_est}</div>
+      </div>`;
+    wrap.appendChild(div);
+  });
+  wrap.querySelectorAll('input[type=checkbox]').forEach(cb=>{
+    cb.addEventListener('change', e=>{
+      const s = JSON.parse(localStorage.getItem('p2037_milestones')||'{}');
+      s[e.target.dataset.key] = e.target.checked;
+      localStorage.setItem('p2037_milestones', JSON.stringify(s));
+      e.target.closest('.tl-item').classList.toggle('done', e.target.checked);
+    });
+  });
+}
+
+function renderScenarios(){
+  document.getElementById('chennaiCorpus').textContent = fmtGBP(DATA.scenarios.chennai.starting_liquid_corpus_gbp);
+  document.getElementById('ukCorpus').textContent = fmtGBP(DATA.scenarios.uk.starting_liquid_corpus_gbp);
+  updateToggleUI();
+}
+
+function updateToggleUI(){
+  const toggle = document.getElementById('scenarioToggle');
+  const knob = document.getElementById('toggleKnob');
+  const cardC = document.getElementById('cardChennai');
+  const cardU = document.getElementById('cardUK');
+  if(scenario==='uk'){
+    toggle.classList.add('uk'); knob.textContent = '🇬🇧';
+    cardU.classList.add('active'); cardC.classList.remove('active');
+  } else {
+    toggle.classList.remove('uk'); knob.textContent = '🇮🇳';
+    cardC.classList.add('active'); cardU.classList.remove('active');
+  }
+}
+document.getElementById('scenarioToggle').addEventListener('click', ()=>{
+  scenario = scenario==='chennai' ? 'uk' : 'chennai';
+  updateToggleUI();
+});
+
+let holdingsSort = {key:'current_value', dir:-1};
+function renderHoldingsTable(){
+  const owners = [...new Set(DATA.holdings.map(h=>h.owner))];
+  const accounts = [...new Set(DATA.holdings.map(h=>h.account_type))];
+  const fOwner = document.getElementById('fOwner');
+  const fAccount = document.getElementById('fAccount');
+  owners.forEach(o=>fOwner.insertAdjacentHTML('beforeend', `<option value="${o}">${o}</option>`));
+  accounts.forEach(a=>fAccount.insertAdjacentHTML('beforeend', `<option value="${a}">${a}</option>`));
+
+  function draw(){
+    const ownerF = fOwner.value, accF = fAccount.value, q = document.getElementById('fSearch').value.toLowerCase();
+    let rows = DATA.holdings.filter(h=>
+      (!ownerF || h.owner===ownerF) &&
+      (!accF || h.account_type===accF) &&
+      (!q || (h.name||'').toLowerCase().includes(q) || (h.symbol||'').toLowerCase().includes(q))
+    );
+    const tbody = document.getElementById('holdingsBody');
+    tbody.innerHTML = rows.map(h=>`
+      <tr>
+        <td>${h.owner}</td>
+        <td>${h.symbol||'—'}</td>
+        <td>${h.name}</td>
+        <td>${h.account_type}</td>
+        <td class="num">${fmtGBP2(h.current_value)}</td>
+        <td class="num">${fmtGBP2(h.cost_basis)}</td>
+        <td class="num ${h.gain_loss>=0?'pos':'neg'}">${fmtGBP2(h.gain_loss)}</td>
+        <td class="num ${h.return_pct>=0?'pos':'neg'}">${fmtPct(h.return_pct*100)}</td>
+        <td class="num">${h.weight_pct.toFixed(1)}%</td>
+      </tr>`).join('');
+  }
+  fOwner.addEventListener('change', draw);
+  fAccount.addEventListener('change', draw);
+  document.getElementById('fSearch').addEventListener('input', draw);
+  draw();
+}
+
+function renderHistoryChart(){
+  const labels = DATA.history.map(h=>h.date);
+  const values = DATA.history.map(h=>h.total_value);
+  new Chart(document.getElementById('historyChart'), {
+    type:'line',
+    data:{labels, datasets:[{label:'Total portfolio value (£)', data:values, borderColor:'#4f8cff', backgroundColor:'rgba(79,140,255,.1)', fill:true, tension:.3}]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#8b96a5', font:{size:10}}}},
+      scales:{
+        x:{ticks:{color:'#8b96a5'}, grid:{color:'#1a2029'}},
+        y:{ticks:{color:'#8b96a5', callback:v=>'£'+(v/1000).toFixed(0)+'k'}, grid:{color:'#1a2029'}}
+      }
+    }
+  });
+}
+
+function renderActionLog(){
+  const saved = JSON.parse(localStorage.getItem('p2037_actions')||'{}');
+  const wrap = document.getElementById('actionList');
+  wrap.innerHTML = '';
+  DATA.action_log.forEach((a,i)=>{
+    const done = saved[i] ?? a.done;
+    const div = document.createElement('div');
+    div.className = 'action-item' + (done?' done':'');
+    div.innerHTML = `<input type="checkbox" ${done?'checked':''} data-i="${i}"><span>${a.item}</span>`;
+    wrap.appendChild(div);
+  });
+  wrap.querySelectorAll('input[type=checkbox]').forEach(cb=>{
+    cb.addEventListener('change', e=>{
+      const s = JSON.parse(localStorage.getItem('p2037_actions')||'{}');
+      s[e.target.dataset.i] = e.target.checked;
+      localStorage.setItem('p2037_actions', JSON.stringify(s));
+      e.target.closest('.action-item').classList.toggle('done', e.target.checked);
+    });
+  });
+}
+</script>
+</body>
+</html>
