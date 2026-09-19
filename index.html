@@ -50,6 +50,13 @@
   }
   .toggle .labels span{flex:1; display:flex; align-items:center; justify-content:center;}
 
+  .owner-toggle{display:flex; gap:4px; background:#20272f; border:1px solid var(--border); border-radius:20px; padding:3px;}
+  .owner-btn{
+    border:none; background:transparent; color:var(--muted); font-size:11.5px; font-weight:600;
+    padding:5px 12px; border-radius:16px; cursor:pointer; letter-spacing:.2px;
+  }
+  .owner-btn.active{background:var(--accent); color:#fff;}
+
   main{max-width:1180px; margin:0 auto; padding:16px;}
   .section-title{
     font-size:13px; text-transform:uppercase; letter-spacing:.6px; color:var(--muted);
@@ -97,6 +104,7 @@
     background:var(--panel2); color:var(--text); border:1px solid var(--border);
     border-radius:6px; padding:6px 8px; font-size:12px;
   }
+  .native{color:var(--muted); font-size:11px; display:block;}
 
   .chart-card{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:14px; height:280px;}
 
@@ -139,6 +147,11 @@
     <h1>Project 2037 — Retirement Glide Path</h1>
     <div class="sub" id="countdown">Loading…</div>
   </div>
+  <div class="owner-toggle" id="ownerToggle">
+    <button class="owner-btn active" data-owner="all">Combined</button>
+    <button class="owner-btn" data-owner="Srini">Srini</button>
+    <button class="owner-btn" data-owner="Deepa">Deepa</button>
+  </div>
   <div class="toggle-wrap">
     <span>Chennai</span>
     <div class="toggle" id="scenarioToggle"><div class="labels"><span></span><span></span></div><div class="knob" id="toggleKnob">🇮🇳</div></div>
@@ -156,7 +169,12 @@
     <div class="card">
       <div class="label">Total Portfolio Value (live)</div>
       <div class="value" id="mTotalPortfolio">—</div>
-      <div class="caption">Sum of holdings tab — Srini + Deepa</div>
+      <div class="caption" id="mTotalCaption">Sum of GBP holdings — Srini + Deepa</div>
+    </div>
+    <div class="card">
+      <div class="label">India Stocks Sandbox</div>
+      <div class="value" id="mIndia">—</div>
+      <div class="caption" id="mIndiaCaption">Tracked in ₹, not converted — separate from the GBP net worth figures</div>
     </div>
     <div class="card">
       <div class="label">Pension Corpus</div>
@@ -164,12 +182,12 @@
       <div class="caption" id="mPensionRag">vs plan —</div>
     </div>
     <div class="card">
-      <div class="label">Property Engine ISA (Srini)</div>
+      <div class="label" id="mIsaLabel">Property Engine ISA (Srini)</div>
       <div class="value" id="mIsa">—</div>
       <div class="caption" id="mIsaRag">vs plan —</div>
     </div>
     <div class="card">
-      <div class="label">Emergency Shield</div>
+      <div class="label">Emergency Shield (household)</div>
       <div class="value" id="mShield">—</div>
       <div class="progress-track"><div class="progress-fill" id="mShieldBar"></div></div>
       <div class="caption" id="mShieldCaption">of £10,500 target</div>
@@ -235,9 +253,8 @@
     </div>
   </div>
 
-  <div class="section-title">Portfolio Holdings <span style="font-weight:400; text-transform:none;">(as of 1 Jul 2026, live prices for Google Finance-linked rows)</span></div>
+  <div class="section-title">Portfolio Holdings <span style="font-weight:400; text-transform:none;" id="holdingsAsOf">(live prices)</span></div>
   <div class="filter-row">
-    <select id="fOwner"><option value="">All owners</option></select>
     <select id="fAccount"><option value="">All account types</option></select>
     <input type="text" id="fSearch" placeholder="Search name / symbol...">
   </div>
@@ -246,8 +263,8 @@
       <thead>
         <tr>
           <th>Owner</th><th>Symbol</th><th>Name</th><th>Account</th>
-          <th class="num">Value (£)</th><th class="num">Cost Basis (£)</th>
-          <th class="num">Gain/Loss (£)</th><th class="num">Return %</th><th class="num">Weight %</th>
+          <th class="num">Value</th><th class="num">Cost Basis</th>
+          <th class="num">Gain/Loss</th><th class="num">Return %</th><th class="num">Weight % (GBP)</th>
         </tr>
       </thead>
       <tbody id="holdingsBody"></tbody>
@@ -263,17 +280,22 @@
 </main>
 
 <footer>
-  Project 2037 dashboard. Portfolio figures are manual-entry accurate as of <strong>1 July 2026</strong>; rows linked to GOOGLEFINANCE in the source Google Sheet
-  will have moved since — refresh <code>data.json</code> from the live sheet periodically. Checklist state is stored locally in this browser only.
+  Project 2037 dashboard. Published automatically from the live Google Sheet via Apps Script — see
+  <code>data.json</code>'s <code>meta.baseline_date</code> for the last refresh. Checklist state is stored locally in this browser only.
 </footer>
 
 <script>
 const fmtGBP = (n) => n==null ? '—' : '£' + Number(n).toLocaleString('en-GB', {maximumFractionDigits:0});
 const fmtGBP2 = (n) => n==null ? '—' : '£' + Number(n).toLocaleString('en-GB', {minimumFractionDigits:2, maximumFractionDigits:2});
+const fmtINR = (n) => n==null ? '—' : '₹' + Number(n).toLocaleString('en-IN', {maximumFractionDigits:0});
+const fmtINR2 = (n) => n==null ? '—' : '₹' + Number(n).toLocaleString('en-IN', {minimumFractionDigits:2, maximumFractionDigits:2});
 const fmtPct = (n) => n==null ? '—' : (n>=0?'+':'') + Number(n).toFixed(1) + '%';
+// Value/cost fields are already in the holding's own currency — never converted.
+const fmtByCcy = (n, ccy) => ccy==='INR' ? fmtINR2(n) : fmtGBP2(n);
 
 let DATA = null;
 let scenario = 'chennai';
+let ownerScope = 'all'; // 'all' | 'Srini' | 'Deepa'
 
 fetch('./data.json').then(r=>r.json()).then(d=>{
   DATA = d;
@@ -289,61 +311,126 @@ function ragClass(pct){
   return 'red';
 }
 
+// Holdings filtered to the currently selected owner scope ('all' = everyone).
+// Includes both currencies — callers that need GBP-only (totals, weights)
+// filter separately below. Pension/ISA/Cash account types never contain
+// INR rows in practice, so this is safe to use broadly for those cards.
+function scopedHoldings(){
+  if(ownerScope==='all') return DATA.holdings;
+  return DATA.holdings.filter(h=>h.owner===ownerScope);
+}
+
+// GBP-only total for the current owner scope — this is the figure that
+// feeds the net worth math. India (INR) holdings are never folded in here.
+function scopeTotal(){
+  if(DATA.owner_totals){
+    if(ownerScope==='all') return DATA.total_portfolio_value_gbp;
+    return DATA.owner_totals[ownerScope] ? DATA.owner_totals[ownerScope].total : 0;
+  }
+  return scopedHoldings().filter(h=>h.currency==='GBP').reduce((s,h)=>s+h.current_value,0);
+}
+
+// INR-only total for the current owner scope — the separate India tally.
+function scopeTotalInr(){
+  if(DATA.owner_totals){
+    if(ownerScope==='all') return DATA.total_portfolio_value_inr || 0;
+    return DATA.owner_totals[ownerScope] ? (DATA.owner_totals[ownerScope].total_inr||0) : 0;
+  }
+  return scopedHoldings().filter(h=>h.currency==='INR').reduce((s,h)=>s+h.current_value,0);
+}
+
+document.getElementById('ownerToggle').addEventListener('click', (e)=>{
+  const btn = e.target.closest('.owner-btn');
+  if(!btn) return;
+  ownerScope = btn.dataset.owner;
+  document.querySelectorAll('.owner-btn').forEach(b=>b.classList.toggle('active', b===btn));
+  if(DATA) render();
+});
+
 function render(){
   // header
   document.getElementById('dataAsOfBadge').textContent = 'Data as of ' + DATA.meta.baseline_date;
+  document.getElementById('holdingsAsOf').textContent = '(as of ' + DATA.meta.baseline_date + ', live prices for Google Finance-linked rows)';
   const target = new Date(DATA.meta.target_retirement + 'T00:00:00');
   const now = new Date();
   const days = Math.round((target-now)/86400000);
   const years = (days/365.25).toFixed(1);
   document.getElementById('countdown').textContent = `${days.toLocaleString()} days (${years} yrs) to September 2037`;
 
-  // totals
-  document.getElementById('mTotalPortfolio').textContent = fmtGBP(DATA.total_portfolio_value_gbp);
+  const scoped = scopedHoldings();
+  const scopeTot = scopeTotal();
 
-  const pensionRows = DATA.holdings.filter(h=>h.account_type==='Pension');
+  // total portfolio card (GBP core only — India sandbox is the separate card below)
+  document.getElementById('mTotalPortfolio').textContent = fmtGBP(scopeTot);
+  document.getElementById('mTotalCaption').textContent = ownerScope==='all'
+    ? 'Sum of GBP holdings — Srini + Deepa'
+    : `Sum of ${ownerScope}'s GBP holdings`;
+
+  // India stocks sandbox — kept as its own ₹ tally, never converted or folded into the total above
+  const scopeInr = scopeTotalInr();
+  document.getElementById('mIndia').textContent = fmtINR(scopeInr);
+  document.getElementById('mIndiaCaption').textContent = scopeInr
+    ? 'Tracked in ₹, not converted — separate from the GBP net worth figures'
+    : (ownerScope==='Deepa' ? 'No India holdings under Deepa' : 'Tracked in ₹, not converted — separate from the GBP net worth figures');
+
+  // pension
+  const pensionRows = scoped.filter(h=>h.account_type==='Pension');
   const pensionTotal = pensionRows.reduce((s,h)=>s+h.current_value,0);
   document.getElementById('mPension').textContent = fmtGBP(pensionTotal);
 
   const milestone2026 = DATA.milestones.find(m=>m.year===new Date().getFullYear()) || DATA.milestones[0];
   const pensionPlan = milestone2026 ? parseFloat(String(milestone2026.pension_est).replace(/[^0-9.]/g,'')) : null;
-  if(pensionPlan){
+  if(ownerScope==='all' && pensionPlan){
     const pct = (pensionTotal/pensionPlan*100);
     const cls = ragClass(pct);
     document.getElementById('mPensionRag').innerHTML = `<span class="badge ${cls}">${pct.toFixed(0)}% of ${milestone2026.year} plan (${milestone2026.pension_est})</span>`;
+  } else {
+    document.getElementById('mPensionRag').innerHTML = `<span class="badge neutral">Plan tracks the combined pension only</span>`;
   }
 
-  const srini = DATA.holdings.filter(h=>h.owner==='Srini');
-  const srinIsa = srini.filter(h=>h.account_type==='ISA').reduce((s,h)=>s+h.current_value,0);
-  document.getElementById('mIsa').textContent = fmtGBP(srinIsa);
-  const isaPlan = milestone2026 ? parseFloat(String(milestone2026.isa_est).replace(/[^0-9.]/g,'')) : null;
-  if(isaPlan){
-    const pct = (srinIsa/isaPlan*100);
-    const cls = ragClass(pct);
-    document.getElementById('mIsaRag').innerHTML = `<span class="badge ${cls}">${pct.toFixed(0)}% of ${milestone2026.year} plan (${milestone2026.isa_est})</span>`;
+  // ISA — the Property Engine target is specifically Srini's Trading 212 ISA.
+  document.getElementById('mIsaLabel').textContent = ownerScope==='Deepa' ? "Deepa's ISA" : 'Property Engine ISA (Srini)';
+  if(ownerScope==='Deepa'){
+    const deepaIsa = scoped.filter(h=>h.account_type==='ISA').reduce((s,h)=>s+h.current_value,0);
+    document.getElementById('mIsa').textContent = fmtGBP(deepaIsa);
+    document.getElementById('mIsaRag').innerHTML = `<span class="badge neutral">No formal glide-path target for Deepa's ISA</span>`;
+  } else {
+    const srinIsa = DATA.holdings.filter(h=>h.owner==='Srini' && h.account_type==='ISA').reduce((s,h)=>s+h.current_value,0);
+    document.getElementById('mIsa').textContent = fmtGBP(srinIsa);
+    const isaPlan = milestone2026 ? parseFloat(String(milestone2026.isa_est).replace(/[^0-9.]/g,'')) : null;
+    if(isaPlan){
+      const pct = (srinIsa/isaPlan*100);
+      const cls = ragClass(pct);
+      document.getElementById('mIsaRag').innerHTML = `<span class="badge ${cls}">${pct.toFixed(0)}% of ${milestone2026.year} plan (${milestone2026.isa_est})</span>`;
+    }
   }
 
-  const srinCash = srini.filter(h=>h.account_type==='Cash').reduce((s,h)=>s+h.current_value,0);
-  document.getElementById('mShield').textContent = fmtGBP(srinCash);
-  const shieldPct = Math.min(100, srinCash/DATA.constants.emergency_shield_target_gbp*100);
+  // Emergency Shield — always the combined household figure; it's one shared target.
+  const srinCash = DATA.holdings.filter(h=>h.owner==='Srini' && h.account_type==='Cash').reduce((s,h)=>s+h.current_value,0);
+  const deepaCash = DATA.holdings.filter(h=>h.owner==='Deepa' && h.account_type==='Cash').reduce((s,h)=>s+h.current_value,0);
+  const combinedCash = srinCash + deepaCash;
+  document.getElementById('mShield').textContent = fmtGBP(combinedCash);
+  const shieldPct = Math.min(100, combinedCash/DATA.constants.emergency_shield_target_gbp*100);
   const shieldBar = document.getElementById('mShieldBar');
   shieldBar.style.width = shieldPct+'%';
   shieldBar.style.background = shieldPct>=100 ? 'var(--green)' : (shieldPct>=50?'var(--amber)':'var(--red)');
-  document.getElementById('mShieldCaption').textContent = `${shieldPct.toFixed(0)}% of £${DATA.constants.emergency_shield_target_gbp.toLocaleString()} target`;
+  document.getElementById('mShieldCaption').textContent =
+    `${shieldPct.toFixed(0)}% of £${DATA.constants.emergency_shield_target_gbp.toLocaleString()} target — Srini ${fmtGBP(srinCash)} · Deepa ${fmtGBP(deepaCash)}`;
 
   document.getElementById('mDebt').textContent = DATA.debt.status==='cleared' ? '£0' : '—';
   document.getElementById('mDebt').style.color = 'var(--green)';
   document.getElementById('mDebtCaption').textContent = `Cleared ${DATA.debt.clear_date}`;
 
-  // pension account cards
-  const byName = n => pensionRows.find(h=>h.name===n);
-  const aviva = ['Av MyM BlackRock World ex UK Equity Index Tracker','Av MyM BlackRock UK Equity Index Tracker','Av MyM My Future Growth (Pre-2025)']
-    .map(n=>byName(n)).filter(Boolean).reduce((s,h)=>s+h.current_value,0);
-  const lg = byName('ARSP - Global Equity Tracker (including UK) Fund');
-  const vg = byName('FTSE Global All Cap Index Fund Accumulation');
+  // pension account cards — grouped by keyword, summed (not "first match"), respecting scope
+  function pensionGroup(regex){
+    return pensionRows.filter(h=>regex.test(h.name)).reduce((s,h)=>s+h.current_value,0);
+  }
+  const aviva = pensionGroup(/Av MyM|BlackRock/i);
+  const lg = pensionGroup(/ARSP/i);
+  const vg = pensionGroup(/FTSE Global All Cap/i);
   document.getElementById('pAviva').textContent = fmtGBP(aviva);
-  document.getElementById('pLG').textContent = fmtGBP(lg ? lg.current_value : null);
-  document.getElementById('pVanguard').textContent = fmtGBP(vg ? vg.current_value : null);
+  document.getElementById('pLG').textContent = fmtGBP(lg);
+  document.getElementById('pVanguard').textContent = fmtGBP(vg);
 
   renderPensionChart(pensionTotal);
   renderTimeline();
@@ -357,13 +444,14 @@ function renderPensionChart(currentValue){
   const labels = DATA.milestones.map(m=>m.year);
   const planData = DATA.milestones.map(m=>parseFloat(String(m.pension_est).replace(/[^0-9.]/g,'')) || null);
   const ctx = document.getElementById('pensionChart');
-  new Chart(ctx, {
+  if(ctx._chart) ctx._chart.destroy();
+  ctx._chart = new Chart(ctx, {
     type:'line',
     data:{
       labels,
       datasets:[
         {label:'Plan (from model)', data:planData, borderColor:'#4f8cff', backgroundColor:'transparent', tension:.3},
-        {label:'Actual (Jul 2026)', data:labels.map(y=> y===2026 ? currentValue : null), pointRadius:6, pointBackgroundColor:'#2ea043', showLine:false}
+        {label:'Actual (' + (DATA.meta.baseline_date||'').slice(0,4) + ')', data:labels.map(y=> y===new Date().getFullYear() ? currentValue : null), pointRadius:6, pointBackgroundColor:'#2ea043', showLine:false}
       ]
     },
     options:{
@@ -429,48 +517,60 @@ document.getElementById('scenarioToggle').addEventListener('click', ()=>{
   updateToggleUI();
 });
 
-let holdingsSort = {key:'current_value', dir:-1};
 function renderHoldingsTable(){
-  const owners = [...new Set(DATA.holdings.map(h=>h.owner))];
-  const accounts = [...new Set(DATA.holdings.map(h=>h.account_type))];
-  const fOwner = document.getElementById('fOwner');
   const fAccount = document.getElementById('fAccount');
-  owners.forEach(o=>fOwner.insertAdjacentHTML('beforeend', `<option value="${o}">${o}</option>`));
-  accounts.forEach(a=>fAccount.insertAdjacentHTML('beforeend', `<option value="${a}">${a}</option>`));
+  if(!fAccount.dataset.populated){
+    const accounts = [...new Set(DATA.holdings.map(h=>h.account_type))];
+    accounts.forEach(a=>fAccount.insertAdjacentHTML('beforeend', `<option value="${a}">${a}</option>`));
+    fAccount.dataset.populated = '1';
+    fAccount.addEventListener('change', draw);
+    document.getElementById('fSearch').addEventListener('input', draw);
+  }
 
   function draw(){
-    const ownerF = fOwner.value, accF = fAccount.value, q = document.getElementById('fSearch').value.toLowerCase();
-    let rows = DATA.holdings.filter(h=>
-      (!ownerF || h.owner===ownerF) &&
+    const accF = fAccount.value, q = document.getElementById('fSearch').value.toLowerCase();
+    const scoped = scopedHoldings();
+    // Weight % is GBP-only — mixing in INR rows would make the percentages meaningless.
+    const scopeTotGbp = scoped.filter(h=>h.currency==='GBP').reduce((s,h)=>s+h.current_value,0);
+    let rows = scoped.filter(h=>
       (!accF || h.account_type===accF) &&
       (!q || (h.name||'').toLowerCase().includes(q) || (h.symbol||'').toLowerCase().includes(q))
     );
     const tbody = document.getElementById('holdingsBody');
-    tbody.innerHTML = rows.map(h=>`
+    tbody.innerHTML = rows.map(h=>{
+      const isInr = h.currency==='INR';
+      const weightCell = isInr ? '—' : (scopeTotGbp ? (h.current_value/scopeTotGbp*100).toFixed(1)+'%' : '—');
+      const ccyTag = isInr ? ' <span class="native">(₹, not in GBP total)</span>' : '';
+      return `
       <tr>
         <td>${h.owner}</td>
-        <td>${h.symbol||'—'}</td>
+        <td>${h.symbol||'—'}${ccyTag}</td>
         <td>${h.name}</td>
         <td>${h.account_type}</td>
-        <td class="num">${fmtGBP2(h.current_value)}</td>
-        <td class="num">${fmtGBP2(h.cost_basis)}</td>
-        <td class="num ${h.gain_loss>=0?'pos':'neg'}">${fmtGBP2(h.gain_loss)}</td>
+        <td class="num">${fmtByCcy(h.current_value, h.currency)}</td>
+        <td class="num">${fmtByCcy(h.cost_basis, h.currency)}</td>
+        <td class="num ${h.gain_loss>=0?'pos':'neg'}">${fmtByCcy(h.gain_loss, h.currency)}</td>
         <td class="num ${h.return_pct>=0?'pos':'neg'}">${fmtPct(h.return_pct*100)}</td>
-        <td class="num">${h.weight_pct.toFixed(1)}%</td>
-      </tr>`).join('');
+        <td class="num">${weightCell}</td>
+      </tr>`;
+    }).join('');
   }
-  fOwner.addEventListener('change', draw);
-  fAccount.addEventListener('change', draw);
-  document.getElementById('fSearch').addEventListener('input', draw);
   draw();
 }
 
 function renderHistoryChart(){
-  const labels = DATA.history.map(h=>h.date);
-  const values = DATA.history.map(h=>h.total_value);
-  new Chart(document.getElementById('historyChart'), {
+  const hist = DATA.history || [];
+  const labels = hist.map(h=>h.date);
+  let values, label;
+  if(ownerScope==='Srini'){ values = hist.map(h=>h.srini_value); label = "Srini's portfolio value (£)"; }
+  else if(ownerScope==='Deepa'){ values = hist.map(h=>h.deepa_value); label = "Deepa's portfolio value (£)"; }
+  else { values = hist.map(h=>h.total_value); label = 'Combined portfolio value (£)'; }
+
+  const ctx = document.getElementById('historyChart');
+  if(ctx._chart) ctx._chart.destroy();
+  ctx._chart = new Chart(ctx, {
     type:'line',
-    data:{labels, datasets:[{label:'Total portfolio value (£)', data:values, borderColor:'#4f8cff', backgroundColor:'rgba(79,140,255,.1)', fill:true, tension:.3}]},
+    data:{labels, datasets:[{label, data:values, borderColor:'#4f8cff', backgroundColor:'rgba(79,140,255,.1)', fill:true, tension:.3}]},
     options:{
       responsive:true, maintainAspectRatio:false,
       plugins:{legend:{labels:{color:'#8b96a5', font:{size:10}}}},
