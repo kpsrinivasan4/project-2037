@@ -30,7 +30,7 @@
     "personal_loan_cleared_gbp": 3194.3,
     "clear_date": "2026-09-01"
   },
-  "total_portfolio_value_gbp": 264015.99,
+  "total_portfolio_value_gbp": 15753.9,
   "total_portfolio_value_inr": 27395,
   "holdings": [
     {
@@ -48,22 +48,6 @@
       "cost_basis": 1646.69,
       "gain_loss": 233.16,
       "return_pct": 0.14159265557112058
-    },
-    {
-      "owner": "Srini",
-      "symbol": "Aviva Pension - Av MyM My Future Growth (Pre-2025)",
-      "name": "Av MyM My Future Growth (Pre-2025)",
-      "account_type": "Aviva Pension",
-      "category": "Pension",
-      "asset_class": "Equity",
-      "units": 3.26139115713886e-12,
-      "avg_cost": 2.720102833481689,
-      "currency": "GBP",
-      "current_price": null,
-      "current_value": 0,
-      "cost_basis": 0,
-      "gain_loss": 0,
-      "return_pct": -1
     },
     {
       "owner": "Srini",
@@ -155,43 +139,11 @@
       "units": 18740.012300000002,
       "avg_cost": 5.883779353099003,
       "currency": "GBP",
-      "current_price": 6.5383,
-      "current_value": 122527.82,
-      "cost_basis": 110262.1,
-      "gain_loss": 12265.72,
-      "return_pct": 0.11124153501036006
-    },
-    {
-      "owner": "Deepa",
-      "symbol": "Aviva Pension - Av MyM My Future Growth (Pre-2025)",
-      "name": "Av MyM My Future Growth (Pre-2025)",
-      "account_type": "Aviva Pension",
-      "category": "Pension",
-      "asset_class": "Equity",
-      "units": 0.002799999998387648,
-      "avg_cost": 3.1236933281616794,
-      "currency": "GBP",
       "current_price": null,
       "current_value": 0,
-      "cost_basis": 0.01,
-      "gain_loss": -0.01,
+      "cost_basis": 110262.1,
+      "gain_loss": -110262.1,
       "return_pct": -1
-    },
-    {
-      "owner": "Deepa",
-      "symbol": "VUAG",
-      "name": "Vanguard S&P 500 (Acc)",
-      "account_type": "Stocks ISA",
-      "category": "ISA",
-      "asset_class": "Equity",
-      "units": 0.00004500000000362547,
-      "avg_cost": 105.90982303418564,
-      "currency": "GBP",
-      "current_price": 110.3,
-      "current_value": 0,
-      "cost_basis": 0,
-      "gain_loss": 0,
-      "return_pct": 0.041452028150375575
     },
     {
       "owner": "Deepa",
@@ -210,38 +162,6 @@
       "return_pct": 0.014407706300161586
     },
     {
-      "owner": "Deepa",
-      "symbol": "VUKG",
-      "name": "Vanguard FTSE UK All Share (Acc)",
-      "account_type": "Stocks ISA",
-      "category": "ISA",
-      "asset_class": "Equity",
-      "units": 0.000003999999989900971,
-      "avg_cost": 55.03475027679962,
-      "currency": "GBP",
-      "current_price": 57.38,
-      "current_value": 0,
-      "cost_basis": 0,
-      "gain_loss": 0,
-      "return_pct": 0.042613979556641
-    },
-    {
-      "owner": "Deepa",
-      "symbol": "VFEG",
-      "name": "Vanguard FTSE Emerging Markets (Acc)",
-      "account_type": "Stocks ISA",
-      "category": "ISA",
-      "asset_class": "Equity",
-      "units": -0.00000100000000458067,
-      "avg_cost": 64.94844124132581,
-      "currency": "GBP",
-      "current_price": 65.94,
-      "current_value": 0,
-      "cost_basis": 0,
-      "gain_loss": 0,
-      "return_pct": 0.015266859984982515
-    },
-    {
       "owner": "Srini",
       "symbol": "Vanguard SIPP - FTSE Global All Cap Index Fund Accumulation",
       "name": "Vanguard SIPP - FTSE Global All Cap",
@@ -251,11 +171,11 @@
       "units": 93.4228,
       "avg_cost": 272.9099320508484,
       "currency": "GBP",
-      "current_price": 293.59,
-      "current_value": 27428,
+      "current_price": null,
+      "current_value": 0,
       "cost_basis": 25496.01,
-      "gain_loss": 1931.99,
-      "return_pct": 0.07577616466262756
+      "gain_loss": -25496.01,
+      "return_pct": -1
     },
     {
       "owner": "Srini",
@@ -267,11 +187,11 @@
       "units": 3476.4041,
       "avg_cost": 2.9660742978102257,
       "currency": "GBP",
-      "current_price": 3.1221,
-      "current_value": 10853.68,
+      "current_price": null,
+      "current_value": 0,
       "cost_basis": 10311.27,
-      "gain_loss": 542.41,
-      "return_pct": 0.05260343690815977
+      "gain_loss": -10311.27,
+      "return_pct": -1
     },
     {
       "owner": "Deepa",
@@ -299,11 +219,11 @@
       "units": 139.2672,
       "avg_cost": 1.0211998739649297,
       "currency": "GBP",
-      "current_price": 1.0109,
-      "current_value": 140.79,
+      "current_price": null,
+      "current_value": 0,
       "cost_basis": 142.22,
-      "gain_loss": -1.43,
-      "return_pct": -0.01008605095586173
+      "gain_loss": -142.22,
+      "return_pct": -1
     },
     {
       "owner": "Srini",
@@ -315,11 +235,11 @@
       "units": 6.2930374,
       "avg_cost": 62.61999968409531,
       "currency": "GBP",
-      "current_price": 63.17,
-      "current_value": 397.53,
+      "current_price": null,
+      "current_value": 0,
       "cost_basis": 394.07,
-      "gain_loss": 3.46,
-      "return_pct": 0.008783141467252122
+      "gain_loss": -394.07,
+      "return_pct": -1
     },
     {
       "owner": "Srini",
@@ -347,11 +267,11 @@
       "units": 17.37408,
       "avg_cost": 63.72999318525068,
       "currency": "GBP",
-      "current_price": 63.17,
-      "current_value": 1097.52,
+      "current_price": null,
+      "current_value": 0,
       "cost_basis": 1107.25,
-      "gain_loss": -9.73,
-      "return_pct": -0.008786964461503831
+      "gain_loss": -1107.25,
+      "return_pct": -1
     },
     {
       "owner": "Deepa",
@@ -379,58 +299,26 @@
       "units": 4121.248,
       "avg_cost": 10.557790872444391,
       "currency": "GBP",
-      "current_price": 2082.3,
-      "current_value": 85816.75,
-      "cost_basis": 435.11,
-      "gain_loss": 85381.63,
-      "return_pct": 196.22875980000313
-    },
-    {
-      "owner": "Srini",
-      "symbol": "L&G Pension - ARSP - Diversified Growth Tracker Fund",
-      "name": "ARSP - Diversified Growth Tracker Fund",
-      "account_type": "L&G Pension",
-      "category": "Pension",
-      "asset_class": "Equity",
-      "units": 0,
-      "avg_cost": 10.93635990955336,
-      "currency": "GBP",
       "current_price": null,
       "current_value": 0,
-      "cost_basis": 0,
-      "gain_loss": 0,
-      "return_pct": 0
-    },
-    {
-      "owner": "Srini",
-      "symbol": "L&G Pension - L&G PMC Transitioning Fund B",
-      "name": "L&G PMC Transitioning Fund B",
-      "account_type": "L&G Pension",
-      "category": "Pension",
-      "asset_class": "Equity",
-      "units": 0,
-      "avg_cost": 10.4313942193035,
-      "currency": "GBP",
-      "current_price": null,
-      "current_value": 0,
-      "cost_basis": 0,
-      "gain_loss": 0,
-      "return_pct": 0
+      "cost_basis": 43511.27,
+      "gain_loss": -43511.27,
+      "return_pct": -1
     }
   ],
   "owner_totals": {
     "Srini": {
-      "total": 251253.78,
+      "total": 4089.2099999999996,
       "total_inr": 27395,
-      "pension": 246767.04,
-      "isa": 4411.02,
+      "pension": 0,
+      "isa": 4013.49,
       "cash": 75.72
     },
     "Deepa": {
-      "total": 12762.21,
+      "total": 11664.689999999999,
       "total_inr": 0,
       "pension": 0,
-      "isa": 12229.75,
+      "isa": 11132.23,
       "cash": 532.46
     }
   },
@@ -444,9 +332,9 @@
     },
     {
       "date": "2026-09-20",
-      "total_value": 264015.99,
-      "srini_value": 251253.78,
-      "deepa_value": 12762.21,
+      "total_value": 15753.9,
+      "srini_value": 4089.2099999999996,
+      "deepa_value": 11664.689999999999,
       "net_injections": 0
     }
   ],
