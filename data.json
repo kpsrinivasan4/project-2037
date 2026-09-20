@@ -30,7 +30,7 @@
     "personal_loan_cleared_gbp": 3194.3,
     "clear_date": "2026-09-01"
   },
-  "total_portfolio_value_gbp": 178199.24,
+  "total_portfolio_value_gbp": 264015.99,
   "total_portfolio_value_inr": 27395,
   "holdings": [
     {
@@ -368,13 +368,61 @@
       "cost_basis": 738.16,
       "gain_loss": -1.73,
       "return_pct": -0.002348417687222322
+    },
+    {
+      "owner": "Srini",
+      "symbol": "L&G Pension - ARSP - Global Equity Tracker (including UK) Fund",
+      "name": "ARSP - Global Equity Tracker (including UK) Fund",
+      "account_type": "L&G Pension",
+      "category": "Pension",
+      "asset_class": "Equity",
+      "units": 4121.248,
+      "avg_cost": 10.557790872444391,
+      "currency": "GBP",
+      "current_price": 2082.3,
+      "current_value": 85816.75,
+      "cost_basis": 435.11,
+      "gain_loss": 85381.63,
+      "return_pct": 196.22875980000313
+    },
+    {
+      "owner": "Srini",
+      "symbol": "L&G Pension - ARSP - Diversified Growth Tracker Fund",
+      "name": "ARSP - Diversified Growth Tracker Fund",
+      "account_type": "L&G Pension",
+      "category": "Pension",
+      "asset_class": "Equity",
+      "units": 0,
+      "avg_cost": 10.93635990955336,
+      "currency": "GBP",
+      "current_price": null,
+      "current_value": 0,
+      "cost_basis": 0,
+      "gain_loss": 0,
+      "return_pct": 0
+    },
+    {
+      "owner": "Srini",
+      "symbol": "L&G Pension - L&G PMC Transitioning Fund B",
+      "name": "L&G PMC Transitioning Fund B",
+      "account_type": "L&G Pension",
+      "category": "Pension",
+      "asset_class": "Equity",
+      "units": 0,
+      "avg_cost": 10.4313942193035,
+      "currency": "GBP",
+      "current_price": null,
+      "current_value": 0,
+      "cost_basis": 0,
+      "gain_loss": 0,
+      "return_pct": 0
     }
   ],
   "owner_totals": {
     "Srini": {
-      "total": 165437.03,
+      "total": 251253.78,
       "total_inr": 27395,
-      "pension": 160950.29,
+      "pension": 246767.04,
       "isa": 4411.02,
       "cash": 75.72
     },
@@ -396,8 +444,8 @@
     },
     {
       "date": "2026-09-20",
-      "total_value": 178199.24,
-      "srini_value": 165437.03,
+      "total_value": 264015.99,
+      "srini_value": 251253.78,
       "deepa_value": 12762.21,
       "net_injections": 0
     }
