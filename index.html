@@ -11,10 +11,6 @@
     --text:#e6edf3; --muted:#8b96a5; --accent:#4f8cff;
     --green:#2ea043; --green-bg:#0f2a17; --amber:#d29922; --amber-bg:#2b230d;
     --red:#f85149; --red-bg:#2b1214;
-    --header-h:52px; /* fallback only — kept in sync with the real <header> height by JS, since its content
-                         (badge/countdown text) changes length after data.json loads and can wrap it to two
-                         lines on narrower screens; a stale hardcoded value here is what let a table row peek
-                         through above the sticky column-header row */
   }
   *{box-sizing:border-box;}
   body{
@@ -92,9 +88,14 @@
   .flow-arrow{display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:18px; padding:0 4px;}
 
   table{width:100%; border-collapse:collapse; font-size:12.5px;}
+  /* Sticks to the top of .table-wrap's OWN scroll box (top:0), not the page/outer
+     header — see the .table-wrap comment below for why that distinction matters.
+     Styled to clearly read as a header row: brighter panel shade, bold+bright
+     text (not the muted grey data rows use), uppercase, and an accent underline. */
   thead th{
-    text-align:left; padding:8px 10px; color:var(--muted); font-weight:600;
-    border-bottom:1px solid var(--border); position:sticky; top:var(--header-h); background:var(--panel);
+    text-align:left; padding:9px 10px; color:var(--text); font-weight:700;
+    text-transform:uppercase; letter-spacing:.4px; font-size:11.5px;
+    border-bottom:2px solid var(--accent); position:sticky; top:0; background:var(--panel2);
     white-space:nowrap; z-index:5;
   }
   tbody td{padding:7px 10px; border-bottom:1px solid #1a2029; white-space:nowrap;}
@@ -102,7 +103,18 @@
   .num{text-align:right; font-variant-numeric:tabular-nums;}
   .pos{color:var(--green);}
   .neg{color:var(--red);}
-  .table-wrap{overflow-x:auto; background:var(--panel); border:1px solid var(--border); border-radius:10px;}
+  /* Self-contained scroll box, not just a horizontal-scroll convenience: this is
+     what thead's sticky top:0 sticks against. Previously this had overflow-x:auto
+     with no overflow-y set — per the CSS overflow spec, a "visible" axis paired
+     with a non-visible one gets silently promoted to auto, which quietly made
+     THIS element (not the page) the sticky positioning ancestor for thead, so its
+     "top" offset was being measured against the wrong box entirely (that's what
+     caused both the overlap and the "header dropped a row" symptoms). Giving it
+     an explicit max-height + overflow-y:auto makes that intentional and correct:
+     the header now sticks to a real, bounded scrollport, independent of however
+     tall the page's own <header> bar happens to be. Adjust max-height to taste —
+     more holdings than fit just scroll inside this box instead of growing the page.*/
+  .table-wrap{overflow-x:auto; overflow-y:auto; max-height:520px; background:var(--panel); border:1px solid var(--border); border-radius:10px;}
   .filter-row{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;}
   select,input[type=text]{
     background:var(--panel2); color:var(--text); border:1px solid var(--border);
@@ -301,21 +313,9 @@ let DATA = null;
 let scenario = 'chennai';
 let ownerScope = 'all'; // 'all' | 'Srini' | 'Deepa'
 
-// The sticky table header (thead th) sticks at `top: var(--header-h)`, which must
-// match the real <header> bar's live height. That bar's own content (the "Data as
-// of..." badge, the countdown text) starts short ("Loading…") and grows once
-// data.json arrives, which can wrap it onto a second line on narrower screens —
-// so this has to be re-measured after every render, not just once on load.
-function syncHeaderHeight(){
-  const h = document.querySelector('header').getBoundingClientRect().height;
-  document.documentElement.style.setProperty('--header-h', h + 'px');
-}
-window.addEventListener('resize', syncHeaderHeight);
-syncHeaderHeight();
-
 fetch('./data.json').then(r=>r.json()).then(d=>{
   DATA = d;
-  render(); // also re-measures --header-h at its end, now that badge/countdown text has real content
+  render();
 }).catch(e=>{
   document.querySelector('main').innerHTML = '<p style="color:var(--red)">Could not load data.json — make sure it is in the same folder as index.html.</p>';
   console.error(e);
@@ -454,7 +454,6 @@ function render(){
   renderHoldingsTable();
   renderHistoryChart();
   renderActionLog();
-  syncHeaderHeight(); // re-measure every render, in case header content wrapped differently this time
 }
 
 function renderPensionChart(currentValue){
