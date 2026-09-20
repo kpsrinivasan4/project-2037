@@ -124,6 +124,22 @@
 
   .chart-card{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:14px; height:280px;}
 
+  /* Portfolio Composition — three small-multiple doughnuts (Srini / Deepa / Combined).
+     Colors are a fixed category->hue mapping (see COMP_COLORS in the script below),
+     validated against this page's own dark panel surface with the dataviz skill's
+     validator: all pairs clear the lightness band, chroma floor, CVD adjacent-pair
+     separation and 3:1 contrast. One pair (Cash ISA/L&G Pension) sits in the 6-8 CVD
+     floor band, which is only acceptable with secondary encoding — covered here by
+     the shared text legend (identity is never color-alone) and the 2px surface-color
+     border between wedges (secondary encoding via a visible gap). */
+  .grid.comp-grid{grid-template-columns:repeat(auto-fit, minmax(220px,1fr));}
+  .comp-card{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:14px; text-align:center;}
+  .comp-card .comp-owner{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.4px;}
+  .comp-card .comp-total{font-size:20px; font-weight:700; margin:2px 0 8px;}
+  .comp-card .comp-canvas-wrap{position:relative; height:190px;}
+  .comp-legend{display:flex; flex-wrap:wrap; gap:8px 18px; justify-content:center; margin-bottom:12px; font-size:12px; color:var(--muted);}
+  .comp-legend .sw{display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:6px; vertical-align:middle;}
+
   .timeline{display:flex; flex-direction:column; gap:0; background:var(--panel); border:1px solid var(--border); border-radius:10px; overflow:hidden;}
   .tl-item{
     display:flex; gap:12px; padding:12px 14px; border-bottom:1px solid #1a2029; align-items:flex-start;
@@ -266,6 +282,26 @@
       <div class="line"><span>Action</span><span style="text-align:right; max-width:60%;">Clear mortgage with £90k ISA</span></div>
       <div class="line"><span>Passive income (4% SWR)</span><span>£40,400/yr</span></div>
       <div class="line"><span>Fixed asset</span><span>Coventry home, paid off (£400k)</span></div>
+    </div>
+  </div>
+
+  <div class="section-title">Portfolio Composition <span style="font-weight:400; text-transform:none;">by account, GBP holdings only — India sandbox excluded, same as the Weight% column below</span></div>
+  <div class="comp-legend" id="compLegend"></div>
+  <div class="grid comp-grid">
+    <div class="comp-card">
+      <div class="comp-owner">Srini</div>
+      <div class="comp-total" id="compTotalSrini">—</div>
+      <div class="comp-canvas-wrap"><canvas id="compChartSrini"></canvas></div>
+    </div>
+    <div class="comp-card">
+      <div class="comp-owner">Deepa</div>
+      <div class="comp-total" id="compTotalDeepa">—</div>
+      <div class="comp-canvas-wrap"><canvas id="compChartDeepa"></canvas></div>
+    </div>
+    <div class="comp-card">
+      <div class="comp-owner">Combined</div>
+      <div class="comp-total" id="compTotalCombined">—</div>
+      <div class="comp-canvas-wrap"><canvas id="compChartCombined"></canvas></div>
     </div>
   </div>
 
@@ -449,11 +485,95 @@ function render(){
   document.getElementById('pVanguard').textContent = fmtGBP(vg);
 
   renderPensionChart(pensionTotal);
+  renderCompositionCharts();
   renderTimeline();
   renderScenarios();
   renderHoldingsTable();
   renderHistoryChart();
   renderActionLog();
+}
+
+// Fixed category -> hue mapping, same order for every chart that uses it (Srini's,
+// Deepa's and Combined) so a given account type is always the same color no matter
+// which subset of categories a particular owner happens to hold — per the dataviz
+// rule "color follows the entity, never its rank". These five hex values are the
+// first five slots of the dataviz skill's validated dark-mode categorical order,
+// taken in that same relative order (never reordered/skipped) so the documented
+// adjacent-pair CVD/contrast guarantees still hold; re-validated directly against
+// this page's own panel surface (#151b23) with the skill's validator — all pass.
+const COMP_CATEGORY_ORDER = ['Stocks ISA', 'Aviva Pension', 'Cash ISA', 'L&G Pension', 'Vanguard SIPP'];
+const COMP_COLORS = {
+  'Stocks ISA':    '#3987e5', // blue
+  'Aviva Pension': '#d95926', // orange
+  'Cash ISA':      '#199e70', // aqua
+  'L&G Pension':   '#c98500', // yellow
+  'Vanguard SIPP': '#d55181'  // magenta
+};
+
+// GBP-only breakdown by Account Type for one owner ('Srini'/'Deepa') or 'all' for
+// combined. India ETF holdings are INR and excluded here, same treatment as the
+// Weight% column on the holdings table — they're a separate sandbox, not part of
+// the GBP net-worth split this chart is illustrating.
+function compBreakdown(owner){
+  const rows = DATA.holdings.filter(h => h.currency === 'GBP' && (owner === 'all' || h.owner === owner));
+  const byCat = {};
+  rows.forEach(h => {
+    const cat = h.account_type || 'Other';
+    byCat[cat] = (byCat[cat] || 0) + h.current_value;
+  });
+  return byCat;
+}
+
+function renderOneCompChart(canvasId, byCat){
+  const cats = COMP_CATEGORY_ORDER.filter(c => byCat[c] > 0);
+  const values = cats.map(c => byCat[c]);
+  const colors = cats.map(c => COMP_COLORS[c]);
+  const total = values.reduce((a,b)=>a+b, 0);
+
+  const ctx = document.getElementById(canvasId);
+  if(ctx._chart) ctx._chart.destroy();
+  ctx._chart = new Chart(ctx, {
+    type: 'doughnut',
+    data: { labels: cats, datasets: [{
+      data: values, backgroundColor: colors,
+      borderColor: '#151b23', borderWidth: 2 // 2px surface-color gap between wedges — secondary encoding alongside the shared legend
+    }]},
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '62%',
+      plugins: {
+        legend: { display: false }, // one shared legend for all three charts, built once below — avoids tripling it
+        tooltip: { callbacks: { label: (c) => {
+          const pct = total ? (c.parsed/total*100).toFixed(1) : '0.0';
+          return ` ${c.label}: ${fmtGBP(c.parsed)} (${pct}%)`;
+        }}}
+      }
+    }
+  });
+}
+
+function renderCompositionCharts(){
+  const srini = compBreakdown('Srini');
+  const deepa = compBreakdown('Deepa');
+  const combined = compBreakdown('all');
+
+  // Shared legend, built once — the category->color mapping never changes between
+  // owners or renders, only which subset of categories has a non-zero slice.
+  const legend = document.getElementById('compLegend');
+  if(!legend.dataset.built){
+    const present = new Set(Object.keys(combined));
+    legend.innerHTML = COMP_CATEGORY_ORDER.filter(c => present.has(c)).map(c =>
+      `<span><span class="sw" style="background:${COMP_COLORS[c]}"></span>${c}</span>`
+    ).join('');
+    legend.dataset.built = '1';
+  }
+
+  document.getElementById('compTotalSrini').textContent = fmtGBP(Object.values(srini).reduce((a,b)=>a+b,0));
+  document.getElementById('compTotalDeepa').textContent = fmtGBP(Object.values(deepa).reduce((a,b)=>a+b,0));
+  document.getElementById('compTotalCombined').textContent = fmtGBP(Object.values(combined).reduce((a,b)=>a+b,0));
+
+  renderOneCompChart('compChartSrini', srini);
+  renderOneCompChart('compChartDeepa', deepa);
+  renderOneCompChart('compChartCombined', combined);
 }
 
 function renderPensionChart(currentValue){
