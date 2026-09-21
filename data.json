@@ -30,8 +30,8 @@
     "personal_loan_cleared_gbp": 3194.3,
     "clear_date": "2026-09-01"
   },
-  "total_portfolio_value_gbp": 289212.59,
-  "total_portfolio_value_inr": 27512.26,
+  "total_portfolio_value_gbp": 289258.64,
+  "total_portfolio_value_inr": 27577.34,
   "holdings": [
     {
       "owner": "Srini",
@@ -43,11 +43,11 @@
       "units": 17.043057899999997,
       "avg_cost": 96.61940225501772,
       "currency": "GBP",
-      "current_price": 111.32,
-      "current_value": 1897.23,
+      "current_price": 111.8,
+      "current_value": 1905.41,
       "cost_basis": 1646.69,
-      "gain_loss": 250.54,
-      "return_pct": 0.15214954141593054
+      "gain_loss": 258.72,
+      "return_pct": 0.15711748769584122
     },
     {
       "owner": "Srini",
@@ -59,11 +59,11 @@
       "units": 134,
       "avg_cost": 72.26201492537314,
       "currency": "INR",
-      "current_price": 76.39,
-      "current_value": 10236.26,
+      "current_price": 76.51,
+      "current_value": 10252.34,
       "cost_basis": 9683.11,
-      "gain_loss": 553.15,
-      "return_pct": 0.057125241786987815
+      "gain_loss": 569.23,
+      "return_pct": 0.05878586528501685
     },
     {
       "owner": "Srini",
@@ -75,11 +75,11 @@
       "units": 13.5107426,
       "avg_cost": 122.92874125624907,
       "currency": "GBP",
-      "current_price": 140,
-      "current_value": 1891.5,
+      "current_price": 140.45,
+      "current_value": 1897.58,
       "cost_basis": 1660.86,
-      "gain_loss": 230.65,
-      "return_pct": 0.13887117503436658
+      "gain_loss": 236.73,
+      "return_pct": 0.14253183238269126
     },
     {
       "owner": "Srini",
@@ -91,11 +91,11 @@
       "units": 100,
       "avg_cost": 152.429,
       "currency": "INR",
-      "current_price": 172.76,
-      "current_value": 17276,
+      "current_price": 173.25,
+      "current_value": 17325,
       "cost_basis": 15242.9,
-      "gain_loss": 2033.1,
-      "return_pct": 0.13338013107741967
+      "gain_loss": 2082.1,
+      "return_pct": 0.13659474247026487
     },
     {
       "owner": "Srini",
@@ -155,11 +155,11 @@
       "units": 72.535601,
       "avg_cost": 141.28441563474462,
       "currency": "GBP",
-      "current_price": 144.9,
-      "current_value": 10510.41,
+      "current_price": 145.36,
+      "current_value": 10543.77,
       "cost_basis": 10248.15,
-      "gain_loss": 262.26,
-      "return_pct": 0.025590822236208732
+      "gain_loss": 295.62,
+      "return_pct": 0.028846666116323732
     },
     {
       "owner": "Srini",
@@ -251,11 +251,11 @@
       "units": 10.3104396,
       "avg_cost": 25.479999902235008,
       "currency": "GBP",
-      "current_price": 25.57,
-      "current_value": 263.64,
+      "current_price": 25.53,
+      "current_value": 263.23,
       "cost_basis": 262.71,
-      "gain_loss": 0.93,
-      "return_pct": 0.0035321859540939113
+      "gain_loss": 0.52,
+      "return_pct": 0.0019623272353547386
     },
     {
       "owner": "Deepa",
@@ -283,11 +283,11 @@
       "units": 28.8908,
       "avg_cost": 25.550002076785688,
       "currency": "GBP",
-      "current_price": 25.57,
-      "current_value": 738.74,
+      "current_price": 25.53,
+      "current_value": 737.58,
       "cost_basis": 738.16,
-      "gain_loss": 0.58,
-      "return_pct": 0.000782697518153276
+      "gain_loss": -0.58,
+      "return_pct": -0.0007828600845344459
     },
     {
       "owner": "Srini",
@@ -308,17 +308,17 @@
   ],
   "owner_totals": {
     "Srini": {
-      "total": 251292.66000000003,
-      "total_inr": 27512.260000000002,
+      "total": 251306.51000000004,
+      "total_inr": 27577.34,
       "pension": 246767.04,
-      "isa": 4449.900000000001,
+      "isa": 4463.75,
       "cash": 75.72
     },
     "Deepa": {
-      "total": 37919.92999999999,
+      "total": 37952.13,
       "total_inr": 0,
       "pension": 25040.8,
-      "isa": 12346.67,
+      "isa": 12378.87,
       "cash": 532.46
     }
   },
@@ -339,9 +339,9 @@
     },
     {
       "date": "2026-09-21",
-      "total_value": 289212.59,
-      "srini_value": 251292.66000000003,
-      "deepa_value": 37919.92999999999,
+      "total_value": 289258.64,
+      "srini_value": 251306.51000000004,
+      "deepa_value": 37952.13,
       "net_injections": 0
     }
   ],
