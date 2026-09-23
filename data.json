@@ -31,7 +31,7 @@
     "clear_date": "2026-09-01"
   },
   "total_portfolio_value_gbp": 289337.53,
-  "total_portfolio_value_inr": 27297.4,
+  "total_portfolio_value_inr": 27474.88,
   "holdings": [
     {
       "owner": "Srini",
@@ -59,11 +59,11 @@
       "units": 134,
       "avg_cost": 72.26201492537314,
       "currency": "INR",
-      "current_price": 76.1,
-      "current_value": 10197.4,
+      "current_price": 76.32,
+      "current_value": 10226.88,
       "cost_basis": 9683.11,
-      "gain_loss": 514.29,
-      "return_pct": 0.05311206833341757
+      "gain_loss": 543.77,
+      "return_pct": 0.05615654474647077
     },
     {
       "owner": "Srini",
@@ -91,11 +91,11 @@
       "units": 100,
       "avg_cost": 152.429,
       "currency": "INR",
-      "current_price": 171,
-      "current_value": 17100,
+      "current_price": 172.48,
+      "current_value": 17248,
       "cost_basis": 15242.9,
-      "gain_loss": 1857.1,
-      "return_pct": 0.12183377178883285
+      "gain_loss": 2005.1,
+      "return_pct": 0.13154321028150814
     },
     {
       "owner": "Srini",
@@ -309,7 +309,7 @@
   "owner_totals": {
     "Srini": {
       "total": 251329.98,
-      "total_inr": 27297.4,
+      "total_inr": 27474.879999999997,
       "pension": 246767.04,
       "isa": 4487.219999999999,
       "cash": 75.72
@@ -356,7 +356,7 @@
       "total_value": 289337.53,
       "srini_value": 251329.98,
       "deepa_value": 38007.55,
-      "net_injections": -122.28
+      "net_injections": 0
     }
   ],
   "milestones": [
