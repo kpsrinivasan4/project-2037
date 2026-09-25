@@ -30,9 +30,25 @@
     "personal_loan_cleared_gbp": 3194.3,
     "clear_date": "2026-09-01"
   },
-  "total_portfolio_value_gbp": 289345.9,
+  "total_portfolio_value_gbp": 127099.13,
   "total_portfolio_value_inr": 41794.6,
   "holdings": [
+    {
+      "owner": "Srini",
+      "symbol": "L&G Pension - ARSP - Global Equity Tracker (including UK) Fund",
+      "name": "ARSP - Global Equity Tracker (including UK) Fund",
+      "account_type": "L&G Pension",
+      "category": "Pension",
+      "asset_class": "Equity",
+      "units": 4121.248,
+      "avg_cost": 10.557790872444391,
+      "currency": "GBP",
+      "current_price": null,
+      "current_value": 0,
+      "cost_basis": 43511.27,
+      "gain_loss": -43511.27,
+      "return_pct": -1
+    },
     {
       "owner": "Srini",
       "symbol": "VUAG",
@@ -43,11 +59,11 @@
       "units": 17.043057899999997,
       "avg_cost": 96.61940225501772,
       "currency": "GBP",
-      "current_price": 112.86,
-      "current_value": 1923.48,
+      "current_price": 112.8,
+      "current_value": 1922.46,
       "cost_basis": 1646.69,
-      "gain_loss": 276.79,
-      "return_pct": 0.16808836906397712
+      "gain_loss": 275.77,
+      "return_pct": 0.1674673757789882
     },
     {
       "owner": "Srini",
@@ -75,11 +91,11 @@
       "units": 13.5107426,
       "avg_cost": 122.92874125624907,
       "currency": "GBP",
-      "current_price": 141.29,
-      "current_value": 1908.93,
+      "current_price": 141.16,
+      "current_value": 1907.18,
       "cost_basis": 1660.86,
-      "gain_loss": 248.07,
-      "return_pct": 0.14936505943289755
+      "gain_loss": 246.32,
+      "return_pct": 0.14830753619893705
     },
     {
       "owner": "Srini",
@@ -123,11 +139,11 @@
       "units": 532.4599999999997,
       "avg_cost": 0.8451339067723402,
       "currency": "GBP",
-      "current_price": 1,
-      "current_value": 532.46,
+      "current_price": 6.5383,
+      "current_value": 3481.38,
       "cost_basis": 450,
-      "gain_loss": 82.46,
-      "return_pct": 0.18324444444444377
+      "gain_loss": 3031.38,
+      "return_pct": 6.736407151111106
     },
     {
       "owner": "Srini",
@@ -139,11 +155,11 @@
       "units": 18740.012300000002,
       "avg_cost": 5.883779353099003,
       "currency": "GBP",
-      "current_price": 6.5383,
-      "current_value": 122527.82,
+      "current_price": null,
+      "current_value": 0,
       "cost_basis": 110262.1,
-      "gain_loss": 12265.72,
-      "return_pct": 0.11124153501036006
+      "gain_loss": -110262.1,
+      "return_pct": -1
     },
     {
       "owner": "Deepa",
@@ -155,11 +171,11 @@
       "units": 72.535601,
       "avg_cost": 141.28441563474462,
       "currency": "GBP",
-      "current_price": 146.26,
-      "current_value": 10609.06,
+      "current_price": 293.59,
+      "current_value": 21295.73,
       "cost_basis": 10248.15,
-      "gain_loss": 360.91,
-      "return_pct": 0.0352167954469832
+      "gain_loss": 11047.58,
+      "return_pct": 1.078006966875973
     },
     {
       "owner": "Srini",
@@ -171,11 +187,11 @@
       "units": 93.4228,
       "avg_cost": 272.9099320508484,
       "currency": "GBP",
-      "current_price": 293.59,
-      "current_value": 27428,
+      "current_price": 3.1221,
+      "current_value": 291.68,
       "cost_basis": 25496.01,
-      "gain_loss": 1931.99,
-      "return_pct": 0.07577616466262756
+      "gain_loss": -25204.33,
+      "return_pct": -0.9885599619752267
     },
     {
       "owner": "Srini",
@@ -187,11 +203,11 @@
       "units": 3476.4041,
       "avg_cost": 2.9660742978102257,
       "currency": "GBP",
-      "current_price": 3.1221,
-      "current_value": 10853.68,
+      "current_price": 1.0127,
+      "current_value": 3520.55,
       "cost_basis": 10311.27,
-      "gain_loss": 542.41,
-      "return_pct": 0.05260343690815977
+      "gain_loss": -6790.72,
+      "return_pct": -0.6585722748928947
     },
     {
       "owner": "Deepa",
@@ -203,11 +219,11 @@
       "units": 24726.7736,
       "avg_cost": 1.0193587756323463,
       "currency": "GBP",
-      "current_price": 1.0127,
-      "current_value": 25040.8,
+      "current_price": 1.0109,
+      "current_value": 24996.3,
       "cost_basis": 25205.45,
-      "gain_loss": -164.65,
-      "return_pct": -0.006532317954702087
+      "gain_loss": -209.16,
+      "return_pct": -0.008298133919629183
     },
     {
       "owner": "Srini",
@@ -219,11 +235,11 @@
       "units": 139.2672,
       "avg_cost": 1.0211998739649297,
       "currency": "GBP",
-      "current_price": 1.0109,
-      "current_value": 140.79,
+      "current_price": 63.17,
+      "current_value": 8797.51,
       "cost_basis": 142.22,
-      "gain_loss": -1.43,
-      "return_pct": -0.01008605095586173
+      "gain_loss": 8655.29,
+      "return_pct": 60.85860536266518
     },
     {
       "owner": "Srini",
@@ -235,11 +251,11 @@
       "units": 6.2930374,
       "avg_cost": 62.61999968409531,
       "currency": "GBP",
-      "current_price": 63.17,
-      "current_value": 397.53,
+      "current_price": null,
+      "current_value": 0,
       "cost_basis": 394.07,
-      "gain_loss": 3.46,
-      "return_pct": 0.008783141467252122
+      "gain_loss": -394.07,
+      "return_pct": -1
     },
     {
       "owner": "Srini",
@@ -251,11 +267,11 @@
       "units": 10.3104396,
       "avg_cost": 25.479999902235008,
       "currency": "GBP",
-      "current_price": 25.34,
-      "current_value": 261.27,
+      "current_price": 63.17,
+      "current_value": 651.31,
       "cost_basis": 262.71,
-      "gain_loss": -1.44,
-      "return_pct": -0.00549450167865698
+      "gain_loss": 388.6,
+      "return_pct": 1.479199381569031
     },
     {
       "owner": "Deepa",
@@ -267,11 +283,11 @@
       "units": 17.37408,
       "avg_cost": 63.72999318525068,
       "currency": "GBP",
-      "current_price": 63.17,
-      "current_value": 1097.52,
+      "current_price": null,
+      "current_value": 0,
       "cost_basis": 1107.25,
-      "gain_loss": -9.73,
-      "return_pct": -0.008786964461503831
+      "gain_loss": -1107.25,
+      "return_pct": -1
     },
     {
       "owner": "Deepa",
@@ -283,27 +299,11 @@
       "units": 28.8908,
       "avg_cost": 25.550002076785688,
       "currency": "GBP",
-      "current_price": 25.34,
-      "current_value": 732.09,
-      "cost_basis": 738.16,
-      "gain_loss": -6.07,
-      "return_pct": -0.008219258697301432
-    },
-    {
-      "owner": "Srini",
-      "symbol": "L&G Pension - ARSP - Global Equity Tracker (including UK) Fund",
-      "name": "ARSP - Global Equity Tracker (including UK) Fund",
-      "account_type": "L&G Pension",
-      "category": "Pension",
-      "asset_class": "Equity",
-      "units": 4121.248,
-      "avg_cost": 10.557790872444391,
-      "currency": "GBP",
       "current_price": 2082.3,
-      "current_value": 85816.75,
-      "cost_basis": 43511.27,
-      "gain_loss": 42305.47,
-      "return_pct": 0.9722875980000315
+      "current_value": 60159.31,
+      "cost_basis": 738.16,
+      "gain_loss": 59421.15,
+      "return_pct": 80.49901490191829
     },
     {
       "owner": "Srini",
@@ -324,18 +324,18 @@
   ],
   "owner_totals": {
     "Srini": {
-      "total": 251333.97,
+      "total": 17166.41,
       "total_inr": 41794.600000000006,
-      "pension": 246767.04,
-      "isa": 4491.209999999999,
+      "pension": 12609.74,
+      "isa": 4480.950000000001,
       "cash": 75.72
     },
     "Deepa": {
-      "total": 38011.92999999999,
+      "total": 109932.72,
       "total_inr": 0,
-      "pension": 25040.8,
-      "isa": 12438.67,
-      "cash": 532.46
+      "pension": 24996.3,
+      "isa": 81455.04,
+      "cash": 3481.38
     }
   },
   "history": [
@@ -383,9 +383,9 @@
     },
     {
       "date": "2026-09-25",
-      "total_value": 289345.9,
-      "srini_value": 251333.97,
-      "deepa_value": 38011.92999999999,
+      "total_value": 127099.13,
+      "srini_value": 17166.41,
+      "deepa_value": 109932.72,
       "net_injections": 0
     }
   ],
