@@ -170,6 +170,29 @@
   a{color:var(--accent);}
   .two-col{display:grid; grid-template-columns:1.3fr 1fr; gap:12px;}
   @media (max-width:760px){ .two-col{grid-template-columns:1fr;} }
+
+  /* Margin of Safety — RAG buffer cards. Same badge palette as the header/pension
+     RAG badges, applied as a left border + tag instead of an inline pill, since
+     these carry a paragraph of explanation rather than one metric. */
+  .rag-card{background:var(--panel); border:1px solid var(--border); border-left:4px solid var(--border); border-radius:10px; padding:12px 14px;}
+  .rag-card.good{border-left-color:var(--green);}
+  .rag-card.warning{border-left-color:var(--amber);}
+  .rag-card.critical{border-left-color:var(--red);}
+  .rag-card .name{font-weight:700; font-size:13px; margin-top:6px;}
+  .rag-card .mech{font-size:12px; color:var(--muted); margin-top:4px; line-height:1.45;}
+
+  /* Stress-test double-meter cards reuse .card/.progress-track/.progress-fill
+     (defined above for the Emergency Shield card) rather than a new component. */
+  .stress-line{display:flex; justify-content:space-between; font-size:12px; margin-top:10px;}
+  .stress-line:first-of-type{margin-top:12px;}
+  .stress-shortfall{color:var(--red); font-weight:700; font-size:13px; margin-top:8px;}
+
+  .reco-list{display:flex; flex-direction:column; gap:0; background:var(--panel); border:1px solid var(--border); border-radius:10px; overflow:hidden;}
+  .reco-item{display:flex; gap:10px; padding:11px 14px; border-bottom:1px solid #1a2029; align-items:flex-start; font-size:13px; line-height:1.5;}
+  .reco-item:last-child{border-bottom:none;}
+  .reco-num{flex:0 0 20px; color:var(--accent); font-weight:700;}
+
+  .stale-flag{color:var(--amber); cursor:help; font-size:11px;}
 </style>
 </head>
 <body>
@@ -191,6 +214,7 @@
   </div>
   <div>
     <span class="badge neutral" id="dataAsOfBadge">Data as of —</span>
+    <span class="badge amber" id="dataQualityBadge" style="display:none; cursor:help;">⚠ data quality</span>
   </div>
 </header>
 
@@ -265,6 +289,37 @@
 
   <div class="section-title">De-Risking Glide Path — 2026 to 2037</div>
   <div class="timeline" id="timeline"></div>
+
+  <div class="section-title">Net Worth Glide Path — Target vs. Current Trajectory <span style="font-weight:400; text-transform:none;">Srini-only, matches the Project 2037 model</span></div>
+  <div class="chart-card" style="height:320px;"><canvas id="networthChart"></canvas></div>
+
+  <div class="section-title">Property Engine — Plan vs. Reality</div>
+  <div class="two-col">
+    <div class="chart-card"><canvas id="isaChart"></canvas></div>
+    <div class="grid" style="grid-template-columns:1fr; gap:10px;">
+      <div class="card">
+        <div class="label">Stocks ISA monthly contribution</div>
+        <div class="value" id="isaContribValue">—</div>
+        <div class="progress-track"><div class="progress-fill" id="isaContribBar"></div></div>
+        <div class="caption" id="isaContribCaption">—</div>
+      </div>
+      <div class="card">
+        <div class="label">Emergency Shield monthly contribution</div>
+        <div class="value" id="shieldContribValue">—</div>
+        <div class="progress-track"><div class="progress-fill" id="shieldContribBar"></div></div>
+        <div class="caption" id="shieldContribCaption">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Margin of Safety — Buffer Inventory</div>
+  <div class="grid" id="ragGrid" style="grid-template-columns:repeat(auto-fit,minmax(230px,1fr));"></div>
+
+  <div class="section-title">Stress Test — a −35% Equity Shock in 2036</div>
+  <div class="grid cards" id="stressCards" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));"></div>
+
+  <div class="section-title">What Closes the Gap, in Priority Order</div>
+  <div class="reco-list" id="recoList"></div>
 
   <div class="section-title">End-State Scenario</div>
   <div class="scenario-cards">
@@ -403,6 +458,11 @@ function render(){
   // header
   document.getElementById('dataAsOfBadge').textContent = 'Data as of ' + DATA.meta.baseline_date;
   document.getElementById('holdingsAsOf').textContent = '(as of ' + DATA.meta.baseline_date + ', live prices for Google Finance-linked rows)';
+  if(DATA.meta.data_quality_note){
+    const dq = document.getElementById('dataQualityBadge');
+    dq.style.display = 'inline-block';
+    dq.title = DATA.meta.data_quality_note;
+  }
   const target = new Date(DATA.meta.target_retirement + 'T00:00:00');
   const now = new Date();
   const days = Math.round((target-now)/86400000);
@@ -426,7 +486,11 @@ function render(){
     : (ownerScope==='Deepa' ? 'No India holdings under Deepa' : 'Tracked in ₹, not converted — separate from the GBP net worth figures');
 
   // pension
-  const pensionRows = scoped.filter(h=>h.account_type==='Pension');
+  // NB: filtered on `category`, not `account_type` -- account_type holds the specific
+  // fund/account name ("Aviva Pension", "Stocks ISA", ...), category holds the roll-up
+  // ("Pension"/"ISA"/"Cash"). This card silently showed £0 before this fix, since
+  // account_type never equals the bare string 'Pension'.
+  const pensionRows = scoped.filter(h=>h.category==='Pension');
   const pensionTotal = pensionRows.reduce((s,h)=>s+h.current_value,0);
   document.getElementById('mPension').textContent = fmtGBP(pensionTotal);
 
@@ -443,11 +507,11 @@ function render(){
   // ISA — the Property Engine target is specifically Srini's Trading 212 ISA.
   document.getElementById('mIsaLabel').textContent = ownerScope==='Deepa' ? "Deepa's ISA" : 'Property Engine ISA (Srini)';
   if(ownerScope==='Deepa'){
-    const deepaIsa = scoped.filter(h=>h.account_type==='ISA').reduce((s,h)=>s+h.current_value,0);
+    const deepaIsa = scoped.filter(h=>h.category==='ISA').reduce((s,h)=>s+h.current_value,0);
     document.getElementById('mIsa').textContent = fmtGBP(deepaIsa);
     document.getElementById('mIsaRag').innerHTML = `<span class="badge neutral">No formal glide-path target for Deepa's ISA</span>`;
   } else {
-    const srinIsa = DATA.holdings.filter(h=>h.owner==='Srini' && h.account_type==='ISA').reduce((s,h)=>s+h.current_value,0);
+    const srinIsa = DATA.holdings.filter(h=>h.owner==='Srini' && h.category==='ISA').reduce((s,h)=>s+h.current_value,0);
     document.getElementById('mIsa').textContent = fmtGBP(srinIsa);
     const isaPlan = milestone2026 ? parseFloat(String(milestone2026.isa_est).replace(/[^0-9.]/g,'')) : null;
     if(isaPlan){
@@ -458,8 +522,8 @@ function render(){
   }
 
   // Emergency Shield — always the combined household figure; it's one shared target.
-  const srinCash = DATA.holdings.filter(h=>h.owner==='Srini' && h.account_type==='Cash').reduce((s,h)=>s+h.current_value,0);
-  const deepaCash = DATA.holdings.filter(h=>h.owner==='Deepa' && h.account_type==='Cash').reduce((s,h)=>s+h.current_value,0);
+  const srinCash = DATA.holdings.filter(h=>h.owner==='Srini' && h.category==='Cash').reduce((s,h)=>s+h.current_value,0);
+  const deepaCash = DATA.holdings.filter(h=>h.owner==='Deepa' && h.category==='Cash').reduce((s,h)=>s+h.current_value,0);
   const combinedCash = srinCash + deepaCash;
   document.getElementById('mShield').textContent = fmtGBP(combinedCash);
   const shieldPct = Math.min(100, combinedCash/DATA.constants.emergency_shield_target_gbp*100);
@@ -491,6 +555,122 @@ function render(){
   renderHoldingsTable();
   renderHistoryChart();
   renderActionLog();
+  renderNetworthChart();
+  renderIsaChart();
+  renderContribMeters();
+  renderRagGrid();
+  renderStressCards();
+  renderRecoList();
+}
+
+function renderNetworthChart(){
+  const gp = DATA.glide_path;
+  if(!gp) return;
+  const years = gp.years;
+  const target = years.map(y=>gp.networth_target_gbp[y]);
+  const current = years.map(y=>gp.networth_currentrate_gbp[y]);
+  const ctx = document.getElementById('networthChart');
+  if(ctx._chart) ctx._chart.destroy();
+  ctx._chart = new Chart(ctx, {
+    type:'line',
+    data:{labels:years, datasets:[
+      {label:'Target (plan)', data:target, borderColor:'#4f8cff', backgroundColor:'transparent', tension:.3},
+      {label:'Projected at current ISA rate', data:current, borderColor:'#d29922', borderDash:[6,4], backgroundColor:'transparent', tension:.3}
+    ]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#8b96a5', font:{size:10}}}},
+      scales:{
+        x:{ticks:{color:'#8b96a5'}, grid:{color:'#1a2029'}},
+        y:{ticks:{color:'#8b96a5', callback:v=>'£'+(v/1000).toFixed(0)+'k'}, grid:{color:'#1a2029'}}
+      }
+    }
+  });
+}
+
+function renderIsaChart(){
+  const gp = DATA.glide_path;
+  if(!gp) return;
+  const years = gp.years;
+  const planRate = years.map(y=>gp.isa_target_planrate_gbp[y]);
+  const currentRate = years.map(y=>gp.isa_target_currentrate_gbp[y]);
+  const srinIsaActual = DATA.holdings.filter(h=>h.owner==='Srini' && h.account_type==='Stocks ISA').reduce((s,h)=>s+h.current_value,0);
+  const thisYear = new Date().getFullYear();
+  const ctx = document.getElementById('isaChart');
+  if(ctx._chart) ctx._chart.destroy();
+  ctx._chart = new Chart(ctx, {
+    type:'line',
+    data:{labels:years, datasets:[
+      {label:'Full plan rate (£1,666/mo)', data:planRate, borderColor:'#4f8cff', backgroundColor:'transparent', tension:.3},
+      {label:'Current confirmed rate (£150/mo)', data:currentRate, borderColor:'#9085e9', borderDash:[6,4], backgroundColor:'transparent', tension:.3},
+      {label:'Recorded actual', data:years.map(y=> y===thisYear ? srinIsaActual : null), pointRadius:6, pointBackgroundColor:'#2ea043', showLine:false}
+    ]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#8b96a5', font:{size:10}}}},
+      scales:{
+        x:{ticks:{color:'#8b96a5'}, grid:{color:'#1a2029'}},
+        y:{ticks:{color:'#8b96a5', callback:v=>'£'+(v/1000).toFixed(0)+'k'}, grid:{color:'#1a2029'}}
+      }
+    }
+  });
+}
+
+function renderContribMeters(){
+  const cr = DATA.glide_path && DATA.glide_path.contribution_rates;
+  if(!cr) return;
+  function setMeter(valueId, barId, capId, actual, target, capText){
+    const pct = Math.min(100, actual/target*100);
+    document.getElementById(valueId).textContent = fmtGBP(actual) + ' of ' + fmtGBP(target) + ' (' + pct.toFixed(0) + '%)';
+    const bar = document.getElementById(barId);
+    bar.style.width = pct + '%';
+    bar.style.background = pct < 25 ? 'var(--red)' : (pct < 60 ? 'var(--amber)' : 'var(--green)');
+    document.getElementById(capId).textContent = capText;
+  }
+  setMeter('isaContribValue','isaContribBar','isaContribCaption', cr.isa_actual_monthly_gbp, cr.isa_target_monthly_gbp,
+    '2037 gap if unchanged: -' + fmtGBP(DATA.glide_path.isa_target_planrate_gbp[2037] - DATA.glide_path.isa_target_currentrate_gbp[2037]) + ' — confirmed as at ' + cr.confirmed_as_of);
+  setMeter('shieldContribValue','shieldContribBar','shieldContribCaption', cr.shield_actual_monthly_gbp, cr.shield_target_monthly_gbp,
+    'Target balance ' + fmtGBP(DATA.constants.emergency_shield_target_gbp) + ' (3 months of expenses)');
+}
+
+function renderRagGrid(){
+  const buffers = DATA.glide_path && DATA.glide_path.buffers;
+  if(!buffers) return;
+  const grid = document.getElementById('ragGrid');
+  grid.innerHTML = buffers.map(b=>`
+    <div class="rag-card ${b.rag}">
+      <span class="badge ${b.rag==='good'?'green':b.rag==='warning'?'amber':'red'}">${b.rag}</span>
+      <div class="name">${b.name}</div>
+      <div class="mech">${b.mechanism}</div>
+    </div>`).join('');
+}
+
+function renderStressCards(){
+  const st = DATA.glide_path && DATA.glide_path.stress_test;
+  if(!st) return;
+  const wrap = document.getElementById('stressCards');
+  function block(label, d){
+    const pct = d.shocked_value_gbp / d.target_gbp * 100;
+    return `
+    <div class="card">
+      <div class="label">${label}</div>
+      <div class="stress-line"><span>2037 target</span><span>${fmtGBP(d.target_gbp)}</span></div>
+      <div class="progress-track"><div class="progress-fill" style="width:100%; background:var(--accent)"></div></div>
+      <div class="stress-line"><span>After −${st.drawdown_pct}% shock</span><span>${fmtGBP(d.shocked_value_gbp)}</span></div>
+      <div class="progress-track"><div class="progress-fill" style="width:${pct.toFixed(0)}%; background:var(--red)"></div></div>
+      <div class="stress-shortfall">Shortfall: −${fmtGBP(d.target_gbp - d.shocked_value_gbp)}</div>
+    </div>`;
+  }
+  wrap.innerHTML = block('Pension (' + st.pension.equity_share_pct + '% equity by 2037)', st.pension) +
+                   block('ISA (' + st.isa.equity_share_pct + '% equity, no de-risking)', st.isa);
+}
+
+function renderRecoList(){
+  const recs = DATA.glide_path && DATA.glide_path.recommendations;
+  if(!recs) return;
+  document.getElementById('recoList').innerHTML = recs.map((r,i)=>
+    `<div class="reco-item"><span class="reco-num">${i+1}.</span><span>${r}</span></div>`
+  ).join('');
 }
 
 // Fixed category -> hue mapping, same order for every chart that uses it (Srini's,
@@ -677,13 +857,14 @@ function renderHoldingsTable(){
       const isInr = h.currency==='INR';
       const weightCell = isInr ? '—' : (scopeTotGbp ? (h.current_value/scopeTotGbp*100).toFixed(1)+'%' : '—');
       const ccyTag = isInr ? ' <span class="native">(₹, not in GBP total)</span>' : '';
+      const staleTag = h.price_stale ? ` <span class="stale-flag" title="${(h.price_stale_note||'').replace(/"/g,'&quot;')}">⚠ floor</span>` : '';
       return `
       <tr>
         <td>${h.owner}</td>
         <td>${h.symbol||'—'}${ccyTag}</td>
         <td>${h.name}</td>
         <td>${h.account_type}</td>
-        <td class="num">${fmtByCcy(h.current_value, h.currency)}</td>
+        <td class="num">${fmtByCcy(h.current_value, h.currency)}${staleTag}</td>
         <td class="num">${fmtByCcy(h.cost_basis, h.currency)}</td>
         <td class="num ${h.gain_loss>=0?'pos':'neg'}">${fmtByCcy(h.gain_loss, h.currency)}</td>
         <td class="num ${h.return_pct>=0?'pos':'neg'}">${fmtPct(h.return_pct*100)}</td>
