@@ -407,98 +407,98 @@
     {
       "year": 2026,
       "age": 49,
-      "milestone": "Zero Consumer Debt. £1,968 surplus deployed.",
-      "isa_est": "~£10,000",
-      "pension_est": "~£234,000",
-      "mortgage_est": "~£165,000"
+      "milestone": "Zero Consumer Debt. \u00a31,968 surplus deployed.",
+      "isa_est": "~\u00a310,000",
+      "pension_est": "~\u00a3234,000",
+      "mortgage_est": "~\u00a3165,000"
     },
     {
       "year": 2027,
       "age": 50,
-      "milestone": "Remortgage UK house. Emergency shield hits £10.5k.",
-      "isa_est": "~£32,000",
-      "pension_est": "~£267,000",
-      "mortgage_est": "~£159,000"
+      "milestone": "Remortgage UK house. Emergency shield hits \u00a310.5k.",
+      "isa_est": "~\u00a332,000",
+      "pension_est": "~\u00a3267,000",
+      "mortgage_est": "~\u00a3159,000"
     },
     {
       "year": 2028,
       "age": 51,
-      "milestone": "Full accumulation mode. £20k/year into ISA.",
-      "isa_est": "~£56,000",
-      "pension_est": "~£304,000",
-      "mortgage_est": "~£153,000"
+      "milestone": "Full accumulation mode. \u00a320k/year into ISA.",
+      "isa_est": "~\u00a356,000",
+      "pension_est": "~\u00a3304,000",
+      "mortgage_est": "~\u00a3153,000"
     },
     {
       "year": 2029,
       "age": 52,
-      "milestone": "Pension crosses £340k mark.",
-      "isa_est": "~£82,000",
-      "pension_est": "~£344,000",
-      "mortgage_est": "~£146,000"
+      "milestone": "Pension crosses \u00a3340k mark.",
+      "isa_est": "~\u00a382,000",
+      "pension_est": "~\u00a3344,000",
+      "mortgage_est": "~\u00a3146,000"
     },
     {
       "year": 2030,
       "age": 53,
       "milestone": "Stay the course. Ignore market volatility.",
-      "isa_est": "~£110,000",
-      "pension_est": "~£388,000",
-      "mortgage_est": "~£140,000"
+      "isa_est": "~\u00a3110,000",
+      "pension_est": "~\u00a3388,000",
+      "mortgage_est": "~\u00a3140,000"
     },
     {
       "year": 2031,
       "age": 54,
       "milestone": "Final year of 100% equity risk profile for ISA.",
-      "isa_est": "~£140,000",
-      "pension_est": "~£435,000",
-      "mortgage_est": "~£134,000"
+      "isa_est": "~\u00a3140,000",
+      "pension_est": "~\u00a3435,000",
+      "mortgage_est": "~\u00a3134,000"
     },
     {
       "year": 2032,
       "age": 55,
       "milestone": "THE DECISION POINT. ISA liquid balance eclipses remaining UK mortgage.",
-      "isa_est": "~£172,000",
-      "pension_est": "~£487,000",
-      "mortgage_est": "~£127,000"
+      "isa_est": "~\u00a3172,000",
+      "pension_est": "~\u00a3487,000",
+      "mortgage_est": "~\u00a3127,000"
     },
     {
       "year": 2033,
       "age": 56,
       "milestone": "De-Risking Protocol Begins. Shift 5% to bonds.",
       "isa_est": "(Optional)",
-      "pension_est": "~£542,000",
-      "mortgage_est": "~£120,000"
+      "pension_est": "~\u00a3542,000",
+      "mortgage_est": "~\u00a3120,000"
     },
     {
       "year": 2034,
       "age": 57,
       "milestone": "Shift another 5% of pension to bonds.",
       "isa_est": "(Optional)",
-      "pension_est": "~£601,000",
-      "mortgage_est": "~£113,000"
+      "pension_est": "~\u00a3601,000",
+      "mortgage_est": "~\u00a3113,000"
     },
     {
       "year": 2035,
       "age": 58,
       "milestone": "Shift another 5% of pension to bonds.",
       "isa_est": "(Optional)",
-      "pension_est": "~£665,000",
-      "mortgage_est": "~£105,000"
+      "pension_est": "~\u00a3665,000",
+      "mortgage_est": "~\u00a3105,000"
     },
     {
       "year": 2036,
       "age": 59,
       "milestone": "Final working year. Shift final 5% to bonds.",
       "isa_est": "(Optional)",
-      "pension_est": "~£733,000",
-      "mortgage_est": "~£98,000"
+      "pension_est": "~\u00a3733,000",
+      "mortgage_est": "~\u00a398,000"
     },
     {
       "year": 2037,
       "age": 60,
       "milestone": "SEPTEMBER: RETIREMENT. Execute final property play.",
       "isa_est": "Target Achieved",
-      "pension_est": "~£780,000",
-      "mortgage_est": "~£90,000"
+      "pension_est": "~\u00a3780,000",
+      "mortgage_est": "~\u00a390,000"
     }
   ],
   "plan_v1_reference": [
@@ -506,15 +506,15 @@
       "year": 2026,
       "age": 49,
       "action_focus": "Kill All Debt",
-      "surplus_allocation": "£3,300 to Debt",
-      "liquid_assets": "£2,000 (Emergency)",
+      "surplus_allocation": "\u00a33,300 to Debt",
+      "liquid_assets": "\u00a32,000 (Emergency)",
       "pension_locked": 228000
     },
     {
       "year": 2027,
       "age": 50,
       "action_focus": "Max ISA",
-      "surplus_allocation": "£1,666 to ISA / Rest to Cash",
+      "surplus_allocation": "\u00a31,666 to ISA / Rest to Cash",
       "liquid_assets": 20000,
       "pension_locked": 251000
     },
@@ -522,7 +522,7 @@
       "year": 2028,
       "age": 51,
       "action_focus": "Max ISA",
-      "surplus_allocation": "£1,666 to ISA",
+      "surplus_allocation": "\u00a31,666 to ISA",
       "liquid_assets": 42000,
       "pension_locked": 276000
     },
@@ -530,7 +530,7 @@
       "year": 2029,
       "age": 52,
       "action_focus": "Max ISA",
-      "surplus_allocation": "£1,666 to ISA",
+      "surplus_allocation": "\u00a31,666 to ISA",
       "liquid_assets": 66000,
       "pension_locked": 303000
     },
@@ -538,7 +538,7 @@
       "year": 2030,
       "age": 53,
       "action_focus": "Max ISA",
-      "surplus_allocation": "£1,666 to ISA",
+      "surplus_allocation": "\u00a31,666 to ISA",
       "liquid_assets": 92000,
       "pension_locked": 333000
     },
@@ -546,7 +546,7 @@
       "year": 2031,
       "age": 54,
       "action_focus": "Max ISA",
-      "surplus_allocation": "£1,666 to ISA",
+      "surplus_allocation": "\u00a31,666 to ISA",
       "liquid_assets": 120000,
       "pension_locked": 366000
     },
@@ -555,14 +555,14 @@
       "age": 55,
       "action_focus": "Buy House",
       "surplus_allocation": "Withdraw ISA for Downpayment",
-      "liquid_assets": "£10,000 (Reset)",
+      "liquid_assets": "\u00a310,000 (Reset)",
       "pension_locked": 402000
     },
     {
       "year": 2033,
       "age": 56,
       "action_focus": "Pension Push",
-      "surplus_allocation": "£2,500 to Pension (SIPP)",
+      "surplus_allocation": "\u00a32,500 to Pension (SIPP)",
       "liquid_assets": 20000,
       "pension_locked": 450000
     },
@@ -570,7 +570,7 @@
       "year": 2034,
       "age": 57,
       "action_focus": "Pension Push",
-      "surplus_allocation": "£2,500 to Pension (SIPP)",
+      "surplus_allocation": "\u00a32,500 to Pension (SIPP)",
       "liquid_assets": 30000,
       "pension_locked": 500000
     },
@@ -587,7 +587,7 @@
       "age": 59,
       "action_focus": "RETIRE",
       "surplus_allocation": "Move to Chennai",
-      "liquid_assets": "Flat + £600k Pension",
+      "liquid_assets": "Flat + \u00a3600k Pension",
       "pension_locked": null
     }
   ],
@@ -718,13 +718,13 @@
       "year": 2036,
       "equity_pct": 80,
       "cash_pct": 20,
-      "note": "Final 5% shift — 80/20 locked for retirement"
+      "note": "Final 5% shift \u2014 80/20 locked for retirement"
     }
   ],
   "scenarios": {
     "chennai": {
       "label": "Scenario A: Chennai",
-      "action": "Sell UK house (clears £90k mortgage, unlocks £310k cash). Use £150k from ISA to buy Chennai flat in cash.",
+      "action": "Sell UK house (clears \u00a390k mortgage, unlocks \u00a3310k cash). Use \u00a3150k from ISA to buy Chennai flat in cash.",
       "starting_liquid_corpus_gbp": 1260000,
       "starting_liquid_corpus_inr_cr": 13.2,
       "passive_income_annual_gbp": 50400,
@@ -734,11 +734,11 @@
     },
     "uk": {
       "label": "Scenario B: Stay in UK",
-      "action": "Use £90k from ISA to instantly clear the UK mortgage.",
+      "action": "Use \u00a390k from ISA to instantly clear the UK mortgage.",
       "starting_liquid_corpus_gbp": 1010000,
       "passive_income_annual_gbp": 40400,
       "withdrawal_rate_pct": 4,
-      "fixed_assets": "Fully paid-off £400k Coventry home"
+      "fixed_assets": "Fully paid-off \u00a3400k Coventry home"
     }
   },
   "end_state_2037": {
@@ -754,20 +754,175 @@
       "done": false
     },
     {
-      "item": "Sept 1 2026: Set up automated £1,516 top-up to Trading 212 ISA.",
+      "item": "Sept 1 2026: Set up automated \u00a31,516 top-up to Trading 212 ISA.",
       "done": false
     },
     {
-      "item": "Sept 1 2026: Set up automated £452 standing order to High-Yield Savings Account.",
+      "item": "Sept 1 2026: Set up automated \u00a3452 standing order to High-Yield Savings Account.",
       "done": false
     },
     {
-      "item": "Log into Vanguard: Switch £25,557 from LifeStrategy 80% to FTSE Global All Cap.",
+      "item": "Log into Vanguard: Switch \u00a325,557 from LifeStrategy 80% to FTSE Global All Cap.",
       "done": false
     },
     {
       "item": "Log into Aviva: Verify Target Retirement Age is set to 2042+ and 7% fund switch to UK BlackRock tracker is complete.",
       "done": false
     }
-  ]
+  ],
+  "glide_path": {
+    "years": [
+      2026,
+      2027,
+      2028,
+      2029,
+      2030,
+      2031,
+      2032,
+      2033,
+      2034,
+      2035,
+      2036,
+      2037
+    ],
+    "isa_target_planrate_gbp": {
+      "2026": 4339,
+      "2027": 23496,
+      "2028": 45766,
+      "2029": 69595,
+      "2030": 95092,
+      "2031": 122374,
+      "2032": 151566,
+      "2033": 182801,
+      "2034": 216223,
+      "2035": 251984,
+      "2036": 290249,
+      "2037": 331192
+    },
+    "isa_target_currentrate_gbp": {
+      "2026": 4339,
+      "2027": 6500,
+      "2028": 8812,
+      "2029": 11286,
+      "2030": 13933,
+      "2031": 16765,
+      "2032": 19796,
+      "2033": 23038,
+      "2034": 26508,
+      "2035": 30221,
+      "2036": 34193,
+      "2037": 38444
+    },
+    "networth_target_gbp": {
+      "2026": 379507,
+      "2027": 448704,
+      "2028": 522568,
+      "2029": 597645,
+      "2030": 676505,
+      "2031": 760484,
+      "2032": 850940,
+      "2033": 947258,
+      "2034": 1049846,
+      "2035": 1160146,
+      "2036": 1276627,
+      "2037": 1401792
+    },
+    "networth_currentrate_gbp": {
+      "2026": 379507,
+      "2027": 431708,
+      "2028": 485614,
+      "2029": 539335,
+      "2030": 595346,
+      "2031": 654875,
+      "2032": 719170,
+      "2033": 787495,
+      "2034": 860131,
+      "2035": 938382,
+      "2036": 1020571,
+      "2037": 1109044
+    },
+    "contribution_rates": {
+      "isa_target_monthly_gbp": 1666,
+      "isa_actual_monthly_gbp": 150,
+      "shield_target_monthly_gbp": 452,
+      "shield_actual_monthly_gbp": 50,
+      "confirmed_as_of": "2026-08-30",
+      "note": "Actual rates are Srini's own confirmed contribution, per the Aug 2026 Diversification & Skill-Building Roadmap audit. Update these two *_actual_monthly_gbp fields whenever the real standing order changes -- everything else on the Property Engine chart recomputes from them."
+    },
+    "stress_test": {
+      "drawdown_pct": 35,
+      "scenario_year": 2036,
+      "scenario_note": "One bad year, one year before execution, hitting after the pension glide has only reached 80/20 and the ISA has no de-risking at all.",
+      "pension": {
+        "target_gbp": 780000,
+        "equity_share_pct": 80,
+        "shocked_value_gbp": 561600,
+        "shortfall_gbp": 218400
+      },
+      "isa": {
+        "target_gbp": 320000,
+        "equity_share_pct": 92.5,
+        "shocked_value_gbp": 216400,
+        "shortfall_gbp": 103600
+      },
+      "combined_shortfall_gbp": 322000,
+      "pct_of_target_networth": 22.7
+    },
+    "buffers": [
+      {
+        "name": "Emergency Shield -- 3 months cash (\u00a310,500)",
+        "mechanism": "\u00a3452/mo to high-yield savings. Covers a redundancy/income shock, but a senior IT service delivery/security leadership search often runs 6\u20139 months.",
+        "rag": "warning"
+      },
+      {
+        "name": "Zero Consumer Debt rule",
+        "mechanism": "No credit card or loan balances carried post-Aug 2026 -- removes a structural single point of failure.",
+        "rag": "good"
+      },
+      {
+        "name": "Pension De-Risking Protocol",
+        "mechanism": "5%/yr shift to Cash/Bonds 2033\u20132037, reaching 80/20. Starts late; terminal allocation is still 80% equity.",
+        "rag": "warning"
+      },
+      {
+        "name": "ISA / Property Engine de-risking",
+        "mechanism": "None exists. The ISA carries the exact \u00a3150k (Chennai) / \u00a390k (UK mortgage) Day-1 execution capital with zero shock absorber.",
+        "rag": "critical"
+      },
+      {
+        "name": "Satellite sleeve diversifiers",
+        "mechanism": "15% of ISA in gold/bonds from inception -- correct in principle, currently too small in \u00a3 terms to matter.",
+        "rag": "warning"
+      },
+      {
+        "name": "Chennai / UK dual-path optionality",
+        "mechanism": "Two independent Day-1 execution routes -- genuine geographic and currency redundancy.",
+        "rag": "good"
+      },
+      {
+        "name": "Tax wrapper efficiency",
+        "mechanism": "\u00a320k/yr ISA + \u00a3198k+ pension shielded via salary sacrifice over the glide path.",
+        "rag": "good"
+      },
+      {
+        "name": "Income-continuity insurance",
+        "mechanism": "None exists. A disability/critical-illness event stops every automated contribution stream, not just lifestyle spending.",
+        "rag": "critical"
+      },
+      {
+        "name": "ISA contribution-ramp integrity",
+        "mechanism": "Your own confirmed rate is \u00a3150/mo against a \u00a31,666/mo target (9%) -- an open, live risk, not yet resolved.",
+        "rag": "critical"
+      }
+    ],
+    "recommendations": [
+      "Give the ISA its own de-risking glide for the Day-1 execution slice (\u00a3150k Chennai / \u00a390k UK mortgage), starting ~2034 -- mirrors the pension logic and closes the single biggest gap on this page.",
+      "Close the contribution gap first. At \u00a3150/mo your own ISA lands near \u00a338k by 2037, not \u00a3320k. This is the largest lever on the whole dashboard and it's fully within your control.",
+      "Extend the Emergency Shield to 6 months (\u00a321,000) before triggering Overflow Status, given realistic redundancy search timelines at Head-of-Service-Delivery level.",
+      "Steepen or start-earlier the pension glide -- 70/30 by 2037, or begin in 2032 -- since the absolute \u00a3 value being protected grows every year the plan succeeds.",
+      "Add income-protection/critical-illness cover sized to the full \u00a31,968/mo surplus, not just base expenses.",
+      "Pre-agree the contingency for the contribution-ramp watch trigger -- what happens to the retirement date or expense baseline if the rate doesn't recover.",
+      "Show a 3.25\u20133.5% safe-withdrawal-rate case alongside the current 4% figures on the Chennai/UK scenarios."
+    ]
+  }
 }
