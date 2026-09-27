@@ -30,7 +30,7 @@
     "personal_loan_cleared_gbp": 3194.3,
     "clear_date": "2026-09-01"
   },
-  "total_portfolio_value_gbp": 290082.74,
+  "total_portfolio_value_gbp": 290553.59,
   "total_portfolio_value_inr": 41794.6,
   "holdings": [
     {
@@ -187,11 +187,11 @@
       "units": 93.4228,
       "avg_cost": 272.9099320508484,
       "currency": "GBP",
-      "current_price": 293.59,
-      "current_value": 27428,
+      "current_price": 298.63,
+      "current_value": 27898.85,
       "cost_basis": 25496.01,
-      "gain_loss": 1931.99,
-      "return_pct": 0.07577616466262756
+      "gain_loss": 2402.84,
+      "return_pct": 0.09424379595081743
     },
     {
       "owner": "Srini",
@@ -324,9 +324,9 @@
   ],
   "owner_totals": {
     "Srini": {
-      "total": 252082.69999999998,
+      "total": 252553.55,
       "total_inr": 41794.600000000006,
-      "pension": 247519.16,
+      "pension": 247990.01,
       "isa": 4487.82,
       "cash": 75.72
     },
@@ -397,8 +397,8 @@
     },
     {
       "date": "2026-09-27",
-      "total_value": 290082.74,
-      "srini_value": 252082.69999999998,
+      "total_value": 290553.59,
+      "srini_value": 252553.55,
       "deepa_value": 38000.04,
       "net_injections": 0
     }
