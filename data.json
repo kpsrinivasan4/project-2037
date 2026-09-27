@@ -25,10 +25,13 @@
     "aviva_monthly_pct_gross": 15
   },
   "debt": {
-    "status": "cleared",
-    "credit_card_cleared_gbp": 1296.95,
+    "status": "revolving_0pct_balance",
+    "credit_card_current_gbp": 2292.8,
+    "credit_card_interest_rate_pct": 0,
+    "credit_card_payoff_target_date": "2026-12-31T00:00:00.000Z",
     "personal_loan_cleared_gbp": 3194.3,
-    "clear_date": "2026-09-01"
+    "clear_date_prior_debt": "2026-09-01",
+    "note": "Zero Consumer Debt rule (amended 2026-09-27): no balance carried at interest past its 0% window. Live balance tracked in the Plan Inputs tab."
   },
   "total_portfolio_value_gbp": 290553.59,
   "total_portfolio_value_inr": 41794.6,
