@@ -533,9 +533,23 @@ function render(){
   document.getElementById('mShieldCaption').textContent =
     `${shieldPct.toFixed(0)}% of £${DATA.constants.emergency_shield_target_gbp.toLocaleString()} target — Srini ${fmtGBP(srinCash)} · Deepa ${fmtGBP(deepaCash)}`;
 
-  document.getElementById('mDebt').textContent = DATA.debt.status==='cleared' ? '£0' : '—';
-  document.getElementById('mDebt').style.color = 'var(--green)';
-  document.getElementById('mDebtCaption').textContent = `Cleared ${DATA.debt.clear_date}`;
+  // 2026-09-27: debt shape now carries a live credit_card_current_gbp figure
+  // (Plan Inputs tab, see Dashboard Automation log) rather than an always-£0
+  // "cleared" flag — a 0%-interest balance actively being paid down doesn't
+  // breach the Zero Consumer Debt rule. Falls back to the old status/clear_date
+  // shape if Code.gs hasn't been updated to publish the new fields yet.
+  var ccBalance = DATA.debt.credit_card_current_gbp;
+  if (typeof ccBalance === 'number') {
+    document.getElementById('mDebt').textContent = ccBalance > 0 ? fmtGBP(ccBalance) : '£0';
+    document.getElementById('mDebt').style.color = ccBalance > 0 ? 'var(--amber)' : 'var(--green)';
+    document.getElementById('mDebtCaption').textContent = ccBalance > 0
+      ? `0% card, target payoff ${DATA.debt.credit_card_payoff_target_date || 'TBC'}`
+      : 'No consumer debt';
+  } else {
+    document.getElementById('mDebt').textContent = DATA.debt.status==='cleared' ? '£0' : '—';
+    document.getElementById('mDebt').style.color = 'var(--green)';
+    document.getElementById('mDebtCaption').textContent = `Cleared ${DATA.debt.clear_date}`;
+  }
 
   // pension account cards — grouped by keyword, summed (not "first match"), respecting scope
   function pensionGroup(regex){
