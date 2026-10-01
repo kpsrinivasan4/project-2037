@@ -34,7 +34,7 @@
     "note": "Zero Consumer Debt rule (amended 2026-09-27): no balance carried at interest past its 0% window. Live balance tracked in the Plan Inputs tab."
   },
   "total_portfolio_value_gbp": 297107.43,
-  "total_portfolio_value_inr": 40697,
+  "total_portfolio_value_inr": 40442.42,
   "holdings": [
     {
       "owner": "Srini",
@@ -78,11 +78,11 @@
       "units": 134,
       "avg_cost": 72.26201492537314,
       "currency": "INR",
-      "current_price": 73.9,
-      "current_value": 9902.6,
+      "current_price": 73.63,
+      "current_value": 9866.42,
       "cost_basis": 9683.11,
-      "gain_loss": 219.49,
-      "return_pct": 0.022667304202885208
+      "gain_loss": 183.31,
+      "return_pct": 0.01893090133231983
     },
     {
       "owner": "Srini",
@@ -110,11 +110,11 @@
       "units": 100,
       "avg_cost": 152.429,
       "currency": "INR",
-      "current_price": 166.9,
-      "current_value": 16690,
+      "current_price": 165.6,
+      "current_value": 16560,
       "cost_basis": 15242.9,
-      "gain_loss": 1447.1,
-      "return_pct": 0.09493600299155674
+      "gain_loss": 1317.1,
+      "return_pct": 0.08640744215339603
     },
     {
       "owner": "Srini",
@@ -302,17 +302,17 @@
       "units": 8,
       "avg_cost": 1785,
       "currency": "INR",
-      "current_price": 1763.05,
-      "current_value": 14104.4,
+      "current_price": 1752,
+      "current_value": 14016,
       "cost_basis": 14280,
-      "gain_loss": -175.6,
-      "return_pct": -0.012296918767507029
+      "gain_loss": -264,
+      "return_pct": -0.018487394957983194
     }
   ],
   "owner_totals": {
     "Srini": {
       "total": 255828.76,
-      "total_inr": 40697,
+      "total_inr": 40442.42,
       "pension": 251249.22000000003,
       "isa": 4453.82,
       "cash": 125.72
@@ -415,7 +415,7 @@
       "total_value": 297107.43,
       "srini_value": 255828.76,
       "deepa_value": 41278.670000000006,
-      "net_injections": 40697
+      "net_injections": 40442.42
     }
   ],
   "milestones": [
