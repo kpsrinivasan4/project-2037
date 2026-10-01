@@ -20,8 +20,10 @@
   }
   header{
     position:sticky; top:0; z-index:10; background:var(--panel);
-    border-bottom:1px solid var(--border); padding:12px 16px;
-    display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between;
+    border-bottom:1px solid var(--border);
+  }
+  .header-top{
+    padding:12px 16px; display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between;
   }
   header h1{font-size:16px; margin:0; font-weight:600;}
   header .sub{color:var(--muted); font-size:12px;}
@@ -33,6 +35,22 @@
   .badge.amber{background:var(--amber-bg); color:var(--amber); border:1px solid var(--amber);}
   .badge.red{background:var(--red-bg); color:var(--red); border:1px solid var(--red);}
   .badge.neutral{background:#20272f; color:var(--muted); border:1px solid var(--border);}
+
+  /* Tab nav — the scope boundary. Each tab owns its own context (combined
+     household vs per-owner, plan vs actual, GBP vs INR); nothing here is a
+     global filter that silently applies — or fails to apply — to content it
+     wasn't designed for. See the per-tab owner-toggle note below. */
+  .tab-nav{
+    display:flex; gap:2px; padding:0 16px; overflow-x:auto; -ms-overflow-style:none; scrollbar-width:none;
+  }
+  .tab-nav::-webkit-scrollbar{display:none;}
+  .tab-btn{
+    border:none; background:transparent; color:var(--muted); font-size:12.5px; font-weight:600;
+    padding:10px 14px; cursor:pointer; white-space:nowrap; border-bottom:2px solid transparent;
+    letter-spacing:.2px;
+  }
+  .tab-btn.active{color:var(--text); border-bottom-color:var(--accent);}
+  .tab-btn:hover{color:var(--text);}
 
   .toggle-wrap{display:flex; align-items:center; gap:8px; font-size:12px;}
   .toggle{
@@ -56,12 +74,21 @@
     padding:5px 12px; border-radius:16px; cursor:pointer; letter-spacing:.2px;
   }
   .owner-btn.active{background:var(--accent); color:#fff;}
+  /* Scoped owner toggle — lives INSIDE the two tabs where owner scoping is
+     actually valid (Holdings, Trends), never in the page header. A tab
+     that doesn't show this control shows the same data no matter who you
+     are — there is no hidden global filter that might or might not apply. */
+  .scope-bar{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:14px;}
+  .scope-note{font-size:11.5px; color:var(--muted);}
 
   main{max-width:1180px; margin:0 auto; padding:16px;}
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block;}
   .section-title{
     font-size:13px; text-transform:uppercase; letter-spacing:.6px; color:var(--muted);
     margin:28px 0 10px; display:flex; align-items:center; gap:8px;
   }
+  .tab-panel > .section-title:first-child{margin-top:4px;}
   .section-title::after{content:""; flex:1; height:1px; background:var(--border);}
 
   .grid{display:grid; gap:12px;}
@@ -88,10 +115,6 @@
   .flow-arrow{display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:18px; padding:0 4px;}
 
   table{width:100%; border-collapse:collapse; font-size:12.5px;}
-  /* Sticks to the top of .table-wrap's OWN scroll box (top:0), not the page/outer
-     header — see the .table-wrap comment below for why that distinction matters.
-     Styled to clearly read as a header row: brighter panel shade, bold+bright
-     text (not the muted grey data rows use), uppercase, and an accent underline. */
   thead th{
     text-align:left; padding:9px 10px; color:var(--text); font-weight:700;
     text-transform:uppercase; letter-spacing:.4px; font-size:11.5px;
@@ -103,18 +126,8 @@
   .num{text-align:right; font-variant-numeric:tabular-nums;}
   .pos{color:var(--green);}
   .neg{color:var(--red);}
-  /* Self-contained scroll box, not just a horizontal-scroll convenience: this is
-     what thead's sticky top:0 sticks against. Previously this had overflow-x:auto
-     with no overflow-y set — per the CSS overflow spec, a "visible" axis paired
-     with a non-visible one gets silently promoted to auto, which quietly made
-     THIS element (not the page) the sticky positioning ancestor for thead, so its
-     "top" offset was being measured against the wrong box entirely (that's what
-     caused both the overlap and the "header dropped a row" symptoms). Giving it
-     an explicit max-height + overflow-y:auto makes that intentional and correct:
-     the header now sticks to a real, bounded scrollport, independent of however
-     tall the page's own <header> bar happens to be. Adjust max-height to taste —
-     more holdings than fit just scroll inside this box instead of growing the page.*/
   .table-wrap{overflow-x:auto; overflow-y:auto; max-height:520px; background:var(--panel); border:1px solid var(--border); border-radius:10px;}
+  .table-wrap.short{max-height:360px;}
   .filter-row{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;}
   select,input[type=text]{
     background:var(--panel2); color:var(--text); border:1px solid var(--border);
@@ -123,15 +136,8 @@
   .native{color:var(--muted); font-size:11px; display:block;}
 
   .chart-card{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:14px; height:280px;}
+  .chart-card.short{height:200px;}
 
-  /* Portfolio Composition — three small-multiple doughnuts (Srini / Deepa / Combined).
-     Colors are a fixed category->hue mapping (see COMP_COLORS in the script below),
-     validated against this page's own dark panel surface with the dataviz skill's
-     validator: all pairs clear the lightness band, chroma floor, CVD adjacent-pair
-     separation and 3:1 contrast. One pair (Cash ISA/L&G Pension) sits in the 6-8 CVD
-     floor band, which is only acceptable with secondary encoding — covered here by
-     the shared text legend (identity is never color-alone) and the 2px surface-color
-     border between wedges (secondary encoding via a visible gap). */
   .grid.comp-grid{grid-template-columns:repeat(auto-fit, minmax(220px,1fr));}
   .comp-card{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:14px; text-align:center;}
   .comp-card .comp-owner{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.4px;}
@@ -170,219 +176,293 @@
   a{color:var(--accent);}
   .two-col{display:grid; grid-template-columns:1.3fr 1fr; gap:12px;}
   @media (max-width:760px){ .two-col{grid-template-columns:1fr;} }
-
-  /* Margin of Safety — RAG buffer cards. Same badge palette as the header/pension
-     RAG badges, applied as a left border + tag instead of an inline pill, since
-     these carry a paragraph of explanation rather than one metric. */
-  .rag-card{background:var(--panel); border:1px solid var(--border); border-left:4px solid var(--border); border-radius:10px; padding:12px 14px;}
-  .rag-card.good{border-left-color:var(--green);}
-  .rag-card.warning{border-left-color:var(--amber);}
-  .rag-card.critical{border-left-color:var(--red);}
-  .rag-card .name{font-weight:700; font-size:13px; margin-top:6px;}
-  .rag-card .mech{font-size:12px; color:var(--muted); margin-top:4px; line-height:1.45;}
-
-  /* Stress-test double-meter cards reuse .card/.progress-track/.progress-fill
-     (defined above for the Emergency Shield card) rather than a new component. */
-  .stress-line{display:flex; justify-content:space-between; font-size:12px; margin-top:10px;}
-  .stress-line:first-of-type{margin-top:12px;}
-  .stress-shortfall{color:var(--red); font-weight:700; font-size:13px; margin-top:8px;}
-
-  .reco-list{display:flex; flex-direction:column; gap:0; background:var(--panel); border:1px solid var(--border); border-radius:10px; overflow:hidden;}
-  .reco-item{display:flex; gap:10px; padding:11px 14px; border-bottom:1px solid #1a2029; align-items:flex-start; font-size:13px; line-height:1.5;}
-  .reco-item:last-child{border-bottom:none;}
-  .reco-num{flex:0 0 20px; color:var(--accent); font-weight:700;}
-
-  .stale-flag{color:var(--amber); cursor:help; font-size:11px;}
 </style>
 </head>
 <body>
 
 <header>
-  <div>
-    <h1>Project 2037 — Retirement Glide Path</h1>
-    <div class="sub" id="countdown">Loading…</div>
+  <div class="header-top">
+    <div>
+      <h1>Project 2037 — Retirement Glide Path</h1>
+      <div class="sub" id="countdown">Loading…</div>
+    </div>
+    <div>
+      <span class="badge neutral" id="dataAsOfBadge">Data as of —</span>
+    </div>
   </div>
-  <div class="owner-toggle" id="ownerToggle">
-    <button class="owner-btn active" data-owner="all">Combined</button>
-    <button class="owner-btn" data-owner="Srini">Srini</button>
-    <button class="owner-btn" data-owner="Deepa">Deepa</button>
-  </div>
-  <div class="toggle-wrap">
-    <span>Chennai</span>
-    <div class="toggle" id="scenarioToggle"><div class="labels"><span></span><span></span></div><div class="knob" id="toggleKnob">🇮🇳</div></div>
-    <span>UK</span>
-  </div>
-  <div>
-    <span class="badge neutral" id="dataAsOfBadge">Data as of —</span>
-    <span class="badge amber" id="dataQualityBadge" style="display:none; cursor:help;">⚠ data quality</span>
-  </div>
+  <nav class="tab-nav" id="tabNav">
+    <button class="tab-btn active" data-tab="overview">Overview</button>
+    <button class="tab-btn" data-tab="holdings">Holdings</button>
+    <button class="tab-btn" data-tab="stocksIsa">Stocks ISA</button>
+    <button class="tab-btn" data-tab="india">India</button>
+    <button class="tab-btn" data-tab="pension">Pension Engine</button>
+    <button class="tab-btn" data-tab="glidepath">Retirement Glide Path</button>
+    <button class="tab-btn" data-tab="trends">Trends</button>
+    <button class="tab-btn" data-tab="actions">Action Log</button>
+  </nav>
 </header>
 
 <main>
 
-  <div class="section-title">Headline</div>
-  <div class="grid cards">
-    <div class="card">
-      <div class="label">Total Portfolio Value (live)</div>
-      <div class="value" id="mTotalPortfolio">—</div>
-      <div class="caption" id="mTotalCaption">Sum of GBP holdings — Srini + Deepa</div>
+  <!-- ============== OVERVIEW — combined household only, no owner toggle.
+       Every figure here is Srini+Deepa together; a tab with no owner
+       control shows the same numbers no matter who's looking. ============== -->
+  <div class="tab-panel active" id="tab-overview">
+    <div class="section-title">Headline</div>
+    <div class="grid cards">
+      <div class="card">
+        <div class="label">Total Portfolio Value (GBP, live)</div>
+        <div class="value" id="mTotalPortfolio">—</div>
+        <div class="caption">Sum of GBP holdings — Srini + Deepa combined</div>
+      </div>
+      <div class="card">
+        <div class="label">India Stocks Sandbox (₹)</div>
+        <div class="value" id="mIndia">—</div>
+        <div class="caption">Tracked in ₹, not converted — a separate figure, not part of the GBP total above. See the India tab.</div>
+      </div>
+      <div class="card">
+        <div class="label">Pension Corpus</div>
+        <div class="value" id="mPension">—</div>
+        <div class="caption" id="mPensionRag">vs plan —</div>
+      </div>
+      <div class="card">
+        <div class="label">Property Engine ISA (Srini)</div>
+        <div class="value" id="mIsa">—</div>
+        <div class="caption" id="mIsaRag">vs plan —</div>
+      </div>
+      <div class="card">
+        <div class="label">Emergency Shield (household)</div>
+        <div class="value" id="mShield">—</div>
+        <div class="progress-track"><div class="progress-fill" id="mShieldBar"></div></div>
+        <div class="caption" id="mShieldCaption">of £10,500 target</div>
+      </div>
+      <div class="card">
+        <div class="label">Consumer Debt</div>
+        <div class="value" id="mDebt">—</div>
+        <div class="caption" id="mDebtCaption">—</div>
+      </div>
+      <div class="card">
+        <div class="label">2037 Net Worth Target</div>
+        <div class="value" id="mNetWorthTarget">—</div>
+        <div class="caption" id="mNetWorthBreakdown">—</div>
+      </div>
     </div>
-    <div class="card">
-      <div class="label">India Stocks Sandbox</div>
-      <div class="value" id="mIndia">—</div>
-      <div class="caption" id="mIndiaCaption">Tracked in ₹, not converted — separate from the GBP net worth figures</div>
+
+    <div class="section-title">Monthly Cash Flow Allocation</div>
+    <div class="flow-row">
+      <div class="flow-box"><div class="t">Take-home pay</div><div class="v" id="cfTakeHome">—</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box"><div class="t">Baseline expenses</div><div class="v" id="cfExpenses">—</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="border-color:var(--accent)"><div class="t">Liquid surplus</div><div class="v" id="cfSurplus">—</div></div>
     </div>
-    <div class="card">
-      <div class="label">Pension Corpus</div>
-      <div class="value" id="mPension">—</div>
-      <div class="caption" id="mPensionRag">vs plan —</div>
+    <div class="flow-row" style="margin-top:8px;">
+      <div class="flow-arrow" style="flex:0 0 20px;">↳</div>
+      <div class="flow-box"><div class="t">Emergency Shield</div><div class="v" id="cfShield">—</div><div class="caption">→ High-yield savings, until £10,500</div></div>
+      <div class="flow-box"><div class="t">Property Engine ISA</div><div class="v" id="cfIsa">—</div><div class="caption" id="cfIsaCaption">→ Trading 212 ISA</div></div>
     </div>
-    <div class="card">
-      <div class="label" id="mIsaLabel">Property Engine ISA (Srini)</div>
-      <div class="value" id="mIsa">—</div>
-      <div class="caption" id="mIsaRag">vs plan —</div>
+    <div class="flow-row" style="margin-top:8px;">
+      <div class="flow-box" style="border-style:dashed;"><div class="t">Separately, from gross salary</div><div class="v" id="cfPension">—</div></div>
     </div>
-    <div class="card">
-      <div class="label">Emergency Shield (household)</div>
-      <div class="value" id="mShield">—</div>
-      <div class="progress-track"><div class="progress-fill" id="mShieldBar"></div></div>
-      <div class="caption" id="mShieldCaption">of £10,500 target</div>
+    <div class="caption" style="margin-top:8px;">Figures come from the <code>Plan Inputs</code> sheet tab, published live — not hardcoded on this page.</div>
+  </div>
+
+  <!-- ============== HOLDINGS — owner-scoped. This is the one tab (along with
+       Trends) where the Combined/Srini/Deepa toggle actually changes what's
+       correct to show. ============== -->
+  <div class="tab-panel" id="tab-holdings">
+    <div class="scope-bar">
+      <div class="owner-toggle" id="ownerToggleHoldings">
+        <button class="owner-btn active" data-owner="all">Combined</button>
+        <button class="owner-btn" data-owner="Srini">Srini</button>
+        <button class="owner-btn" data-owner="Deepa">Deepa</button>
+      </div>
+      <div class="scope-note">Every figure on this tab follows the toggle above.</div>
     </div>
-    <div class="card">
-      <div class="label">Consumer Debt</div>
-      <div class="value" id="mDebt">—</div>
-      <div class="caption" id="mDebtCaption">—</div>
+
+    <div class="section-title">Portfolio Composition <span style="font-weight:400; text-transform:none;">by account, GBP holdings only — India sandbox excluded, same as the Weight% column below</span></div>
+    <div class="comp-legend" id="compLegend"></div>
+    <div class="grid comp-grid">
+      <div class="comp-card">
+        <div class="comp-owner">Srini</div>
+        <div class="comp-total" id="compTotalSrini">—</div>
+        <div class="comp-canvas-wrap"><canvas id="compChartSrini"></canvas></div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-owner">Deepa</div>
+        <div class="comp-total" id="compTotalDeepa">—</div>
+        <div class="comp-canvas-wrap"><canvas id="compChartDeepa"></canvas></div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-owner">Combined</div>
+        <div class="comp-total" id="compTotalCombined">—</div>
+        <div class="comp-canvas-wrap"><canvas id="compChartCombined"></canvas></div>
+      </div>
     </div>
-    <div class="card">
-      <div class="label">2037 Net Worth Target</div>
-      <div class="value">£1.42M</div>
-      <div class="caption">Pension £780k + ISA £320k + House £400k − Mortgage £90k</div>
+
+    <div class="section-title">All Holdings <span style="font-weight:400; text-transform:none;" id="holdingsAsOf">(live prices)</span></div>
+    <div class="filter-row">
+      <select id="fAccount"><option value="">All account types</option></select>
+      <input type="text" id="fSearch" placeholder="Search name / symbol...">
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Owner</th><th>Symbol</th><th>Name</th><th>Account</th>
+            <th class="num">Value</th><th class="num">Cost Basis</th>
+            <th class="num">Gain/Loss</th><th class="num">Return %</th><th class="num">Weight % (GBP)</th>
+          </tr>
+        </thead>
+        <tbody id="holdingsBody"></tbody>
+      </table>
     </div>
   </div>
 
-  <div class="section-title">Monthly Cash Flow Allocation</div>
-  <div class="flow-row">
-    <div class="flow-box"><div class="t">Take-home pay</div><div class="v">£5,468</div></div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-box"><div class="t">Baseline expenses</div><div class="v">£3,500</div></div>
-    <div class="flow-arrow">→</div>
-    <div class="flow-box" style="border-color:var(--accent)"><div class="t">Liquid surplus</div><div class="v">£1,968</div></div>
-  </div>
-  <div class="flow-row" style="margin-top:8px;">
-    <div class="flow-arrow" style="flex:0 0 20px;">↳</div>
-    <div class="flow-box"><div class="t">Emergency Shield</div><div class="v">£452/mo</div><div class="caption">→ High-yield savings, until £10,500</div></div>
-    <div class="flow-box"><div class="t">Property Engine ISA</div><div class="v">£1,666/mo</div><div class="caption">£150 existing + £1,516 new → Trading 212 ISA</div></div>
-  </div>
-  <div class="flow-row" style="margin-top:8px;">
-    <div class="flow-box" style="border-style:dashed;"><div class="t">Separately, from gross salary</div><div class="v">15% → Aviva pension (salary sacrifice)</div></div>
+  <!-- ============== STOCKS ISA — structured like Pension Engine: named pots
+       shown explicitly per owner, never blended by a toggle. Srini's pot
+       carries the Property Engine plan target; Deepa's doesn't (no formal
+       glide-path target exists for it), and says so rather than implying one. ============== -->
+  <div class="tab-panel" id="tab-stocksIsa">
+    <div class="section-title">Property Engine — Plan vs Actual <span style="font-weight:400; text-transform:none;">Srini's Stocks ISA only — the only Stocks ISA pot with a formal 2037 target</span></div>
+    <div class="two-col">
+      <div class="chart-card"><canvas id="isaChart"></canvas></div>
+      <div class="grid" style="grid-template-columns:1fr; gap:10px;">
+        <div class="card"><div class="label">Srini — Stocks ISA</div><div class="value" id="isaSrini">—</div><div class="caption" id="isaSriniRag">vs plan —</div></div>
+        <div class="card"><div class="label">Deepa — Stocks ISA</div><div class="value" id="isaDeepa">—</div><div class="caption">No formal glide-path target for Deepa's ISA — tracked here for visibility only</div></div>
+        <div class="card"><div class="label">Combined Stocks ISA</div><div class="value" id="isaCombined">—</div><div class="caption">Srini + Deepa, both Stocks ISA accounts</div></div>
+      </div>
+    </div>
+
+    <div class="section-title">Holdings by Instrument</div>
+    <div class="table-wrap short">
+      <table>
+        <thead>
+          <tr><th>Owner</th><th>Symbol</th><th>Name</th><th class="num">Value</th><th class="num">Cost Basis</th><th class="num">Gain/Loss</th><th class="num">Return %</th></tr>
+        </thead>
+        <tbody id="isaHoldingsBody"></tbody>
+      </table>
+    </div>
   </div>
 
-  <div class="section-title">Pension Engine</div>
-  <div class="two-col">
-    <div class="chart-card"><canvas id="pensionChart"></canvas></div>
-    <div class="grid" style="grid-template-columns:1fr; gap:10px;">
+  <!-- ============== INDIA — Srini only for now (Deepa has no India holdings
+       yet; this is a placeholder for when she does, not an assumption that
+       she never will). Always ₹, never converted, never blended into any
+       GBP figure on this page. ============== -->
+  <div class="tab-panel" id="tab-india">
+    <div class="section-title">India Stocks Sandbox <span style="font-weight:400; text-transform:none;">Srini only — a skill-building sandbox, separate from the core 2037 architecture</span></div>
+    <div class="grid cards">
+      <div class="card">
+        <div class="label">Srini — India Total</div>
+        <div class="value" id="indiaSriniTotal">—</div>
+        <div class="caption">₹, not converted to GBP</div>
+      </div>
+      <div class="card">
+        <div class="label">Deepa — India Total</div>
+        <div class="value" id="indiaDeepaTotal">₹0</div>
+        <div class="caption"><span class="badge neutral">No India holdings tracked for Deepa yet</span> — this card is a placeholder for if that changes</div>
+      </div>
+    </div>
+
+    <div class="section-title">Holdings</div>
+    <div class="table-wrap short">
+      <table>
+        <thead>
+          <tr><th>Symbol</th><th>Name</th><th>Account</th><th class="num">Value (₹)</th><th class="num">Cost Basis (₹)</th><th class="num">Gain/Loss (₹)</th><th class="num">Return %</th></tr>
+        </thead>
+        <tbody id="indiaHoldingsBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============== PENSION ENGINE — no owner toggle. Srini's three active/
+       legacy pots and Deepa's one legacy pot are shown as named, explicit
+       cards — never matched by a fuzzy keyword search across whichever
+       owner a global toggle happens to be set to, which is what let Deepa's
+       legacy Aviva pot get mislabeled as Srini's active salary-sacrifice one
+       on the old single-page version of this dashboard. ============== -->
+  <div class="tab-panel" id="tab-pension">
+    <div class="section-title">Pension Engine — Plan vs Actual <span style="font-weight:400; text-transform:none;">combined household pension only</span></div>
+    <div class="two-col">
+      <div class="chart-card"><canvas id="pensionChart"></canvas></div>
+      <div class="grid" style="grid-template-columns:1fr; gap:10px;">
+        <div class="card"><div class="label">Combined Pension Corpus</div><div class="value" id="pTotal">—</div><div class="caption" id="pTotalRag">vs plan —</div></div>
+      </div>
+    </div>
+
+    <div class="section-title">Srini's Pots</div>
+    <div class="grid cards">
       <div class="card"><div class="label">Aviva (Active Workplace)</div><div class="value" id="pAviva">—</div><div class="caption">93% BlackRock World ex-UK / 7% BlackRock UK Equity — 15% of gross salary monthly</div></div>
       <div class="card"><div class="label">L&amp;G Legacy (ASRP Global Equity Tracker)</div><div class="value" id="pLG">—</div><div class="caption">£0 new input — compounding only</div></div>
       <div class="card"><div class="label">Vanguard SIPP Legacy (FTSE Global All Cap)</div><div class="value" id="pVanguard">—</div><div class="caption">£0 new input — compounding only</div></div>
     </div>
+
+    <div class="section-title">Deepa's Pots</div>
+    <div class="grid cards">
+      <div class="card"><div class="label">Aviva (Pre-2025, legacy)</div><div class="value" id="pDeepaAviva">—</div><div class="caption">£0 new input — compounding only. Not the same pot as Srini's active Aviva above.</div></div>
+    </div>
   </div>
 
-  <div class="section-title">De-Risking Glide Path — 2026 to 2037</div>
-  <div class="timeline" id="timeline"></div>
+  <!-- ============== RETIREMENT GLIDE PATH — the plan itself: de-risking
+       schedule and the Chennai/UK end-state comparison. Combined-household
+       only; no owner toggle because the plan was never written per-person. ============== -->
+  <div class="tab-panel" id="tab-glidepath">
+    <div class="section-title">De-Risking Glide Path — 2026 to 2037</div>
+    <div class="timeline" id="timeline"></div>
 
-  <div class="section-title">Net Worth Glide Path — Target vs. Current Trajectory <span style="font-weight:400; text-transform:none;">Srini-only, matches the Project 2037 model</span></div>
-  <div class="chart-card" style="height:320px;"><canvas id="networthChart"></canvas></div>
-
-  <div class="section-title">Property Engine — Plan vs. Reality</div>
-  <div class="two-col">
-    <div class="chart-card"><canvas id="isaChart"></canvas></div>
-    <div class="grid" style="grid-template-columns:1fr; gap:10px;">
-      <div class="card">
-        <div class="label">Stocks ISA monthly contribution</div>
-        <div class="value" id="isaContribValue">—</div>
-        <div class="progress-track"><div class="progress-fill" id="isaContribBar"></div></div>
-        <div class="caption" id="isaContribCaption">—</div>
+    <div class="section-title">End-State Scenario</div>
+    <div class="toggle-wrap" style="margin-bottom:12px;">
+      <span>Chennai</span>
+      <div class="toggle" id="scenarioToggle"><div class="labels"><span></span><span></span></div><div class="knob" id="toggleKnob">🇮🇳</div></div>
+      <span>UK</span>
+    </div>
+    <div class="scenario-cards">
+      <div class="scenario-card" id="cardChennai">
+        <h3>🇮🇳 Scenario A — Chennai</h3>
+        <div class="big" id="chennaiCorpus">—</div>
+        <div class="line"><span>Action</span><span style="text-align:right; max-width:60%;">Sell UK house, buy Chennai flat cash</span></div>
+        <div class="line"><span>Passive income (4% SWR)</span><span id="chennaiIncome">—</span></div>
+        <div class="line"><span>Tax treatment</span><span>Tax-free (RNOR)</span></div>
+        <div class="line"><span>Fixed asset</span><span>Chennai flat, paid off</span></div>
       </div>
-      <div class="card">
-        <div class="label">Emergency Shield monthly contribution</div>
-        <div class="value" id="shieldContribValue">—</div>
-        <div class="progress-track"><div class="progress-fill" id="shieldContribBar"></div></div>
-        <div class="caption" id="shieldContribCaption">—</div>
+      <div class="scenario-card" id="cardUK">
+        <h3>🇬🇧 Scenario B — Stay in UK</h3>
+        <div class="big" id="ukCorpus">—</div>
+        <div class="line"><span>Action</span><span style="text-align:right; max-width:60%;">Clear mortgage with £90k ISA</span></div>
+        <div class="line"><span>Passive income (4% SWR)</span><span id="ukIncome">—</span></div>
+        <div class="line"><span>Fixed asset</span><span>Coventry home, paid off (£400k)</span></div>
       </div>
     </div>
   </div>
 
-  <div class="section-title">Margin of Safety — Buffer Inventory</div>
-  <div class="grid" id="ragGrid" style="grid-template-columns:repeat(auto-fit,minmax(230px,1fr));"></div>
-
-  <div class="section-title">Stress Test — a −35% Equity Shock in 2036</div>
-  <div class="grid cards" id="stressCards" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));"></div>
-
-  <div class="section-title">What Closes the Gap, in Priority Order</div>
-  <div class="reco-list" id="recoList"></div>
-
-  <div class="section-title">End-State Scenario</div>
-  <div class="scenario-cards">
-    <div class="scenario-card" id="cardChennai">
-      <h3>🇮🇳 Scenario A — Chennai</h3>
-      <div class="big" id="chennaiCorpus">£1.26M</div>
-      <div class="line"><span>Action</span><span style="text-align:right; max-width:60%;">Sell UK house, buy Chennai flat cash</span></div>
-      <div class="line"><span>Passive income (4% SWR)</span><span>£50,400/yr</span></div>
-      <div class="line"><span>Tax treatment</span><span>Tax-free (RNOR)</span></div>
-      <div class="line"><span>Fixed asset</span><span>Chennai flat, paid off</span></div>
+  <!-- ============== TRENDS — owner-scoped (the underlying history data is
+       already split by owner, so this toggle is valid here, same as
+       Holdings). ============== -->
+  <div class="tab-panel" id="tab-trends">
+    <div class="scope-bar">
+      <div class="owner-toggle" id="ownerToggleTrends">
+        <button class="owner-btn active" data-owner="all">Combined</button>
+        <button class="owner-btn" data-owner="Srini">Srini</button>
+        <button class="owner-btn" data-owner="Deepa">Deepa</button>
+      </div>
+      <div class="scope-note">Portfolio value follows the toggle above; Net Injections/Exit below are household-level (not split by owner in the source data).</div>
     </div>
-    <div class="scenario-card" id="cardUK">
-      <h3>🇬🇧 Scenario B — Stay in UK</h3>
-      <div class="big" id="ukCorpus">£1.01M</div>
-      <div class="line"><span>Action</span><span style="text-align:right; max-width:60%;">Clear mortgage with £90k ISA</span></div>
-      <div class="line"><span>Passive income (4% SWR)</span><span>£40,400/yr</span></div>
-      <div class="line"><span>Fixed asset</span><span>Coventry home, paid off (£400k)</span></div>
-    </div>
+
+    <div class="section-title">Portfolio Value Over Time</div>
+    <div class="chart-card"><canvas id="historyChart"></canvas></div>
+
+    <div class="section-title">Net Injections / Net Exit — GBP <span style="font-weight:400; text-transform:none;">rough proxy, trailing 7-day window — see HistoryLog in the sheet</span></div>
+    <div class="chart-card short"><canvas id="flowsGbpChart"></canvas></div>
+
+    <div class="section-title">Net Injections / Net Exit — INR <span style="font-weight:400; text-transform:none;">India sandbox only, never combined with the GBP figures above</span></div>
+    <div class="chart-card short"><canvas id="flowsInrChart"></canvas></div>
   </div>
 
-  <div class="section-title">Portfolio Composition <span style="font-weight:400; text-transform:none;">by account, GBP holdings only — India sandbox excluded, same as the Weight% column below</span></div>
-  <div class="comp-legend" id="compLegend"></div>
-  <div class="grid comp-grid">
-    <div class="comp-card">
-      <div class="comp-owner">Srini</div>
-      <div class="comp-total" id="compTotalSrini">—</div>
-      <div class="comp-canvas-wrap"><canvas id="compChartSrini"></canvas></div>
-    </div>
-    <div class="comp-card">
-      <div class="comp-owner">Deepa</div>
-      <div class="comp-total" id="compTotalDeepa">—</div>
-      <div class="comp-canvas-wrap"><canvas id="compChartDeepa"></canvas></div>
-    </div>
-    <div class="comp-card">
-      <div class="comp-owner">Combined</div>
-      <div class="comp-total" id="compTotalCombined">—</div>
-      <div class="comp-canvas-wrap"><canvas id="compChartCombined"></canvas></div>
-    </div>
+  <!-- ============== ACTION LOG — standalone checklist, no scope to get wrong. ============== -->
+  <div class="tab-panel" id="tab-actions">
+    <div class="section-title">Immediate Action Log</div>
+    <div class="action-list" id="actionList"></div>
   </div>
-
-  <div class="section-title">Portfolio Holdings <span style="font-weight:400; text-transform:none;" id="holdingsAsOf">(live prices)</span></div>
-  <div class="filter-row">
-    <select id="fAccount"><option value="">All account types</option></select>
-    <input type="text" id="fSearch" placeholder="Search name / symbol...">
-  </div>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Owner</th><th>Symbol</th><th>Name</th><th>Account</th>
-          <th class="num">Value</th><th class="num">Cost Basis</th>
-          <th class="num">Gain/Loss</th><th class="num">Return %</th><th class="num">Weight % (GBP)</th>
-        </tr>
-      </thead>
-      <tbody id="holdingsBody"></tbody>
-    </table>
-  </div>
-
-  <div class="section-title">Portfolio Value Over Time</div>
-  <div class="chart-card"><canvas id="historyChart"></canvas></div>
-
-  <div class="section-title">Immediate Action Log</div>
-  <div class="action-list" id="actionList"></div>
 
 </main>
 
@@ -401,12 +481,34 @@ const fmtPct = (n) => n==null ? '—' : (n>=0?'+':'') + Number(n).toFixed(1) + '
 const fmtByCcy = (n, ccy) => ccy==='INR' ? fmtINR2(n) : fmtGBP2(n);
 
 let DATA = null;
-let scenario = 'chennai';
-let ownerScope = 'all'; // 'all' | 'Srini' | 'Deepa'
+
+// ---- Tab navigation -------------------------------------------------------
+// Each tab's render function runs once, the first time it's switched into
+// (not on every switch) — this also sidesteps Chart.js sizing against a
+// still-hidden (display:none, zero-size) canvas, since by the time a tab's
+// render runs its panel is already display:block.
+const RENDER_FNS = {}; // populated below, once each render*() function exists
+const renderedTabs = new Set();
+
+function showTab(name){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('active', p.id==='tab-'+name));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===name));
+  if(!renderedTabs.has(name)){
+    renderedTabs.add(name);
+    if(RENDER_FNS[name]) RENDER_FNS[name]();
+  }
+}
+document.getElementById('tabNav').addEventListener('click', (e)=>{
+  const btn = e.target.closest('.tab-btn');
+  if(!btn || !DATA) return;
+  showTab(btn.dataset.tab);
+});
 
 fetch('./data.json').then(r=>r.json()).then(d=>{
   DATA = d;
-  render();
+  renderHeader();
+  RENDER_FNS.overview();
+  renderedTabs.add('overview');
 }).catch(e=>{
   document.querySelector('main').innerHTML = '<p style="color:var(--red)">Could not load data.json — make sure it is in the same folder as index.html.</p>';
   console.error(e);
@@ -418,110 +520,49 @@ function ragClass(pct){
   return 'red';
 }
 
-// Holdings filtered to the currently selected owner scope ('all' = everyone).
-// Includes both currencies — callers that need GBP-only (totals, weights)
-// filter separately below. Pension/ISA/Cash account types never contain
-// INR rows in practice, so this is safe to use broadly for those cards.
-function scopedHoldings(){
-  if(ownerScope==='all') return DATA.holdings;
-  return DATA.holdings.filter(h=>h.owner===ownerScope);
-}
-
-// GBP-only total for the current owner scope — this is the figure that
-// feeds the net worth math. India (INR) holdings are never folded in here.
-function scopeTotal(){
-  if(DATA.owner_totals){
-    if(ownerScope==='all') return DATA.total_portfolio_value_gbp;
-    return DATA.owner_totals[ownerScope] ? DATA.owner_totals[ownerScope].total : 0;
-  }
-  return scopedHoldings().filter(h=>h.currency==='GBP').reduce((s,h)=>s+h.current_value,0);
-}
-
-// INR-only total for the current owner scope — the separate India tally.
-function scopeTotalInr(){
-  if(DATA.owner_totals){
-    if(ownerScope==='all') return DATA.total_portfolio_value_inr || 0;
-    return DATA.owner_totals[ownerScope] ? (DATA.owner_totals[ownerScope].total_inr||0) : 0;
-  }
-  return scopedHoldings().filter(h=>h.currency==='INR').reduce((s,h)=>s+h.current_value,0);
-}
-
-document.getElementById('ownerToggle').addEventListener('click', (e)=>{
-  const btn = e.target.closest('.owner-btn');
-  if(!btn) return;
-  ownerScope = btn.dataset.owner;
-  document.querySelectorAll('.owner-btn').forEach(b=>b.classList.toggle('active', b===btn));
-  if(DATA) render();
-});
-
-function render(){
-  // header
+function renderHeader(){
   document.getElementById('dataAsOfBadge').textContent = 'Data as of ' + DATA.meta.baseline_date;
-  document.getElementById('holdingsAsOf').textContent = '(as of ' + DATA.meta.baseline_date + ', live prices for Google Finance-linked rows)';
-  if(DATA.meta.data_quality_note){
-    const dq = document.getElementById('dataQualityBadge');
-    dq.style.display = 'inline-block';
-    dq.title = DATA.meta.data_quality_note;
-  }
   const target = new Date(DATA.meta.target_retirement + 'T00:00:00');
   const now = new Date();
   const days = Math.round((target-now)/86400000);
   const years = (days/365.25).toFixed(1);
   document.getElementById('countdown').textContent = `${days.toLocaleString()} days (${years} yrs) to September 2037`;
+}
 
-  const scoped = scopedHoldings();
-  const scopeTot = scopeTotal();
+// ===========================================================================
+// OVERVIEW — combined household only. No owner scoping anywhere in here.
+// ===========================================================================
+RENDER_FNS.overview = function(){
+  document.getElementById('mTotalPortfolio').textContent = fmtGBP(DATA.total_portfolio_value_gbp);
 
-  // total portfolio card (GBP core only — India sandbox is the separate card below)
-  document.getElementById('mTotalPortfolio').textContent = fmtGBP(scopeTot);
-  document.getElementById('mTotalCaption').textContent = ownerScope==='all'
-    ? 'Sum of GBP holdings — Srini + Deepa'
-    : `Sum of ${ownerScope}'s GBP holdings`;
+  const indiaTotal = DATA.total_portfolio_value_inr || 0;
+  document.getElementById('mIndia').textContent = fmtINR(indiaTotal);
 
-  // India stocks sandbox — kept as its own ₹ tally, never converted or folded into the total above
-  const scopeInr = scopeTotalInr();
-  document.getElementById('mIndia').textContent = fmtINR(scopeInr);
-  document.getElementById('mIndiaCaption').textContent = scopeInr
-    ? 'Tracked in ₹, not converted — separate from the GBP net worth figures'
-    : (ownerScope==='Deepa' ? 'No India holdings under Deepa' : 'Tracked in ₹, not converted — separate from the GBP net worth figures');
-
-  // pension
-  // NB: filtered on `category`, not `account_type` -- account_type holds the specific
-  // fund/account name ("Aviva Pension", "Stocks ISA", ...), category holds the roll-up
-  // ("Pension"/"ISA"/"Cash"). This card silently showed £0 before this fix, since
-  // account_type never equals the bare string 'Pension'.
-  const pensionRows = scoped.filter(h=>h.category==='Pension');
+  // Fixed — account_type is the SPECIFIC name ("Aviva Pension", "Stocks ISA", ...);
+  // category is the coarse bucket ("Pension"/"ISA"/"Cash") that actually
+  // groups these. Filtering on account_type==='Pension' never matched
+  // anything real — this card has likely shown £0 since launch.
+  const pensionRows = DATA.holdings.filter(h=>h.category==='Pension');
   const pensionTotal = pensionRows.reduce((s,h)=>s+h.current_value,0);
   document.getElementById('mPension').textContent = fmtGBP(pensionTotal);
 
   const milestone2026 = DATA.milestones.find(m=>m.year===new Date().getFullYear()) || DATA.milestones[0];
   const pensionPlan = milestone2026 ? parseFloat(String(milestone2026.pension_est).replace(/[^0-9.]/g,'')) : null;
-  if(ownerScope==='all' && pensionPlan){
+  if(pensionPlan){
     const pct = (pensionTotal/pensionPlan*100);
-    const cls = ragClass(pct);
-    document.getElementById('mPensionRag').innerHTML = `<span class="badge ${cls}">${pct.toFixed(0)}% of ${milestone2026.year} plan (${milestone2026.pension_est})</span>`;
-  } else {
-    document.getElementById('mPensionRag').innerHTML = `<span class="badge neutral">Plan tracks the combined pension only</span>`;
+    document.getElementById('mPensionRag').innerHTML = `<span class="badge ${ragClass(pct)}">${pct.toFixed(0)}% of ${milestone2026.year} plan (${milestone2026.pension_est})</span>`;
   }
 
-  // ISA — the Property Engine target is specifically Srini's Trading 212 ISA.
-  document.getElementById('mIsaLabel').textContent = ownerScope==='Deepa' ? "Deepa's ISA" : 'Property Engine ISA (Srini)';
-  if(ownerScope==='Deepa'){
-    const deepaIsa = scoped.filter(h=>h.category==='ISA').reduce((s,h)=>s+h.current_value,0);
-    document.getElementById('mIsa').textContent = fmtGBP(deepaIsa);
-    document.getElementById('mIsaRag').innerHTML = `<span class="badge neutral">No formal glide-path target for Deepa's ISA</span>`;
-  } else {
-    const srinIsa = DATA.holdings.filter(h=>h.owner==='Srini' && h.category==='ISA').reduce((s,h)=>s+h.current_value,0);
-    document.getElementById('mIsa').textContent = fmtGBP(srinIsa);
-    const isaPlan = milestone2026 ? parseFloat(String(milestone2026.isa_est).replace(/[^0-9.]/g,'')) : null;
-    if(isaPlan){
-      const pct = (srinIsa/isaPlan*100);
-      const cls = ragClass(pct);
-      document.getElementById('mIsaRag').innerHTML = `<span class="badge ${cls}">${pct.toFixed(0)}% of ${milestone2026.year} plan (${milestone2026.isa_est})</span>`;
-    }
+  // Property Engine target is specifically Srini's Stocks ISA — the literal
+  // account_type, not the coarse category (same fix as pensionRows above).
+  const srinIsa = DATA.holdings.filter(h=>h.owner==='Srini' && h.account_type==='Stocks ISA').reduce((s,h)=>s+h.current_value,0);
+  document.getElementById('mIsa').textContent = fmtGBP(srinIsa);
+  const isaPlan = milestone2026 ? parseFloat(String(milestone2026.isa_est).replace(/[^0-9.]/g,'')) : null;
+  if(isaPlan){
+    const pct = (srinIsa/isaPlan*100);
+    document.getElementById('mIsaRag').innerHTML = `<span class="badge ${ragClass(pct)}">${pct.toFixed(0)}% of ${milestone2026.year} plan (${milestone2026.isa_est})</span>`;
   }
 
-  // Emergency Shield — always the combined household figure; it's one shared target.
   const srinCash = DATA.holdings.filter(h=>h.owner==='Srini' && h.category==='Cash').reduce((s,h)=>s+h.current_value,0);
   const deepaCash = DATA.holdings.filter(h=>h.owner==='Deepa' && h.category==='Cash').reduce((s,h)=>s+h.current_value,0);
   const combinedCash = srinCash + deepaCash;
@@ -533,181 +574,76 @@ function render(){
   document.getElementById('mShieldCaption').textContent =
     `${shieldPct.toFixed(0)}% of £${DATA.constants.emergency_shield_target_gbp.toLocaleString()} target — Srini ${fmtGBP(srinCash)} · Deepa ${fmtGBP(deepaCash)}`;
 
-  // 2026-09-27: debt shape now carries a live credit_card_current_gbp figure
-  // (Plan Inputs tab, see Dashboard Automation log) rather than an always-£0
-  // "cleared" flag — a 0%-interest balance actively being paid down doesn't
-  // breach the Zero Consumer Debt rule. Falls back to the old status/clear_date
-  // shape if Code.gs hasn't been updated to publish the new fields yet.
-  var ccBalance = DATA.debt.credit_card_current_gbp;
-  if (typeof ccBalance === 'number') {
-    document.getElementById('mDebt').textContent = ccBalance > 0 ? fmtGBP(ccBalance) : '£0';
-    document.getElementById('mDebt').style.color = ccBalance > 0 ? 'var(--amber)' : 'var(--green)';
-    document.getElementById('mDebtCaption').textContent = ccBalance > 0
-      ? `0% card, target payoff ${DATA.debt.credit_card_payoff_target_date || 'TBC'}`
-      : 'No consumer debt';
+  // Debt card — now reflects both states Code.gs can report, not just
+  // "cleared" vs a bare dash. A revolving 0%-interest balance being actively
+  // paid down is NOT a Zero Consumer Debt rule breach (amended 2026-09-27),
+  // so this is amber/informational, never red.
+  const debt = DATA.debt || {status:'cleared'};
+  const mDebt = document.getElementById('mDebt');
+  if(debt.status === 'cleared'){
+    mDebt.textContent = '£0';
+    mDebt.style.color = 'var(--green)';
+    document.getElementById('mDebtCaption').textContent = `Cleared ${debt.clear_date_prior_debt || debt.clear_date || ''}`.trim();
   } else {
-    document.getElementById('mDebt').textContent = DATA.debt.status==='cleared' ? '£0' : '—';
-    document.getElementById('mDebt').style.color = 'var(--green)';
-    document.getElementById('mDebtCaption').textContent = `Cleared ${DATA.debt.clear_date}`;
+    mDebt.textContent = fmtGBP(debt.credit_card_current_gbp);
+    mDebt.style.color = 'var(--amber)';
+    const bits = [];
+    if(debt.credit_card_interest_rate_pct != null) bits.push(`${debt.credit_card_interest_rate_pct}% (0% promo)`);
+    if(debt.credit_card_payoff_target_date) bits.push(`paying off by ${debt.credit_card_payoff_target_date}`);
+    document.getElementById('mDebtCaption').textContent = bits.length ? bits.join(' · ') : 'Revolving 0%-interest balance, within policy';
   }
 
-  // pension account cards — grouped by keyword, summed (not "first match"), respecting scope
-  function pensionGroup(regex){
-    return pensionRows.filter(h=>regex.test(h.name)).reduce((s,h)=>s+h.current_value,0);
+  // Net Worth target — pulled from end_state_2037 rather than hardcoded, so
+  // it can't silently drift from Code.gs's own constants.
+  const es = DATA.end_state_2037;
+  if(es){
+    document.getElementById('mNetWorthTarget').textContent = fmtGBP(es.total_net_worth_gbp);
+    document.getElementById('mNetWorthBreakdown').textContent =
+      `Pension ${fmtGBP(es.pension_gbp)} + ISA ${fmtGBP(es.isa_gbp)} + House ${fmtGBP(es.uk_house_value_gbp)} − Mortgage ${fmtGBP(es.uk_mortgage_balance_gbp)}`;
   }
-  const aviva = pensionGroup(/Av MyM|BlackRock/i);
-  const lg = pensionGroup(/ARSP/i);
-  const vg = pensionGroup(/FTSE Global All Cap/i);
-  document.getElementById('pAviva').textContent = fmtGBP(aviva);
-  document.getElementById('pLG').textContent = fmtGBP(lg);
-  document.getElementById('pVanguard').textContent = fmtGBP(vg);
 
-  renderPensionChart(pensionTotal);
-  renderCompositionCharts();
-  renderTimeline();
-  renderScenarios();
-  renderHoldingsTable();
-  renderHistoryChart();
-  renderActionLog();
-  renderNetworthChart();
-  renderIsaChart();
-  renderContribMeters();
-  renderRagGrid();
-  renderStressCards();
-  renderRecoList();
-}
-
-function renderNetworthChart(){
-  const gp = DATA.glide_path;
-  if(!gp) return;
-  const years = gp.years;
-  const target = years.map(y=>gp.networth_target_gbp[y]);
-  const current = years.map(y=>gp.networth_currentrate_gbp[y]);
-  const ctx = document.getElementById('networthChart');
-  if(ctx._chart) ctx._chart.destroy();
-  ctx._chart = new Chart(ctx, {
-    type:'line',
-    data:{labels:years, datasets:[
-      {label:'Target (plan)', data:target, borderColor:'#4f8cff', backgroundColor:'transparent', tension:.3},
-      {label:'Projected at current ISA rate', data:current, borderColor:'#d29922', borderDash:[6,4], backgroundColor:'transparent', tension:.3}
-    ]},
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{labels:{color:'#8b96a5', font:{size:10}}}},
-      scales:{
-        x:{ticks:{color:'#8b96a5'}, grid:{color:'#1a2029'}},
-        y:{ticks:{color:'#8b96a5', callback:v=>'£'+(v/1000).toFixed(0)+'k'}, grid:{color:'#1a2029'}}
-      }
-    }
-  });
-}
-
-function renderIsaChart(){
-  const gp = DATA.glide_path;
-  if(!gp) return;
-  const years = gp.years;
-  const planRate = years.map(y=>gp.isa_target_planrate_gbp[y]);
-  const currentRate = years.map(y=>gp.isa_target_currentrate_gbp[y]);
-  const srinIsaActual = DATA.holdings.filter(h=>h.owner==='Srini' && h.account_type==='Stocks ISA').reduce((s,h)=>s+h.current_value,0);
-  const thisYear = new Date().getFullYear();
-  const ctx = document.getElementById('isaChart');
-  if(ctx._chart) ctx._chart.destroy();
-  ctx._chart = new Chart(ctx, {
-    type:'line',
-    data:{labels:years, datasets:[
-      {label:'Full plan rate (£1,666/mo)', data:planRate, borderColor:'#4f8cff', backgroundColor:'transparent', tension:.3},
-      {label:'Current confirmed rate (£150/mo)', data:currentRate, borderColor:'#9085e9', borderDash:[6,4], backgroundColor:'transparent', tension:.3},
-      {label:'Recorded actual', data:years.map(y=> y===thisYear ? srinIsaActual : null), pointRadius:6, pointBackgroundColor:'#2ea043', showLine:false}
-    ]},
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{labels:{color:'#8b96a5', font:{size:10}}}},
-      scales:{
-        x:{ticks:{color:'#8b96a5'}, grid:{color:'#1a2029'}},
-        y:{ticks:{color:'#8b96a5', callback:v=>'£'+(v/1000).toFixed(0)+'k'}, grid:{color:'#1a2029'}}
-      }
-    }
-  });
-}
-
-function renderContribMeters(){
-  const cr = DATA.glide_path && DATA.glide_path.contribution_rates;
-  if(!cr) return;
-  function setMeter(valueId, barId, capId, actual, target, capText){
-    const pct = Math.min(100, actual/target*100);
-    document.getElementById(valueId).textContent = fmtGBP(actual) + ' of ' + fmtGBP(target) + ' (' + pct.toFixed(0) + '%)';
-    const bar = document.getElementById(barId);
-    bar.style.width = pct + '%';
-    bar.style.background = pct < 25 ? 'var(--red)' : (pct < 60 ? 'var(--amber)' : 'var(--green)');
-    document.getElementById(capId).textContent = capText;
-  }
-  setMeter('isaContribValue','isaContribBar','isaContribCaption', cr.isa_actual_monthly_gbp, cr.isa_target_monthly_gbp,
-    '2037 gap if unchanged: -' + fmtGBP(DATA.glide_path.isa_target_planrate_gbp[2037] - DATA.glide_path.isa_target_currentrate_gbp[2037]) + ' — confirmed as at ' + cr.confirmed_as_of);
-  setMeter('shieldContribValue','shieldContribBar','shieldContribCaption', cr.shield_actual_monthly_gbp, cr.shield_target_monthly_gbp,
-    'Target balance ' + fmtGBP(DATA.constants.emergency_shield_target_gbp) + ' (3 months of expenses)');
-}
-
-function renderRagGrid(){
-  const buffers = DATA.glide_path && DATA.glide_path.buffers;
-  if(!buffers) return;
-  const grid = document.getElementById('ragGrid');
-  grid.innerHTML = buffers.map(b=>`
-    <div class="rag-card ${b.rag}">
-      <span class="badge ${b.rag==='good'?'green':b.rag==='warning'?'amber':'red'}">${b.rag}</span>
-      <div class="name">${b.name}</div>
-      <div class="mech">${b.mechanism}</div>
-    </div>`).join('');
-}
-
-function renderStressCards(){
-  const st = DATA.glide_path && DATA.glide_path.stress_test;
-  if(!st) return;
-  const wrap = document.getElementById('stressCards');
-  function block(label, d){
-    const pct = d.shocked_value_gbp / d.target_gbp * 100;
-    return `
-    <div class="card">
-      <div class="label">${label}</div>
-      <div class="stress-line"><span>2037 target</span><span>${fmtGBP(d.target_gbp)}</span></div>
-      <div class="progress-track"><div class="progress-fill" style="width:100%; background:var(--accent)"></div></div>
-      <div class="stress-line"><span>After −${st.drawdown_pct}% shock</span><span>${fmtGBP(d.shocked_value_gbp)}</span></div>
-      <div class="progress-track"><div class="progress-fill" style="width:${pct.toFixed(0)}%; background:var(--red)"></div></div>
-      <div class="stress-shortfall">Shortfall: −${fmtGBP(d.target_gbp - d.shocked_value_gbp)}</div>
-    </div>`;
-  }
-  wrap.innerHTML = block('Pension (' + st.pension.equity_share_pct + '% equity by 2037)', st.pension) +
-                   block('ISA (' + st.isa.equity_share_pct + '% equity, no de-risking)', st.isa);
-}
-
-function renderRecoList(){
-  const recs = DATA.glide_path && DATA.glide_path.recommendations;
-  if(!recs) return;
-  document.getElementById('recoList').innerHTML = recs.map((r,i)=>
-    `<div class="reco-item"><span class="reco-num">${i+1}.</span><span>${r}</span></div>`
-  ).join('');
-}
-
-// Fixed category -> hue mapping, same order for every chart that uses it (Srini's,
-// Deepa's and Combined) so a given account type is always the same color no matter
-// which subset of categories a particular owner happens to hold — per the dataviz
-// rule "color follows the entity, never its rank". These five hex values are the
-// first five slots of the dataviz skill's validated dark-mode categorical order,
-// taken in that same relative order (never reordered/skipped) so the documented
-// adjacent-pair CVD/contrast guarantees still hold; re-validated directly against
-// this page's own panel surface (#151b23) with the skill's validator — all pass.
-const COMP_CATEGORY_ORDER = ['Stocks ISA', 'Aviva Pension', 'Cash ISA', 'L&G Pension', 'Vanguard SIPP'];
-const COMP_COLORS = {
-  'Stocks ISA':    '#3987e5', // blue
-  'Aviva Pension': '#d95926', // orange
-  'Cash ISA':      '#199e70', // aqua
-  'L&G Pension':   '#c98500', // yellow
-  'Vanguard SIPP': '#d55181'  // magenta
+  // Cash Flow Allocation — wired to Plan Inputs (via DATA.constants), not
+  // hand-typed into the page. Edit the Plan Inputs sheet tab and republish;
+  // this updates on its own.
+  const c = DATA.constants;
+  document.getElementById('cfTakeHome').textContent = fmtGBP(c.monthly_take_home_gbp);
+  document.getElementById('cfExpenses').textContent = fmtGBP(c.monthly_expenses_gbp);
+  document.getElementById('cfSurplus').textContent = fmtGBP(c.monthly_surplus_gbp);
+  document.getElementById('cfShield').textContent = fmtGBP(c.emergency_shield_monthly_gbp) + '/mo';
+  document.getElementById('cfIsa').textContent = fmtGBP(c.property_engine_total_monthly_gbp) + '/mo';
+  document.getElementById('cfIsaCaption').textContent =
+    `£${(c.property_engine_existing_monthly_gbp||0).toLocaleString()} existing + £${(c.property_engine_new_monthly_gbp||0).toLocaleString()} new → Trading 212 ISA`;
+  document.getElementById('cfPension').textContent = `${c.aviva_monthly_pct_gross}% → Aviva pension (salary sacrifice)`;
 };
 
-// GBP-only breakdown by Account Type for one owner ('Srini'/'Deepa') or 'all' for
-// combined. India ETF holdings are INR and excluded here, same treatment as the
-// Weight% column on the holdings table — they're a separate sandbox, not part of
-// the GBP net-worth split this chart is illustrating.
+// ===========================================================================
+// HOLDINGS — owner-scoped. Its own local owner toggle controls everything
+// on this tab only.
+// ===========================================================================
+let holdingsOwnerScope = 'all';
+
+document.getElementById('ownerToggleHoldings').addEventListener('click', (e)=>{
+  const btn = e.target.closest('.owner-btn');
+  if(!btn) return;
+  holdingsOwnerScope = btn.dataset.owner;
+  document.querySelectorAll('#ownerToggleHoldings .owner-btn').forEach(b=>b.classList.toggle('active', b===btn));
+  RENDER_FNS.holdings();
+});
+
+function scopedHoldings(scope){
+  if(scope==='all') return DATA.holdings;
+  return DATA.holdings.filter(h=>h.owner===scope);
+}
+
+const COMP_CATEGORY_ORDER = ['Stocks ISA', 'Aviva Pension', 'Cash ISA', 'L&G Pension', 'Vanguard SIPP'];
+const COMP_COLORS = {
+  'Stocks ISA':    '#3987e5',
+  'Aviva Pension': '#d95926',
+  'Cash ISA':      '#199e70',
+  'L&G Pension':   '#c98500',
+  'Vanguard SIPP': '#d55181'
+};
+
 function compBreakdown(owner){
   const rows = DATA.holdings.filter(h => h.currency === 'GBP' && (owner === 'all' || h.owner === owner));
   const byCat = {};
@@ -730,12 +666,12 @@ function renderOneCompChart(canvasId, byCat){
     type: 'doughnut',
     data: { labels: cats, datasets: [{
       data: values, backgroundColor: colors,
-      borderColor: '#151b23', borderWidth: 2 // 2px surface-color gap between wedges — secondary encoding alongside the shared legend
+      borderColor: '#151b23', borderWidth: 2
     }]},
     options: {
       responsive: true, maintainAspectRatio: false, cutout: '62%',
       plugins: {
-        legend: { display: false }, // one shared legend for all three charts, built once below — avoids tripling it
+        legend: { display: false },
         tooltip: { callbacks: { label: (c) => {
           const pct = total ? (c.parsed/total*100).toFixed(1) : '0.0';
           return ` ${c.label}: ${fmtGBP(c.parsed)} (${pct}%)`;
@@ -745,13 +681,11 @@ function renderOneCompChart(canvasId, byCat){
   });
 }
 
-function renderCompositionCharts(){
+RENDER_FNS.holdings = function(){
   const srini = compBreakdown('Srini');
   const deepa = compBreakdown('Deepa');
   const combined = compBreakdown('all');
 
-  // Shared legend, built once — the category->color mapping never changes between
-  // owners or renders, only which subset of categories has a non-zero slice.
   const legend = document.getElementById('compLegend');
   if(!legend.dataset.built){
     const present = new Set(Object.keys(combined));
@@ -768,20 +702,83 @@ function renderCompositionCharts(){
   renderOneCompChart('compChartSrini', srini);
   renderOneCompChart('compChartDeepa', deepa);
   renderOneCompChart('compChartCombined', combined);
+
+  document.getElementById('holdingsAsOf').textContent = '(as of ' + DATA.meta.baseline_date + ', live prices for Google Finance-linked rows)';
+
+  const fAccount = document.getElementById('fAccount');
+  if(!fAccount.dataset.populated){
+    const accounts = [...new Set(DATA.holdings.map(h=>h.account_type))];
+    accounts.forEach(a=>fAccount.insertAdjacentHTML('beforeend', `<option value="${a}">${a}</option>`));
+    fAccount.dataset.populated = '1';
+    fAccount.addEventListener('change', drawHoldingsTable);
+    document.getElementById('fSearch').addEventListener('input', drawHoldingsTable);
+  }
+  drawHoldingsTable();
+};
+
+function drawHoldingsTable(){
+  const accF = document.getElementById('fAccount').value, q = document.getElementById('fSearch').value.toLowerCase();
+  const scoped = scopedHoldings(holdingsOwnerScope);
+  const scopeTotGbp = scoped.filter(h=>h.currency==='GBP').reduce((s,h)=>s+h.current_value,0);
+  let rows = scoped.filter(h=>
+    (!accF || h.account_type===accF) &&
+    (!q || (h.name||'').toLowerCase().includes(q) || (h.symbol||'').toLowerCase().includes(q))
+  );
+  const tbody = document.getElementById('holdingsBody');
+  tbody.innerHTML = rows.map(h=>{
+    const isInr = h.currency==='INR';
+    const weightCell = isInr ? '—' : (scopeTotGbp ? (h.current_value/scopeTotGbp*100).toFixed(1)+'%' : '—');
+    const ccyTag = isInr ? ' <span class="native">(₹, not in GBP total)</span>' : '';
+    return `
+    <tr>
+      <td>${h.owner}</td>
+      <td>${h.symbol||'—'}${ccyTag}</td>
+      <td>${h.name}</td>
+      <td>${h.account_type}</td>
+      <td class="num">${fmtByCcy(h.current_value, h.currency)}</td>
+      <td class="num">${fmtByCcy(h.cost_basis, h.currency)}</td>
+      <td class="num ${h.gain_loss>=0?'pos':'neg'}">${fmtByCcy(h.gain_loss, h.currency)}</td>
+      <td class="num ${h.return_pct>=0?'pos':'neg'}">${fmtPct(h.return_pct*100)}</td>
+      <td class="num">${weightCell}</td>
+    </tr>`;
+  }).join('');
 }
 
-function renderPensionChart(currentValue){
+// ===========================================================================
+// STOCKS ISA — structured like Pension Engine: Srini's and Deepa's pots
+// shown explicitly, side by side, never blended by an owner toggle.
+// ===========================================================================
+RENDER_FNS.stocksIsa = function(){
+  const srinRows = DATA.holdings.filter(h=>h.owner==='Srini' && h.account_type==='Stocks ISA');
+  const deepaRows = DATA.holdings.filter(h=>h.owner==='Deepa' && h.account_type==='Stocks ISA');
+  const srinTotal = srinRows.reduce((s,h)=>s+h.current_value,0);
+  const deepaTotal = deepaRows.reduce((s,h)=>s+h.current_value,0);
+
+  document.getElementById('isaSrini').textContent = fmtGBP(srinTotal);
+  document.getElementById('isaDeepa').textContent = fmtGBP(deepaTotal);
+  document.getElementById('isaCombined').textContent = fmtGBP(srinTotal + deepaTotal);
+
+  const milestone2026 = DATA.milestones.find(m=>m.year===new Date().getFullYear()) || DATA.milestones[0];
+  const isaPlan = milestone2026 ? parseFloat(String(milestone2026.isa_est).replace(/[^0-9.]/g,'')) : null;
+  if(isaPlan){
+    const pct = (srinTotal/isaPlan*100);
+    document.getElementById('isaSriniRag').innerHTML = `<span class="badge ${ragClass(pct)}">${pct.toFixed(0)}% of ${milestone2026.year} plan (${milestone2026.isa_est})</span>`;
+  }
+
+  // Plan vs Actual line chart — same pattern as the Pension Engine chart,
+  // using the isa_est milestone series. Actual point is Srini's Stocks ISA
+  // only, matching the plan it's being measured against.
   const labels = DATA.milestones.map(m=>m.year);
-  const planData = DATA.milestones.map(m=>parseFloat(String(m.pension_est).replace(/[^0-9.]/g,'')) || null);
-  const ctx = document.getElementById('pensionChart');
+  const planData = DATA.milestones.map(m=>parseFloat(String(m.isa_est).replace(/[^0-9.]/g,'')) || null);
+  const ctx = document.getElementById('isaChart');
   if(ctx._chart) ctx._chart.destroy();
   ctx._chart = new Chart(ctx, {
     type:'line',
     data:{
       labels,
       datasets:[
-        {label:'Plan (from model)', data:planData, borderColor:'#4f8cff', backgroundColor:'transparent', tension:.3},
-        {label:'Actual (' + (DATA.meta.baseline_date||'').slice(0,4) + ')', data:labels.map(y=> y===new Date().getFullYear() ? currentValue : null), pointRadius:6, pointBackgroundColor:'#2ea043', showLine:false}
+        {label:'Plan (from model)', data:planData, borderColor:'#4f8cff', backgroundColor:'transparent', tension:.3, spanGaps:true},
+        {label:'Actual — Srini (' + (DATA.meta.baseline_date||'').slice(0,4) + ')', data:labels.map(y=> y===new Date().getFullYear() ? srinTotal : null), pointRadius:6, pointBackgroundColor:'#2ea043', showLine:false}
       ]
     },
     options:{
@@ -793,9 +790,100 @@ function renderPensionChart(currentValue){
       }
     }
   });
-}
 
-function renderTimeline(){
+  const rows = srinRows.map(h=>({...h})).concat(deepaRows.map(h=>({...h})));
+  document.getElementById('isaHoldingsBody').innerHTML = rows.map(h=>`
+    <tr>
+      <td>${h.owner}</td>
+      <td>${h.symbol||'—'}</td>
+      <td>${h.name}</td>
+      <td class="num">${fmtGBP2(h.current_value)}</td>
+      <td class="num">${fmtGBP2(h.cost_basis)}</td>
+      <td class="num ${h.gain_loss>=0?'pos':'neg'}">${fmtGBP2(h.gain_loss)}</td>
+      <td class="num ${h.return_pct>=0?'pos':'neg'}">${fmtPct(h.return_pct*100)}</td>
+    </tr>`).join('');
+};
+
+// ===========================================================================
+// INDIA — Srini only for now. Deepa's card is an explicit, labelled
+// placeholder rather than silently omitted, so it's obvious this is a
+// current-data-state fact, not a design limitation.
+// ===========================================================================
+RENDER_FNS.india = function(){
+  const srinRows = DATA.holdings.filter(h=>h.owner==='Srini' && h.currency==='INR');
+  const deepaRows = DATA.holdings.filter(h=>h.owner==='Deepa' && h.currency==='INR');
+  const srinTotal = srinRows.reduce((s,h)=>s+h.current_value,0);
+
+  document.getElementById('indiaSriniTotal').textContent = fmtINR(srinTotal);
+  document.getElementById('indiaDeepaTotal').textContent = fmtINR(deepaRows.reduce((s,h)=>s+h.current_value,0));
+
+  document.getElementById('indiaHoldingsBody').innerHTML = srinRows.concat(deepaRows).map(h=>`
+    <tr>
+      <td>${h.symbol||'—'}</td>
+      <td>${h.name}</td>
+      <td>${h.account_type}</td>
+      <td class="num">${fmtINR2(h.current_value)}</td>
+      <td class="num">${fmtINR2(h.cost_basis)}</td>
+      <td class="num ${h.gain_loss>=0?'pos':'neg'}">${fmtINR2(h.gain_loss)}</td>
+      <td class="num ${h.return_pct>=0?'pos':'neg'}">${fmtPct(h.return_pct*100)}</td>
+    </tr>`).join('');
+};
+
+// ===========================================================================
+// PENSION ENGINE — no owner toggle. Srini's three pots and Deepa's one pot
+// are each their own named card, matched on owner AND fund name together
+// (never fund-name alone), so a legacy pot never gets shown under an active
+// pot's caption just because they happen to share a provider name.
+// ===========================================================================
+RENDER_FNS.pension = function(){
+  const allPension = DATA.holdings.filter(h=>h.category==='Pension');
+  const pensionTotal = allPension.reduce((s,h)=>s+h.current_value,0);
+  document.getElementById('pTotal').textContent = fmtGBP(pensionTotal);
+
+  const milestone2026 = DATA.milestones.find(m=>m.year===new Date().getFullYear()) || DATA.milestones[0];
+  const pensionPlan = milestone2026 ? parseFloat(String(milestone2026.pension_est).replace(/[^0-9.]/g,'')) : null;
+  if(pensionPlan){
+    const pct = (pensionTotal/pensionPlan*100);
+    document.getElementById('pTotalRag').innerHTML = `<span class="badge ${ragClass(pct)}">${pct.toFixed(0)}% of ${milestone2026.year} plan (${milestone2026.pension_est})</span>`;
+  }
+
+  function ownerFundTotal(owner, regex){
+    return allPension.filter(h=>h.owner===owner && regex.test(h.name)).reduce((s,h)=>s+h.current_value,0);
+  }
+  document.getElementById('pAviva').textContent = fmtGBP(ownerFundTotal('Srini', /Av MyM|BlackRock/i));
+  document.getElementById('pLG').textContent = fmtGBP(ownerFundTotal('Srini', /ARSP/i));
+  document.getElementById('pVanguard').textContent = fmtGBP(ownerFundTotal('Srini', /FTSE Global All Cap/i));
+  document.getElementById('pDeepaAviva').textContent = fmtGBP(ownerFundTotal('Deepa', /Av MyM|BlackRock/i));
+
+  const labels = DATA.milestones.map(m=>m.year);
+  const planData = DATA.milestones.map(m=>parseFloat(String(m.pension_est).replace(/[^0-9.]/g,'')) || null);
+  const ctx = document.getElementById('pensionChart');
+  if(ctx._chart) ctx._chart.destroy();
+  ctx._chart = new Chart(ctx, {
+    type:'line',
+    data:{
+      labels,
+      datasets:[
+        {label:'Plan (from model)', data:planData, borderColor:'#4f8cff', backgroundColor:'transparent', tension:.3, spanGaps:true},
+        {label:'Actual — combined (' + (DATA.meta.baseline_date||'').slice(0,4) + ')', data:labels.map(y=> y===new Date().getFullYear() ? pensionTotal : null), pointRadius:6, pointBackgroundColor:'#2ea043', showLine:false}
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#8b96a5', font:{size:10}}}},
+      scales:{
+        x:{ticks:{color:'#8b96a5'}, grid:{color:'#1a2029'}},
+        y:{ticks:{color:'#8b96a5', callback:v=>'£'+(v/1000)+'k'}, grid:{color:'#1a2029'}}
+      }
+    }
+  });
+};
+
+// ===========================================================================
+// RETIREMENT GLIDE PATH — combined-household plan. No owner toggle; this
+// was never a per-person plan.
+// ===========================================================================
+RENDER_FNS.glidepath = function(){
   const saved = JSON.parse(localStorage.getItem('p2037_milestones')||'{}');
   const wrap = document.getElementById('timeline');
   wrap.innerHTML = '';
@@ -821,14 +909,15 @@ function renderTimeline(){
       e.target.closest('.tl-item').classList.toggle('done', e.target.checked);
     });
   });
-}
 
-function renderScenarios(){
   document.getElementById('chennaiCorpus').textContent = fmtGBP(DATA.scenarios.chennai.starting_liquid_corpus_gbp);
   document.getElementById('ukCorpus').textContent = fmtGBP(DATA.scenarios.uk.starting_liquid_corpus_gbp);
+  document.getElementById('chennaiIncome').textContent = fmtGBP(DATA.scenarios.chennai.passive_income_annual_gbp) + '/yr';
+  document.getElementById('ukIncome').textContent = fmtGBP(DATA.scenarios.uk.passive_income_annual_gbp) + '/yr';
   updateToggleUI();
-}
+};
 
+let scenario = 'chennai';
 function updateToggleUI(){
   const toggle = document.getElementById('scenarioToggle');
   const knob = document.getElementById('toggleKnob');
@@ -847,54 +936,27 @@ document.getElementById('scenarioToggle').addEventListener('click', ()=>{
   updateToggleUI();
 });
 
-function renderHoldingsTable(){
-  const fAccount = document.getElementById('fAccount');
-  if(!fAccount.dataset.populated){
-    const accounts = [...new Set(DATA.holdings.map(h=>h.account_type))];
-    accounts.forEach(a=>fAccount.insertAdjacentHTML('beforeend', `<option value="${a}">${a}</option>`));
-    fAccount.dataset.populated = '1';
-    fAccount.addEventListener('change', draw);
-    document.getElementById('fSearch').addEventListener('input', draw);
-  }
+// ===========================================================================
+// TRENDS — owner-scoped for portfolio value (data already split by owner);
+// Net Injections/Net Exit are household-level, shown as such, split only by
+// currency (GBP vs INR), never silently blended across that boundary.
+// ===========================================================================
+let trendsOwnerScope = 'all';
 
-  function draw(){
-    const accF = fAccount.value, q = document.getElementById('fSearch').value.toLowerCase();
-    const scoped = scopedHoldings();
-    // Weight % is GBP-only — mixing in INR rows would make the percentages meaningless.
-    const scopeTotGbp = scoped.filter(h=>h.currency==='GBP').reduce((s,h)=>s+h.current_value,0);
-    let rows = scoped.filter(h=>
-      (!accF || h.account_type===accF) &&
-      (!q || (h.name||'').toLowerCase().includes(q) || (h.symbol||'').toLowerCase().includes(q))
-    );
-    const tbody = document.getElementById('holdingsBody');
-    tbody.innerHTML = rows.map(h=>{
-      const isInr = h.currency==='INR';
-      const weightCell = isInr ? '—' : (scopeTotGbp ? (h.current_value/scopeTotGbp*100).toFixed(1)+'%' : '—');
-      const ccyTag = isInr ? ' <span class="native">(₹, not in GBP total)</span>' : '';
-      const staleTag = h.price_stale ? ` <span class="stale-flag" title="${(h.price_stale_note||'').replace(/"/g,'&quot;')}">⚠ floor</span>` : '';
-      return `
-      <tr>
-        <td>${h.owner}</td>
-        <td>${h.symbol||'—'}${ccyTag}</td>
-        <td>${h.name}</td>
-        <td>${h.account_type}</td>
-        <td class="num">${fmtByCcy(h.current_value, h.currency)}${staleTag}</td>
-        <td class="num">${fmtByCcy(h.cost_basis, h.currency)}</td>
-        <td class="num ${h.gain_loss>=0?'pos':'neg'}">${fmtByCcy(h.gain_loss, h.currency)}</td>
-        <td class="num ${h.return_pct>=0?'pos':'neg'}">${fmtPct(h.return_pct*100)}</td>
-        <td class="num">${weightCell}</td>
-      </tr>`;
-    }).join('');
-  }
-  draw();
-}
+document.getElementById('ownerToggleTrends').addEventListener('click', (e)=>{
+  const btn = e.target.closest('.owner-btn');
+  if(!btn) return;
+  trendsOwnerScope = btn.dataset.owner;
+  document.querySelectorAll('#ownerToggleTrends .owner-btn').forEach(b=>b.classList.toggle('active', b===btn));
+  renderHistoryChart();
+});
 
 function renderHistoryChart(){
   const hist = DATA.history || [];
   const labels = hist.map(h=>h.date);
   let values, label;
-  if(ownerScope==='Srini'){ values = hist.map(h=>h.srini_value); label = "Srini's portfolio value (£)"; }
-  else if(ownerScope==='Deepa'){ values = hist.map(h=>h.deepa_value); label = "Deepa's portfolio value (£)"; }
+  if(trendsOwnerScope==='Srini'){ values = hist.map(h=>h.srini_value); label = "Srini's portfolio value (£)"; }
+  else if(trendsOwnerScope==='Deepa'){ values = hist.map(h=>h.deepa_value); label = "Deepa's portfolio value (£)"; }
   else { values = hist.map(h=>h.total_value); label = 'Combined portfolio value (£)'; }
 
   const ctx = document.getElementById('historyChart');
@@ -913,7 +975,43 @@ function renderHistoryChart(){
   });
 }
 
-function renderActionLog(){
+function renderFlowsChart(canvasId, hist, injKey, exitKey, fmt){
+  const labels = hist.map(h=>h.date);
+  const injections = hist.map(h=>h[injKey]||0);
+  const exits = hist.map(h=>-(h[exitKey]||0)); // shown as negative bars, same axis as injections
+  const ctx = document.getElementById(canvasId);
+  if(ctx._chart) ctx._chart.destroy();
+  ctx._chart = new Chart(ctx, {
+    type:'bar',
+    data:{
+      labels,
+      datasets:[
+        {label:'Net Injections', data:injections, backgroundColor:'#2ea043'},
+        {label:'Net Exit', data:exits, backgroundColor:'#f85149'}
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#8b96a5', font:{size:10}}}},
+      scales:{
+        x:{ticks:{color:'#8b96a5'}, grid:{color:'#1a2029'}, stacked:true},
+        y:{ticks:{color:'#8b96a5', callback:v=>fmt(v)}, grid:{color:'#1a2029'}, stacked:true}
+      }
+    }
+  });
+}
+
+RENDER_FNS.trends = function(){
+  renderHistoryChart();
+  const hist = DATA.history || [];
+  renderFlowsChart('flowsGbpChart', hist, 'net_injections', 'net_exit', v=>'£'+v);
+  renderFlowsChart('flowsInrChart', hist, 'net_injections_inr', 'net_exit_inr', v=>'₹'+v);
+};
+
+// ===========================================================================
+// ACTION LOG — standalone.
+// ===========================================================================
+RENDER_FNS.actions = function(){
   const saved = JSON.parse(localStorage.getItem('p2037_actions')||'{}');
   const wrap = document.getElementById('actionList');
   wrap.innerHTML = '';
@@ -932,7 +1030,7 @@ function renderActionLog(){
       e.target.closest('.action-item').classList.toggle('done', e.target.checked);
     });
   });
-}
+};
 </script>
 </body>
 </html>
