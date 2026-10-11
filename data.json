@@ -1,6 +1,6 @@
 {
   "meta": {
-    "baseline_date": "2026-10-11",
+    "baseline_date": "2026-10-12",
     "note": "Live-published from Google Sheets via Apps Script. India (INR) holdings are tallied separately, not converted to GBP.",
     "target_retirement": "2037-09-01",
     "currency_primary": "GBP"
@@ -34,7 +34,7 @@
     "note": "Zero Consumer Debt rule (amended 2026-09-27): no balance carried at interest past its 0% window. Live balance tracked in the Plan Inputs tab."
   },
   "total_portfolio_value_gbp": 298609.13,
-  "total_portfolio_value_inr": 41176.75,
+  "total_portfolio_value_inr": 14064.25,
   "holdings": [
     {
       "owner": "Srini",
@@ -75,14 +75,14 @@
       "account_type": "India ETF (NSE)",
       "category": null,
       "asset_class": "Equity",
-      "units": 153,
+      "units": 3,
       "avg_cost": 72.57718954248367,
       "currency": "INR",
       "current_price": 72.35,
-      "current_value": 11069.55,
-      "cost_basis": 11104.31,
-      "gain_loss": -34.76,
-      "return_pct": -0.003130316066464466
+      "current_value": 217.05,
+      "cost_basis": 217.73,
+      "gain_loss": -0.68,
+      "return_pct": -0.003130316066464438
     },
     {
       "owner": "Srini",
@@ -99,22 +99,6 @@
       "cost_basis": 2209.14,
       "gain_loss": 258.67,
       "return_pct": 0.11709213292434767
-    },
-    {
-      "owner": "Srini",
-      "symbol": "HEALTHIETF",
-      "name": "ICICI Healthcare ETF",
-      "account_type": "India ETF (NSE)",
-      "category": null,
-      "asset_class": "Equity",
-      "units": 100,
-      "avg_cost": 152.429,
-      "currency": "INR",
-      "current_price": 162.6,
-      "current_value": 16260,
-      "cost_basis": 15242.9,
-      "gain_loss": 1017.1,
-      "return_pct": 0.06672614791148669
     },
     {
       "owner": "Srini",
@@ -312,7 +296,7 @@
   "owner_totals": {
     "Srini": {
       "total": 256463.17,
-      "total_inr": 41176.75,
+      "total_inr": 14064.25,
       "pension": 250519.76,
       "isa": 5817.6900000000005,
       "cash": 125.72
@@ -548,6 +532,16 @@
     },
     {
       "date": "2026-10-11",
+      "total_value": 298609.13,
+      "srini_value": 256463.17,
+      "deepa_value": 42145.96,
+      "net_injections": 0,
+      "net_exit": 0,
+      "net_injections_inr": 0,
+      "net_exit_inr": 0
+    },
+    {
+      "date": "2026-10-12",
       "total_value": 298609.13,
       "srini_value": 256463.17,
       "deepa_value": 42145.96,
