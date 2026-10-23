@@ -1,6 +1,6 @@
 {
   "meta": {
-    "baseline_date": "2026-10-23",
+    "baseline_date": "2026-10-24",
     "note": "Live-published from Google Sheets via Apps Script. India (INR) holdings are tallied separately, not converted to GBP.",
     "target_retirement": "2037-09-01",
     "currency_primary": "GBP"
@@ -652,6 +652,16 @@
     },
     {
       "date": "2026-10-23",
+      "total_value": 297824.19,
+      "srini_value": 256302.06000000003,
+      "deepa_value": 41522.13,
+      "net_injections": 0,
+      "net_exit": 0,
+      "net_injections_inr": 9948.96,
+      "net_exit_inr": 0
+    },
+    {
+      "date": "2026-10-24",
       "total_value": 297824.19,
       "srini_value": 256302.06000000003,
       "deepa_value": 41522.13,
