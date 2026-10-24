@@ -34,7 +34,7 @@
     "note": "Zero Consumer Debt rule (amended 2026-09-27): no balance carried at interest past its 0% window. Live balance tracked in the Plan Inputs tab."
   },
   "total_portfolio_value_gbp": 297824.19,
-  "total_portfolio_value_inr": 23564.9,
+  "total_portfolio_value_inr": 25997.4,
   "holdings": [
     {
       "owner": "Srini",
@@ -75,14 +75,14 @@
       "account_type": "India ETF (NSE)",
       "category": null,
       "asset_class": "Equity",
-      "units": 147,
-      "avg_cost": 70.88643097643097,
+      "units": 182,
+      "avg_cost": 70.56144578313253,
       "currency": "INR",
       "current_price": 69.5,
-      "current_value": 10216.5,
-      "cost_basis": 10420.31,
-      "gain_loss": -203.81,
-      "return_pct": -0.01955848188903674
+      "current_value": 12649,
+      "cost_basis": 12842.18,
+      "gain_loss": -193.18,
+      "return_pct": -0.01504285763070713
     },
     {
       "owner": "Srini",
@@ -296,7 +296,7 @@
   "owner_totals": {
     "Srini": {
       "total": 256302.06000000003,
-      "total_inr": 23564.9,
+      "total_inr": 25997.4,
       "pension": 250507.40000000002,
       "isa": 5668.94,
       "cash": 125.72
