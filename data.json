@@ -34,7 +34,7 @@
     "note": "Zero Consumer Debt rule (amended 2026-09-27): no balance carried at interest past its 0% window. Live balance tracked in the Plan Inputs tab."
   },
   "total_portfolio_value_gbp": 293062.81,
-  "total_portfolio_value_inr": 27415.6,
+  "total_portfolio_value_inr": 27328.22,
   "holdings": [
     {
       "owner": "Srini",
@@ -78,11 +78,11 @@
       "units": 182,
       "avg_cost": 70.56144578313253,
       "currency": "INR",
-      "current_price": 72,
-      "current_value": 13104,
+      "current_price": 71.61,
+      "current_value": 13033.02,
       "cost_basis": 12842.18,
-      "gain_loss": 261.82,
-      "return_pct": 0.02038725540415952
+      "gain_loss": 190.84,
+      "return_pct": 0.014860157770720356
     },
     {
       "owner": "Srini",
@@ -286,17 +286,17 @@
       "units": 8,
       "avg_cost": 1785,
       "currency": "INR",
-      "current_price": 1788.95,
-      "current_value": 14311.6,
+      "current_price": 1786.9,
+      "current_value": 14295.2,
       "cost_basis": 14280,
-      "gain_loss": 31.6,
-      "return_pct": 0.00221288515406165
+      "gain_loss": 15.2,
+      "return_pct": 0.0010644257703081742
     }
   ],
   "owner_totals": {
     "Srini": {
       "total": 251433.35,
-      "total_inr": 27415.6,
+      "total_inr": 27328.22,
       "pension": 245595.41000000003,
       "isa": 5712.219999999999,
       "cash": 125.72
