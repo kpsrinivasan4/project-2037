@@ -76,13 +76,13 @@
       "category": null,
       "asset_class": "Equity",
       "units": 182,
-      "avg_cost": 70.56144578313253,
+      "avg_cost": 70.56144578313254,
       "currency": "INR",
       "current_price": 71.61,
       "current_value": 13033.02,
       "cost_basis": 12842.18,
       "gain_loss": 190.84,
-      "return_pct": 0.014860157770720356
+      "return_pct": 0.014860157770720068
     },
     {
       "owner": "Srini",
