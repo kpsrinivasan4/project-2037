@@ -1,6 +1,6 @@
 {
   "meta": {
-    "baseline_date": "2026-11-21",
+    "baseline_date": "2026-11-22",
     "note": "Live-published from Google Sheets via Apps Script. India (INR) holdings are tallied separately, not converted to GBP. USD holdings (e.g. NVDA) are converted to GBP at an approximate GOOGLEFINANCE rate — see meta.fx.",
     "target_retirement": "2037-09-01",
     "currency_primary": "GBP",
@@ -9,7 +9,7 @@
         "pair": "USDGBP",
         "rate": 0.7645259999999999,
         "source": "live",
-        "as_of": "2026-11-21T18:02:31.729Z"
+        "as_of": "2026-11-22T00:02:28.546Z"
       }
     }
   },
@@ -1054,6 +1054,16 @@
     },
     {
       "date": "2026-11-21",
+      "total_value": 296698.43,
+      "srini_value": 254691.53,
+      "deepa_value": 42006.9,
+      "net_injections": 0,
+      "net_exit": 0,
+      "net_injections_inr": 0,
+      "net_exit_inr": 0
+    },
+    {
+      "date": "2026-11-22",
       "total_value": 296698.43,
       "srini_value": 254691.53,
       "deepa_value": 42006.9,
