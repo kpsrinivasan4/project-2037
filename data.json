@@ -1,15 +1,15 @@
 {
   "meta": {
-    "baseline_date": "2026-11-25",
+    "baseline_date": "2026-11-26",
     "note": "Live-published from Google Sheets via Apps Script. India (INR) holdings are tallied separately, not converted to GBP. USD holdings (e.g. NVDA) are converted to GBP at an approximate GOOGLEFINANCE rate — see meta.fx.",
     "target_retirement": "2037-09-01",
     "currency_primary": "GBP",
     "fx": {
       "USD": {
         "pair": "USDGBP",
-        "rate": 0.762505,
+        "rate": 0.762721237,
         "source": "live",
-        "as_of": "2026-11-25T18:02:34.174Z"
+        "as_of": "2026-11-26T00:02:32.952Z"
       }
     }
   },
@@ -41,7 +41,7 @@
     "clear_date_prior_debt": "2026-09-01",
     "note": "Zero Consumer Debt rule (amended 2026-09-27): no balance carried at interest past its 0% window. Live balance tracked in the Plan Inputs tab."
   },
-  "total_portfolio_value_gbp": 296728.15,
+  "total_portfolio_value_gbp": 296743.9,
   "total_portfolio_value_inr": 47595.3,
   "holdings": [
     {
@@ -394,23 +394,23 @@
       "units": 5.933132,
       "avg_cost": 117.98153150814781,
       "currency": "GBP",
-      "current_price": 111.21897930000002,
-      "current_value": 659.88,
+      "current_price": 113.87428068410001,
+      "current_value": 675.63,
       "cost_basis": 700,
-      "gain_loss": -40.12,
-      "return_pct": -0.05731873558261766,
+      "gain_loss": -24.37,
+      "return_pct": -0.03481265899454911,
       "native_currency": "USD",
-      "native_price": 145.86,
-      "native_value": 865.41,
-      "fx_rate_to_gbp": 0.762505
+      "native_price": 149.3,
+      "native_value": 885.82,
+      "fx_rate_to_gbp": 0.762721237
     }
   ],
   "owner_totals": {
     "Srini": {
-      "total": 254759.43000000002,
+      "total": 254775.18000000002,
       "total_inr": 47595.3,
       "pension": 248464.38,
-      "isa": 6118.9400000000005,
+      "isa": 6134.6900000000005,
       "cash": 176.11
     },
     "Deepa": {
@@ -1096,6 +1096,16 @@
       "date": "2026-11-25",
       "total_value": 296728.15,
       "srini_value": 254759.43000000002,
+      "deepa_value": 41968.72,
+      "net_injections": 0,
+      "net_exit": 0,
+      "net_injections_inr": 0,
+      "net_exit_inr": 0
+    },
+    {
+      "date": "2026-11-26",
+      "total_value": 296743.9,
+      "srini_value": 254775.18000000002,
       "deepa_value": 41968.72,
       "net_injections": 0,
       "net_exit": 0,
